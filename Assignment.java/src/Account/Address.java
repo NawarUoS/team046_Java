@@ -1,4 +1,4 @@
-package src.Account;
+package src.account;
 
 public class Address {
     private int houseNumber;

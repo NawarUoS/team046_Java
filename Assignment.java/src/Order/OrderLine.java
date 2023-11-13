@@ -1,6 +1,6 @@
-package src.Order;
+package src.order;
 
-import src.Products.*;
+import src.product.*;
 
 public class OrderLine {
     private int orderLineNumber;

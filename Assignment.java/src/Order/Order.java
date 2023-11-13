@@ -1,4 +1,4 @@
-package src.Order;
+package src.order;
 
 import java.util.List;
 
