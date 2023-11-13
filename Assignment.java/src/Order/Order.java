@@ -3,7 +3,7 @@ package src.order;
 import java.util.List;
 
 public class Order {
-    private enum Status {};
+    public enum Status {};
     private int orderNumber;
     private String orderDate;
     private double totalCost;
