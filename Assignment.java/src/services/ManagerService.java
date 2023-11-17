@@ -10,4 +10,11 @@ public class ManagerService {
             Account.getUserByID(userID).addUserRole(UserRole.STAFF);
         }
     }
+
+    public void dismissUserFromStaff(int userID) {
+        Account currentUser = Account.getUserByID(currentUserID);
+        if (currentUser.getUserRoles().contains(UserRole.MANAGER)) {
+            Account.getUserByID(userID).removeUserRole(UserRole.STAFF);
+        }
+    }
 }
