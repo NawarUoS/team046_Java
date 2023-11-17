@@ -7,6 +7,15 @@ public class BankDetails {
     private String expiryDate;
     private int securityCode;
 
+    // Constructor
+    public BankDetails(String cardName, String cardHolder, int[] cardNumber, String expiryDate, int securityCode) {
+        this.cardName = cardName;
+        this.cardHolder = cardHolder;
+        this.cardNumber = cardNumber;
+        this.expiryDate = expiryDate;
+        this.securityCode = securityCode;
+    }
+
     //Get methods
     public String getCardName() {
         return cardName;

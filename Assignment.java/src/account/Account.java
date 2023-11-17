@@ -12,26 +12,16 @@ public class Account {
     private String password;
     private String forename;
     private String surname;
-    private Boolean isCustomer;
 
     // Constructor
-    public Account(String email, String password, String forename,
-                   String surname) {
-        this(List.of(UserRole.CUSTOMER), email, password, forename, surname,
-                true);
-    }
+
     public Account(List<UserRole> userRoles, String email,
-                   String password, String forename, String surname,
-                   Boolean isCustomer) {
-        if (isCustomer) {
-            userRoles.add(UserRole.CUSTOMER);
-        }
+                   String password, String forename, String surname) {
         this.userRoles = userRoles;
         this.emailAddress = email;
         this.password = password;
         this.forename = forename;
         this.surname = surname;
-        this.isCustomer = isCustomer;
     }
 
     // Get methods
@@ -57,9 +47,5 @@ public class Account {
 
     public String getSurname() {
         return surname;
-    }
-
-    public Boolean getCustomer() {
-        return isCustomer;
     }
 }

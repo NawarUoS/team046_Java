@@ -6,6 +6,15 @@ public class Address {
     private String cityName;
     private String postCode;
 
+    // Constructor
+    public Address(int houseNumber, String streetName, String cityName,
+                   String postCode) {
+        this.houseNumber = houseNumber;
+        this.streetName = streetName;
+        this.cityName = cityName;
+        this.postCode = postCode;
+    }
+
     //Get methods
     public int getHouseNumber() {
         return houseNumber;
