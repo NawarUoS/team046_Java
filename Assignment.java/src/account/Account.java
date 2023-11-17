@@ -22,12 +22,31 @@ public class Account {
         this.surname = surname;
     }
 
+    // Class methods
+    public void addUserRole(UserRole userRole) {
+        List<UserRole> newUserRoles = getUserRoles();
+        newUserRoles.add(userRole);
+        this.userRoles = newUserRoles;
+    }
+
+    public void removeUserRole(UserRole userRole) {
+        List<UserRole> newUserRoles = getUserRoles();
+        newUserRoles.remove(userRole);
+        this.userRoles = newUserRoles;
+    }
+
     // Getter methods
     public int getUserID() {
         return userID;
     }
 
-    public List<UserRole> getUserRole() {
+    public static Account getUserByID(int userID) {
+        // for now - implement later after going over SQL
+        return new Account(List.of(UserRole.CUSTOMER), "emem",
+                "jdj", "jjd", "jdjd");
+    }
+    
+    public List<UserRole> getUserRoles() {
         return userRoles;
     }
 
@@ -47,11 +66,8 @@ public class Account {
         return surname;
     }
 
-    // Setter methods
-    public void setUserRoles(List<UserRole> userRoles) {
-        this.userRoles = userRoles;
-    }
 
+    // Setter methods
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
