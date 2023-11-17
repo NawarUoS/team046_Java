@@ -1,7 +1,7 @@
 package src.connection;
 
 import javax.swing.*;
-import src.connection.views.LoanTableDisplay;
+import src.views.LoanTableDisplay;
 
 public class ConnectionMain {
     public static void main(String[] args) {
