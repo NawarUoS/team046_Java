@@ -4,7 +4,6 @@ import javax.print.attribute.HashPrintJobAttributeSet;
 import java.util.*;
 
 public class Account {
-    public enum UserRole {CUSTOMER, MANAGER, STAFF}
     private int userID;
     private List<UserRole> userRoles;
     private String emailAddress;
@@ -45,7 +44,7 @@ public class Account {
         return new Account(List.of(UserRole.CUSTOMER), "emem",
                 "jdj", "jjd", "jdjd");
     }
-    
+
     public List<UserRole> getUserRoles() {
         return userRoles;
     }
