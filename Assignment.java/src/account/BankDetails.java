@@ -7,7 +7,17 @@ public class BankDetails {
     private String expiryDate;
     private int securityCode;
 
-    //Get methods
+    // Constructor
+    public BankDetails(String cardName, String cardHolder, int[] cardNumber,
+                       String expiryDate, int securityCode) {
+        this.cardName = cardName;
+        this.cardHolder = cardHolder;
+        this.cardNumber = cardNumber;
+        this.expiryDate = expiryDate;
+        this.securityCode = securityCode;
+    }
+
+    // Getter methods
     public String getCardName() {
         return cardName;
     }
@@ -26,5 +36,26 @@ public class BankDetails {
 
     public int getSecurityCode() {
         return securityCode;
+    }
+
+    public void setCardName(String cardName) {
+        this.cardName = cardName;
+    }
+
+    // Setter methods
+    public void setCardHolder(String cardHolder) {
+        this.cardHolder = cardHolder;
+    }
+
+    public void setCardNumber(int[] cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public void setSecurityCode(int securityCode) {
+        this.securityCode = securityCode;
     }
 }

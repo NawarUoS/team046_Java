@@ -14,11 +14,7 @@ public class DatabaseOperations {
             // Establish a database connection
 
             // Execute the SQL query
-            String sqlQuery = "SELECT b.memberID, b.forename, b.surname, t.title, t.isbn, c.copyID, m.dueDate " +
-                    "FROM Borrower b, BookTitle t, BookCopy c, Loan m " +
-                    "WHERE m.copyID = c.copyID " +
-                    "AND c.isbn = t.isbn " +
-                    "AND m.memberID = b.memberID";
+            String sqlQuery = "SELECT *";
             PreparedStatement statement = connection.prepareStatement(sqlQuery);
             resultSet = statement.executeQuery(sqlQuery);
         } catch (Exception e) {
