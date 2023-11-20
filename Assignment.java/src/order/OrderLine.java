@@ -7,6 +7,11 @@ public class OrderLine {
     private Product item;
     private int quantity;
 
+    public OrderLine(Product item, int quantity) {
+        this.item = item;
+        this.quantity = quantity;
+    }
+
     public int getOrderLineNumber() {
         return orderLineNumber;
     }
