@@ -1,1 +1,5 @@
 READ ME
+
+Things to implement:
+* error handling and exceptions
+* if arguments are null then ___
