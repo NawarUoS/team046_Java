@@ -1,4 +1,4 @@
 package src.services;
 
-public class ShoppingCartService {
+public class ShoppingCartService extends Service {
 }

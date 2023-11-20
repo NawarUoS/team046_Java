@@ -2,7 +2,7 @@ package src.services;
 
 import src.account.*;
 
-public class ManagerService {
+public class ManagerService extends Service {
     private int currentUserID;
 
     public void promoteUsersToStaff(int[] userIDs) {
@@ -16,6 +16,7 @@ public class ManagerService {
         if (currentUser.getUserRoles().contains(UserRole.MANAGER)) {
             Account.getUserByID(userID).addUserRole(UserRole.STAFF);
         }
+        // else: add exception later or error message
     }
 
     public void dismissUserFromStaff(int userID) {
@@ -23,5 +24,6 @@ public class ManagerService {
         if (currentUser.getUserRoles().contains(UserRole.MANAGER)) {
             Account.getUserByID(userID).removeUserRole(UserRole.STAFF);
         }
+        // else: add exception later or error message
     }
 }

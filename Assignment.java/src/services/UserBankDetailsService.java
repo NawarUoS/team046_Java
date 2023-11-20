@@ -1,4 +1,4 @@
 package src.services;
 
-public class UserBankDetailsService {
+public class UserBankDetailsService extends Service {
 }

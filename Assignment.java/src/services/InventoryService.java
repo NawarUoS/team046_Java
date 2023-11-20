@@ -1,4 +1,4 @@
 package src.services;
 
-public class InventoryService {
+public class InventoryService extends Service {
 }
