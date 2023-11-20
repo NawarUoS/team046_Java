@@ -1,6 +1,7 @@
 package src.account;
 
 public class BankDetails {
+    private int userID;
     private String cardName;
     private String cardHolder;
     private int[] cardNumber = new int[16];
@@ -18,6 +19,7 @@ public class BankDetails {
     }
 
     // Getter methods
+    public int getUserID() { return userID; }
     public String getCardName() {
         return cardName;
     }
@@ -43,6 +45,10 @@ public class BankDetails {
     }
 
     // Setter methods
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
     public void setCardHolder(String cardHolder) {
         this.cardHolder = cardHolder;
     }

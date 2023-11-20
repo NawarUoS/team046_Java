@@ -7,6 +7,6 @@ public class UserAddressService extends Service {
 
     public void updateAddress(int houseNumber, String streetName,
                               String cityName, String postCode) {
-        Account currentUser = Account.getUserByID(currentUserID);
+
     }
 }

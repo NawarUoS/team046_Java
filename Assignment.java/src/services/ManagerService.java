@@ -12,7 +12,7 @@ public class ManagerService extends Service {
     }
 
     public void promoteUserToStaff(int userID) {
-        Account currentUser = Account.getUserByID(currentUserID);
+        Account currentUser = Account.getUserByID(getCurrentUserID());
         if (currentUser.getUserRoles().contains(UserRole.MANAGER)) {
             Account.getUserByID(userID).addUserRole(UserRole.STAFF);
         }
@@ -20,7 +20,7 @@ public class ManagerService extends Service {
     }
 
     public void dismissUserFromStaff(int userID) {
-        Account currentUser = Account.getUserByID(currentUserID);
+        Account currentUser = Account.getUserByID(getCurrentUserID());
         if (currentUser.getUserRoles().contains(UserRole.MANAGER)) {
             Account.getUserByID(userID).removeUserRole(UserRole.STAFF);
         }

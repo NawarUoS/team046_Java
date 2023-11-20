@@ -1,14 +1,16 @@
 package src.account;
 
 public class Address {
+    private int userID;
     private int houseNumber;
     private String streetName;
     private String cityName;
     private String postCode;
 
     // Constructor
-    public Address(int houseNumber, String streetName, String cityName,
-                   String postCode) {
+    public Address(int userID, int houseNumber, String streetName,
+                   String cityName, String postCode) {
+        this.userID = userID;
         this.houseNumber = houseNumber;
         this.streetName = streetName;
         this.cityName = cityName;
@@ -16,6 +18,7 @@ public class Address {
     }
 
     // Getter methods
+    public int getUserID() { return userID; }
     public int getHouseNumber() {
         return houseNumber;
     }
@@ -33,6 +36,10 @@ public class Address {
     }
 
     // Setter methods
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
     public void setHouseNumber(int houseNumber) {
         this.houseNumber = houseNumber;
     }
