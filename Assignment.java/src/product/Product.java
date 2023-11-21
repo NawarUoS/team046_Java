@@ -16,6 +16,16 @@ public class Product {
 
     private int stockLevel;
 
+    public Product(String brandName, String productName, String productCode, double productPrice, String gaugeType,
+            int modelScale, int stockLevel) {
+        this.brandName = brandName;
+        this.productName = productName;
+        this.productCode = productCode;
+        this.productPrice = productPrice;
+        this.gaugeType = gaugeType;
+        this.modelScale = modelScale;
+        this.stockLevel = stockLevel;
+    }
     // Getter method
     public String getBrandName() {
         return brandName;
