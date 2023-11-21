@@ -82,4 +82,9 @@ public class Account {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+    // Save details into database
+    public void saveAccount() {
+        
+    }
 }
