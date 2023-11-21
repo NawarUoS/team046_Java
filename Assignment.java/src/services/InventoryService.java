@@ -66,7 +66,7 @@ public class InventoryService {
     public void addTrackToInventory(Account member, String brand, String name, String code, 
                             Double price, String gauge, int scale, int stock, String trackName, String type ) throws IllegalArgumentException{
         try {
-            Track object = new Track(code, name, brand, price, gauge, scale, stock, trackName, type);
+            Track object = new Track(code, name, brand, price, gauge, scale, stock);
         } catch (IllegalArgumentException e) {
             System.err.println("One or more input fields is invalid");
         }

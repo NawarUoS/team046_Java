@@ -4,13 +4,13 @@ import java.util.*;
 public class Locomotive extends Product {
 
     private List<Integer> eraCode;
-    private String ddcCode;
+    private String dccCode;
 
     public Locomotive(String brandName, String productName, String productCode, double productPrice, String gaugeType,
-            int modelScale, int stockLevel, List<Integer> eraCode, String ddcCode) {
+            int modelScale, int stockLevel, List<Integer> eraCode, String dccCode) {
         super(brandName, productName, productCode, productPrice, gaugeType, modelScale, stockLevel);
         this.eraCode = eraCode;
-        this.ddcCode = ddcCode;
+        this.dccCode = dccCode;
     }
 
     //Get methods
@@ -19,6 +19,6 @@ public class Locomotive extends Product {
     }
 
     public String getDdcCode() {
-        return ddcCode;
+        return dccCode;
     }
 }
