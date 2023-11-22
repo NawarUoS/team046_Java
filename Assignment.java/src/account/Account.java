@@ -83,8 +83,4 @@ public class Account {
         this.surname = surname;
     }
 
-    // Save details into database
-    public void saveAccount() {
-        
-    }
 }

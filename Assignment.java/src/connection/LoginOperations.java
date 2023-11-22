@@ -39,9 +39,11 @@ public class LoginOperations {
         return "User not found.";
     }
 
-    private static boolean verifyPassword(char[] enteredPassword, String storedPasswordHash) {
+    private static boolean verifyPassword(char[] enteredPassword,
+                                                String storedPasswordHash) {
         try {
-            String hashedEnteredPassword = HashedPasswordGenerator.hashPassword(enteredPassword);
+            String hashedEnteredPassword =
+                    HashedPasswordGenerator.hashPassword(enteredPassword);
             return hashedEnteredPassword.equals(storedPasswordHash);
         } catch (Exception e) {
             e.printStackTrace();
