@@ -10,27 +10,27 @@ import java.sql.SQLException;
 
 // Most of this code was inspired by COM2008 Week 08 Lab 5 solution
 public class LoginOperations {
+
     public String verifyLogin(Connection connection, String emailAddress,
-                                                    String enteredPassword) {
+                              char[] enteredPassword) {
         try {
             // Query the database to fetch user information
-            String sql = "SELECT userID, unique_password_hash, " +
-                    "FROM Accounts WHERE emailAddress = ?";
+            String sql = "SELECT userID, unique_password_hash " +
+                    "FROM Accounts WHERE email_address = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, emailAddress);
-            System.out.print(statement);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                String userId = resultSet.getString("userId");
-                String storedPasswordHash = resultSet.getString(
-                        "unique_password_hash");
+                String userID = resultSet.getString("userID");
+                String storedPasswordHash =
+                        resultSet.getString("unique_password_hash");
 
-                if (verifyPassword(enteredPassword.toCharArray(),
-                        storedPasswordHash)) {
+                // Verify the entered password against the stored hash
+                if (verifyPassword(enteredPassword, storedPasswordHash)) {
                     return "Login successful for user: " + emailAddress;
                 } else {
-                    return "Incorrect password.";
+                    return "Incorrect password";
                 }
             }
         } catch (SQLException e) {
@@ -39,11 +39,9 @@ public class LoginOperations {
         return "User not found.";
     }
 
-    private static boolean verifyPassword(char[] enteredPassword,
-                                                 String storedPasswordHash) {
+    private static boolean verifyPassword(char[] enteredPassword, String storedPasswordHash) {
         try {
-            String hashedEnteredPassword =
-                    HashedPasswordGenerator.hashPassword(enteredPassword);
+            String hashedEnteredPassword = HashedPasswordGenerator.hashPassword(enteredPassword);
             return hashedEnteredPassword.equals(storedPasswordHash);
         } catch (Exception e) {
             e.printStackTrace();

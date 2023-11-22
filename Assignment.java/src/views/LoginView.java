@@ -56,7 +56,7 @@
                     LoginOperations databaseOperations =
                             new LoginOperations();
                     System.out.println(databaseOperations.verifyLogin(
-                            connection, username, passwordChars.toString()));
+                            connection, username, passwordChars));
                     // Secure disposal of the password
                     Arrays.fill(passwordChars, '\u0000');
                 }
