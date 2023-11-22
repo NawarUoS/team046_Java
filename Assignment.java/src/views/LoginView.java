@@ -53,8 +53,10 @@
                     char[] passwordChars = passwordField.getPassword();
                     System.out.println(username);
                     System.out.println(new String(passwordChars));
-                    DatabaseOperations databaseOperations = new DatabaseOperations();
-                    System.out.println(databaseOperations.verifyLogin(connection, username, passwordChars));
+                    LoginOperations databaseOperations =
+                            new LoginOperations();
+                    System.out.println(databaseOperations.verifyLogin(
+                            connection, username, passwordChars.toString()));
                     // Secure disposal of the password
                     Arrays.fill(passwordChars, '\u0000');
                 }

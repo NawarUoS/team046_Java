@@ -7,7 +7,7 @@ import java.util.*;
 public class InventoryService {
     public void addStock(Account member, Product productName, Integer changeVal) throws IllegalArgumentException {
         List<UserRole> roles = member.getUserRoles();
-        if (roles.contains(UserRole.MANAGER) == false) {
+        if (!roles.contains(UserRole.MANAGER)) {
 
         }
         try {
@@ -21,7 +21,7 @@ public class InventoryService {
 
     public void removeStock(Account member, Product productName, Integer changeVal) throws IllegalArgumentException {
         List<UserRole> roles = member.getUserRoles();
-        if (roles.contains(UserRole.MANAGER) == false) {
+        if (!roles.contains(UserRole.MANAGER)) {
         }
         try {
             Integer current = productName.getStockLevel();
