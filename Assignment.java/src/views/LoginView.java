@@ -27,7 +27,7 @@
             panel.setLayout(new GridLayout(3, 2));
 
             // Create JLabels for username and password
-            JLabel usernameLabel = new JLabel("Username:");
+            JLabel usernameLabel = new JLabel("Email:");
             JLabel passwordLabel = new JLabel("Password:");
 
             // Create JTextFields for entering username and password

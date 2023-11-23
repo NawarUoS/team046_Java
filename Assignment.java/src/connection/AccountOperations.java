@@ -34,6 +34,7 @@ public class AccountOperations {
                 String user_manager =
                         resultSet.getString("user_manager");
 
+                // Just to test that it worked
                 String userDetails = forename + " " + surname + "\n" +
                         email_address;
                 return userDetails;
