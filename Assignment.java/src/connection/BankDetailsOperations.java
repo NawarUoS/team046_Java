@@ -11,7 +11,7 @@ public class BankDetailsOperations {
     // add class attributes so can access them globally
 
     // Get order details by order_number
-    public String getBankDetailsByuserID(Connection connection, String userID) {
+    public BankDetails getBankDetailsByuserID(Connection connection, String userID) throws Error {
         try {
             // Query the database to fetch user information
             String sql = "SELECT card_number, card_name, expiry_date, " +
@@ -22,15 +22,18 @@ public class BankDetailsOperations {
 
             if (resultSet.next()) {
                 int card_number = resultSet.getInt("card_number");
+                String card_holder_name = resultSet.getString("card_holder_name");
                 String card_name = resultSet.getString("card_name");
                 String expiry_date = resultSet.getString("expiry_date");
                 int security_code = resultSet.getInt("security_code");
 
+                return new BankDetails(card_name, card_holder_name, card_number, expiry_date, security_code);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "Bank detils not found.";
+        throw new Error("User does not have bank details.");
     }
 
     // Save hashed(?) bank details into database
