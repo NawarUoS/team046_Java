@@ -24,19 +24,19 @@ public class AccountOperations {
             if (resultSet.next()) {
                 String forename = resultSet.getString("forename");
                 String surname = resultSet.getString("surname");
-                String email_address =
+                String emailAddress =
                         resultSet.getString("email_address");
                 String password = resultSet.getString("password");
-                String user_customer =
+                String userCustomer =
                         resultSet.getString("user_customer");
-                String user_staff =
+                String userStaff =
                         resultSet.getString("user_staff");
-                String user_manager =
+                String userManager =
                         resultSet.getString("user_manager");
 
                 // Just to test that it worked
                 String userDetails = forename + " " + surname + "\n" +
-                        email_address;
+                        emailAddress;
                 return userDetails;
             }
         } catch (SQLException e) {
