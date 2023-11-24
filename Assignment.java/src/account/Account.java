@@ -1,10 +1,11 @@
 package src.account;
 
 import javax.print.attribute.HashPrintJobAttributeSet;
+import src.util.*;
 import java.util.*;
 
 public class Account {
-    private int userID;
+    private String userID;
     private List<UserRole> userRoles;
     private String emailAddress;
     private String password;
@@ -12,8 +13,9 @@ public class Account {
     private String surname;
 
     // Constructor
-    public Account(List<UserRole> userRoles, String email,
+    public Account(String userID, List<UserRole> userRoles, String email,
                    String password, String forename, String surname) {
+        this.userID = userID;
         this.userRoles = userRoles;
         this.emailAddress = email;
         this.password = password;
@@ -21,7 +23,18 @@ public class Account {
         this.surname = surname;
     }
 
-    // Class methods
+    // randomly generated userID
+    public Account(List<UserRole> userRoles, String email, String password,
+                   String forename, String surname) {
+        this.userID = UniqueUserIDGenerator.generateUniqueUserID();
+        this.userRoles = userRoles;
+        this.emailAddress = email;
+        this.password = password;
+        this.forename = forename;
+        this.surname = surname;
+    }
+
+    // ManagerService methods
     public void addUserRole(UserRole userRole) {
         List<UserRole> newUserRoles = getUserRoles();
         newUserRoles.add(userRole);
@@ -35,14 +48,8 @@ public class Account {
     }
 
     // Getter methods
-    public int getUserID() {
+    public String getUserID() {
         return userID;
-    }
-
-    public static Account getUserByID(int userID) {
-        // for now - implement later after going over SQL
-        return new Account(List.of(UserRole.CUSTOMER), "emem",
-                "jdj", "jjd", "jdjd");
     }
 
     public List<UserRole> getUserRoles() {
@@ -55,6 +62,11 @@ public class Account {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getPasswordHash() {
+        return HashedPasswordGenerator.hashPassword(password.toCharArray(),
+                userID);
     }
 
     public String getForename() {
@@ -83,4 +95,12 @@ public class Account {
         this.surname = surname;
     }
 
+    // toString
+    public String toString() {
+        return "User ID: " + userID + "\n" +
+                "User: " + forename + " " + surname + "\n" +
+                "Email: " + emailAddress + "\n" +
+                "Password: " + password + "\n" +
+                "Roles: " + userRoles;
+    }
 }

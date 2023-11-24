@@ -1,29 +1,34 @@
 package src.services;
 
 import src.account.*;
+import src.connection.AccountOperations;
 
 public class ManagerService extends Service {
-    private int currentUserID;
+    private String currentUserID;
 
-    public void promoteUsersToStaff(int[] userIDs) {
-        for (int userID : userIDs) {
+    /*
+    public void promoteUsersToStaff(String[] userIDs) {
+        for (String userID : userIDs) {
             promoteUserToStaff(userID);
         }
     }
 
-    public void promoteUserToStaff(int userID) {
-        Account currentUser = Account.getUserByID(getCurrentUserID());
+
+    public void promoteUserToStaff(String userID) {
+        Account currentUser =
+                AccountOperations.getUserByUserID(getCurrentUserID());
         if (currentUser.getUserRoles().contains(UserRole.MANAGER)) {
             Account.getUserByID(userID).addUserRole(UserRole.STAFF);
         }
         // else: add exception later or error message
     }
 
-    public void dismissUserFromStaff(int userID) {
+    public void dismissUserFromStaff(String userID) {
         Account currentUser = Account.getUserByID(getCurrentUserID());
         if (currentUser.getUserRoles().contains(UserRole.MANAGER)) {
             Account.getUserByID(userID).removeUserRole(UserRole.STAFF);
         }
         // else: add exception later or error message
     }
+    */
 }
