@@ -4,15 +4,17 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class HashedPasswordGenerator {
-    private static final String SALT = "MyStaticSalt"; // Replace with your own static salt
+    private static String salt;
 
-    public static String hashPassword(char[] password) {
+    public static String hashPassword(char[] password, String userID) {
         try {
             // Create a MessageDigest instance for SHA-256
             MessageDigest md = MessageDigest.getInstance("SHA-256");
 
             // Concatenate the salt and password bytes
-            byte[] saltedPasswordBytes = concatenateBytes(SALT.getBytes(), new String(password).getBytes());
+            salt = userID;
+            byte[] saltedPasswordBytes = concatenateBytes(salt.getBytes(),
+                    new String(password).getBytes());
 
             // Update the digest with the salted password bytes
             md.update(saltedPasswordBytes);
@@ -42,7 +44,8 @@ public class HashedPasswordGenerator {
 
     public static void main(String[] args) {
         char[] password = "asd@456".toCharArray();
-        String hashedPassword = hashPassword(password);
+        String salt = "MyStaticSalt";
+        String hashedPassword = hashPassword(password, salt);
 
         System.out.println("Original Password: " + String.valueOf(password));
         System.out.println("Hashed Password: " + hashedPassword);

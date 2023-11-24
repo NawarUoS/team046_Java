@@ -11,6 +11,8 @@ import java.sql.SQLException;
 // Most of this code was inspired by COM2008 Week 08 Lab 5 solution
 public class LoginOperations {
 
+    private static String userID;
+
     public String verifyLogin(Connection connection, String emailAddress,
                               char[] enteredPassword) {
         try {
@@ -22,7 +24,7 @@ public class LoginOperations {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                String userID = resultSet.getString("userID");
+                userID = resultSet.getString("userID");
                 String storedPasswordHash =
                         resultSet.getString("unique_password_hash");
 
@@ -43,7 +45,8 @@ public class LoginOperations {
                                                 String storedPasswordHash) {
         try {
             String hashedEnteredPassword =
-                    HashedPasswordGenerator.hashPassword(enteredPassword);
+                    HashedPasswordGenerator.hashPassword(enteredPassword,
+                            userID);
             return hashedEnteredPassword.equals(storedPasswordHash);
         } catch (Exception e) {
             e.printStackTrace();

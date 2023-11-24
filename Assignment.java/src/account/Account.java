@@ -1,6 +1,7 @@
 package src.account;
 
 import javax.print.attribute.HashPrintJobAttributeSet;
+import src.util.*;
 import java.util.*;
 
 public class Account {
@@ -22,7 +23,18 @@ public class Account {
         this.surname = surname;
     }
 
-    // Class methods
+    // randomly generated userID
+    public Account(List<UserRole> userRoles, String email, String password,
+                   String forename, String surname) {
+        this.userID = UniqueUserIDGenerator.generateUniqueUserID();
+        this.userRoles = userRoles;
+        this.emailAddress = email;
+        this.password = password;
+        this.forename = forename;
+        this.surname = surname;
+    }
+
+    // ManagerService methods
     public void addUserRole(UserRole userRole) {
         List<UserRole> newUserRoles = getUserRoles();
         newUserRoles.add(userRole);
@@ -40,12 +52,6 @@ public class Account {
         return userID;
     }
 
-    public static Account getUserByID(String userID) {
-        // for now - implement later after going over SQL
-        return new Account(userID, List.of(UserRole.CUSTOMER), "emem",
-                "jdj", "jjd", "jdjd");
-    }
-
     public List<UserRole> getUserRoles() {
         return userRoles;
     }
@@ -56,6 +62,11 @@ public class Account {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getPasswordHash() {
+        return HashedPasswordGenerator.hashPassword(password.toCharArray(),
+                userID);
     }
 
     public String getForename() {
@@ -84,4 +95,12 @@ public class Account {
         this.surname = surname;
     }
 
+    // toString
+    public String toString() {
+        return "User ID: " + userID + "\n" +
+                "User: " + forename + " " + surname + "\n" +
+                "Email: " + emailAddress + "\n" +
+                "Password: " + password + "\n" +
+                "Roles: " + userRoles;
+    }
 }

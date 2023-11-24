@@ -35,14 +35,9 @@ public class AccountOperations {
                 String userManager =
                         resultSet.getString("user_manager");
 
-                // Just to test that it worked
-                String userDetails = forename + " " + surname + "\n" +
-                        emailAddress + " " + userCustomer;
-                System.out.println(userDetails);
-
                 return new Account(userID, combineUserRoles(userCustomer,
                         userStaff, userManager), emailAddress, password,
-                                                            forename, surname);
+                        forename, surname);
             }
         } catch (SQLException e) {
             e.printStackTrace();
