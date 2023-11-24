@@ -30,7 +30,7 @@ public class OrderLineOperations {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        throw new Error("User does not have bank details.");
+        throw new Error("Order line not found.");
     }
 
 }
