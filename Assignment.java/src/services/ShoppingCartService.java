@@ -14,8 +14,10 @@ public class ShoppingCartService extends Service {
         cartItems = new ArrayList<>();
     }
 
-    public void addItem(Product productCode,int quantity) {
-        cartItems.add(new OrderLine(productCode, quantity));
+    public void addItem(int orderLineNumber, String productCode, int quantity,
+                        double orderLineCost , int orderNumber) {
+        cartItems.add(new OrderLine(orderLineNumber, productCode, quantity,
+                orderLineCost, orderNumber));
 
     }
 

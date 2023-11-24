@@ -12,7 +12,8 @@ public class AccountOperations {
     // add class attributes so can access them globally
 
     // Get account details by userID
-    public Account getAccountByID(Connection connection, String userID) {
+    public Account getAccountByID(Connection connection, String userID)
+                                                                throws Error {
         try {
             // Query the database to fetch user information
             String sql = "SELECT forename, surname, email_address, password, " +
@@ -60,8 +61,26 @@ public class AccountOperations {
         return userRoles;
     };
 
-    // Save account details into database
-    public void saveAccount() {
+    // Save account into database
+    /*
+    public void saveAccountIntoDatabase(Connection connection,
+                                        Account account) {
+        String forename = account.getForename();
+        String surname = account.getSurname();
+        String emailAddress = account.getEmailAddress();
+        String password = account.getPassword();
+        String userCustomer = account.getUserCustomer();
+        String userStaff = account.getUserStaff();
+        String userManager = account.getUserManager();
+        try {
+            // Query the database to fetch user information
+            String sql = "INSERT INTO Account()";
 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+     */
 }
