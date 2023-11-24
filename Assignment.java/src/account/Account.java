@@ -56,6 +56,27 @@ public class Account {
         return userRoles;
     }
 
+    public int getUserCustomer() {
+        if (userRoles.contains(UserRole.CUSTOMER))
+            return 1;
+        else
+            return 0;
+    }
+
+    public int getUserStaff() {
+        if (userRoles.contains(UserRole.STAFF))
+            return 1;
+        else
+            return 0;
+    }
+
+    public int getUserManager() {
+        if (userRoles.contains(UserRole.MANAGER))
+            return 1;
+        else
+            return 0;
+    }
+
     public String getEmailAddress() {
         return emailAddress;
     }

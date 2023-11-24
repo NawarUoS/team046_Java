@@ -62,25 +62,27 @@ public class AccountOperations {
     };
 
     // Save account into database
-    /*
     public void saveAccountIntoDatabase(Connection connection,
                                         Account account) {
+        String userID = account.getUserID();
         String forename = account.getForename();
         String surname = account.getSurname();
         String emailAddress = account.getEmailAddress();
         String password = account.getPassword();
-        String userCustomer = account.getUserCustomer();
-        String userStaff = account.getUserStaff();
-        String userManager = account.getUserManager();
+        int userCustomer = account.getUserCustomer();
+        int userStaff = account.getUserStaff();
+        int userManager = account.getUserManager();
         try {
             // Query the database to fetch user information
-            String sql = "INSERT INTO Account()";
-
-            }
+            String sql =
+                    "INSERT INTO Account VALUES (" + userID +", "+ forename +
+                            ", "+ surname + ", "+
+                    emailAddress +", "+ password + ", " + userCustomer + ", " +
+                            userStaff + ", " + userManager + ")";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
-     */
 }

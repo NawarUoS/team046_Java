@@ -60,7 +60,7 @@
                     AccountOperations accountOperations =
                             new AccountOperations();
                     System.out.println(accountOperations.getAccountByID(
-                            connection, "12"
+                            connection, "1234"
                     ));
                     // Secure disposal of the password
                     Arrays.fill(passwordChars, '\u0000');
