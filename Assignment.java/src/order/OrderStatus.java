@@ -9,7 +9,17 @@ public enum OrderStatus {
         return "";
     }
 
-    public OrderStatus stringToEnum(String string) {
-        return OrderStatus.PENDING;
+    public static OrderStatus stringToEnum(String status) throws Error {
+        switch (status) {
+            case "P":
+                return OrderStatus.PENDING;  
+            case "C":
+                return OrderStatus.CONFIRMED; 
+            case "F":
+                return OrderStatus.FULFILLED; 
+            default:
+                break;
+        }
+        throw new Error("Invalid order status");
     }
 }

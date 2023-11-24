@@ -3,26 +3,30 @@ package src.order;
 import java.util.List;
 
 public class Order {
-    public OrderStatus status;
+    public OrderStatus orderStatus;
     private int orderNumber;
     private String orderDate;
     private double totalCost;
     private List<OrderLine> orderLines;
 
-    public Order(OrderStatus status, int orderNumber, String orderDate,
+    public Order(OrderStatus orderStatus, int orderNumber, String orderDate,
                  double totalCost, List<OrderLine> orderLines) {
-        this.status = status;
+        this.orderStatus = orderStatus;
         this.orderNumber = orderNumber;
         this.orderDate = orderDate;
         this.totalCost = totalCost;
         this.orderLines = orderLines;
     }
 
-    // Get methods
-    public void setOrderStatus(OrderStatus status) {
-        this.status = status;
+    // Set methods
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
-
+    
+    // Get methods
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
     public int getOrderNumber() {
         return orderNumber;
     }
@@ -38,7 +42,4 @@ public class Order {
     public List<OrderLine> getOrderLines() {
         return orderLines;
     }
-
-
 }
-
