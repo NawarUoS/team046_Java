@@ -69,20 +69,55 @@ public class AccountOperations {
         String surname = account.getSurname();
         String emailAddress = account.getEmailAddress();
         String password = account.getPassword();
+        String passwordHash = account.getPasswordHash();
         int userCustomer = account.getUserCustomer();
         int userStaff = account.getUserStaff();
         int userManager = account.getUserManager();
         try {
-            // Query the database to fetch user information
-            String sql =
-                    "INSERT INTO Account VALUES (" + userID +", "+ forename +
-                            ", "+ surname + ", "+
-                    emailAddress +", "+ password + ", " + userCustomer + ", " +
-                            userStaff + ", " + userManager + ")";
+            // Query the database to insert user information
+            String sql = "INSERT INTO Accounts (userID, forename, surname, " +
+            "email_address, password, unique_password_hash, user_customer, " +
+            "user_staff, user_manager) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeQuery();
+
+            // Set parameters for the query
+            statement.setString(1, userID);
+            statement.setString(2, forename);
+            statement.setString(3, surname);
+            statement.setString(4, emailAddress);
+            statement.setString(5, password);
+            statement.setString(6, passwordHash);
+            statement.setInt(7, userCustomer);
+            statement.setInt(8, userStaff);
+            statement.setInt(9, userManager);
+
+            // Execute the insert statement
+            statement.executeUpdate();
+
+            // Close the statement to release resources
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        DatabaseConnectionHandler connectionHandler =
+                new DatabaseConnectionHandler();
+        try {
+            connectionHandler.openConnection();
+
+            Account account = new Account(List.of(UserRole.CUSTOMER),
+                    "email" , "password", "William",
+                    "Afton");
+
+            AccountOperations accountOperations = new AccountOperations();
+            accountOperations.saveAccountIntoDatabase(connectionHandler.getConnection(),
+                    account);
+        } catch (Throwable t) {
+            // Close connection if database crashes.
+            connectionHandler.closeConnection();
+            throw new RuntimeException(t);
         }
     }
 }

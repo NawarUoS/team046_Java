@@ -29,8 +29,9 @@ public class OrderOperations {
                 String order_status = resultSet.getString("order_status");
                 String userID = resultSet.getString("userID");
                  
-                return new Order(OrderStatus.stringToEnum(order_status), 
-                                    order_number, order_date, total_cost, new List);
+                //return new Order(OrderStatus.stringToEnum(order_status),
+                        //            order_number, order_date, total_cost,
+                        //new List);
             }
         } catch (SQLException e) {
             e.printStackTrace();
