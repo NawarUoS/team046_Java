@@ -4,7 +4,7 @@ import javax.print.attribute.HashPrintJobAttributeSet;
 import java.util.*;
 
 public class Account {
-    private int userID;
+    private String userID;
     private List<UserRole> userRoles;
     private String emailAddress;
     private String password;
@@ -12,8 +12,9 @@ public class Account {
     private String surname;
 
     // Constructor
-    public Account(List<UserRole> userRoles, String email,
+    public Account(String userID, List<UserRole> userRoles, String email,
                    String password, String forename, String surname) {
+        this.userID = userID;
         this.userRoles = userRoles;
         this.emailAddress = email;
         this.password = password;
@@ -35,13 +36,13 @@ public class Account {
     }
 
     // Getter methods
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public static Account getUserByID(int userID) {
+    public static Account getUserByID(String userID) {
         // for now - implement later after going over SQL
-        return new Account(List.of(UserRole.CUSTOMER), "emem",
+        return new Account(userID, List.of(UserRole.CUSTOMER), "emem",
                 "jdj", "jjd", "jdjd");
     }
 

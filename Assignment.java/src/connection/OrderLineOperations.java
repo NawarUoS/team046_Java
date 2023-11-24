@@ -31,11 +31,7 @@ public class OrderLineOperations {
         return "Order Line not found";
     }
 
-
     public static void main(String[] args) {
-    OrderLineOperations orderLineOperations = new OrderLineOperations();
-    System.out.println(orderLineOperations.getOrderLineNyNumber(connection, 2));
 
     }
-
 }
