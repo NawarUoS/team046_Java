@@ -198,8 +198,8 @@ public class AccountOperations {
                 accountOperations.saveAccountIntoDatabase(connection, account));
             // updates already existing account in database
             System.out.println(accountOperations.updateAccountDetails(
-                    connection, "124", "Mike", "LEAN",
-                    "mrBEAST@gmail.com", "amongus"));
+                    connection, "1234", "Mike", "LEAN",
+                    "mrBreast@gmail.com", "amongus2"));
         } catch (Throwable t) {
             // close connection if database crashes.
             connectionHandler.closeConnection();
