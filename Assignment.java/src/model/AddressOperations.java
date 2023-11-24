@@ -1,6 +1,4 @@
-package src.connection;
-
-import src.account.Address;
+package src.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

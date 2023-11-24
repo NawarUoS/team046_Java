@@ -1,6 +1,4 @@
-package src.connection;
-
-import src.product.*;
+package src.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,4 +1,4 @@
-package src.connection;
+package src.model;
 
 import src.account.*;
 
@@ -9,8 +9,6 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class AccountOperations {
-    // add class attributes so can access them globally
-
     // Get account details by userID
     public Account getAccountByID(Connection connection, String userID)
                                                                 throws Error {
@@ -47,8 +45,8 @@ public class AccountOperations {
     }
 
     // Combine user roles into List
-    public List<UserRole> combineUserRoles(String userCustomer, String userStaff,
-                                 String userManager) {
+    public List<UserRole> combineUserRoles(String userCustomer,
+                                        String userStaff, String userManager) {
         List<UserRole> userRoles = new ArrayList<>();
 
         if (Integer.parseInt(userCustomer) == 1)
@@ -62,10 +60,13 @@ public class AccountOperations {
     };
 
     // Save account into database
-    public void saveAccountIntoDatabase(Connection connection,
-                                        Account account) {
+    public String saveAccountIntoDatabase(Connection connection,
+                                        Account account) throws Error {
         String userID = account.getUserID();
         String forename = account.getForename();
+        if (checkAccountInDatabase(connection, forename)) {
+            return "Account with this name already exists.";
+        }
         String surname = account.getSurname();
         String emailAddress = account.getEmailAddress();
         String password = account.getPassword();
@@ -99,6 +100,36 @@ public class AccountOperations {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "Successfully registered!";
+    }
+
+    public boolean checkAccountInDatabase(Connection connection,
+                                          String username) {
+        try {
+            String sql = "SELECT userID FROM Accounts WHERE forename = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void updateAccountDetails(Connection connection, String userID,
+        List<UserRole> userRoles, String email, String password,
+                                            String forename, String surname) {
+        try {
+            String sql = "UPDATE Accounts SET email = ?, ";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
@@ -108,12 +139,13 @@ public class AccountOperations {
             connectionHandler.openConnection();
 
             Account account = new Account(List.of(UserRole.CUSTOMER),
-                    "email" , "password", "William",
-                    "Afton");
+                    "ash@pokemon.com" , "pikchuballs",
+                    "Ash", "Ketchup");
+            Connection connection = connectionHandler.getConnection();
 
             AccountOperations accountOperations = new AccountOperations();
-            accountOperations.saveAccountIntoDatabase(connectionHandler.getConnection(),
-                    account);
+            System.out.println(
+                accountOperations.saveAccountIntoDatabase(connection, account));
         } catch (Throwable t) {
             // Close connection if database crashes.
             connectionHandler.closeConnection();

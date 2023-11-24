@@ -1,9 +1,6 @@
-package src.connection;
+package src.model;
 
-import src.account.*;
 import src.order.Order;
-import src.order.OrderLine;
-import src.order.OrderStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,6 +1,6 @@
     package src.views;
 
-    import src.connection.*;
+    import src.model.*;
 
     import javax.swing.*;
     import java.awt.*;
@@ -46,25 +46,17 @@
             panel.add(loginButton);
 
             // Create an ActionListener for the login button
-            loginButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String username = usernameField.getText();
-                    char[] passwordChars = passwordField.getPassword();
-                    System.out.println(username);
-                    System.out.println(new String(passwordChars));
-                    LoginOperations loginOperations =
-                            new LoginOperations();
-                    System.out.println(loginOperations.verifyLogin(
-                            connection, username, passwordChars));
-                    AccountOperations accountOperations =
-                            new AccountOperations();
-                    System.out.println(accountOperations.getAccountByID(
-                            connection, "1234"
-                    ));
-                    // Secure disposal of the password
-                    Arrays.fill(passwordChars, '\u0000');
-                }
+            loginButton.addActionListener(e -> {
+                String username = usernameField.getText();
+                char[] passwordChars = passwordField.getPassword();
+                System.out.println(username);
+                System.out.println(new String(passwordChars));
+                LoginOperations loginOperations =
+                        new LoginOperations();
+                System.out.println(loginOperations.verifyLogin(
+                        connection, username, passwordChars));
+                // Secure disposal of the password
+                Arrays.fill(passwordChars, '\u0000');
             });
         }
     }

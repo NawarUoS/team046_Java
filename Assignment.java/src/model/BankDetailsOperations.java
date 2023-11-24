@@ -1,4 +1,4 @@
-package src.connection;
+package src.model;
 
 import src.account.*;
 

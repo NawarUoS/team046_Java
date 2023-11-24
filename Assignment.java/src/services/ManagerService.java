@@ -1,8 +1,5 @@
 package src.services;
 
-import src.account.*;
-import src.connection.AccountOperations;
-
 public class ManagerService extends Service {
     private String currentUserID;
 
