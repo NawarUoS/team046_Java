@@ -6,12 +6,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.*;
 
 public class AccountOperations {
     // add class attributes so can access them globally
 
     // Get account details by userID
-    public String getAccountByID(Connection connection, String userID) {
+    public Account getAccountByID(Connection connection, String userID) {
         try {
             // Query the database to fetch user information
             String sql = "SELECT forename, surname, email_address, password, " +
@@ -36,14 +37,33 @@ public class AccountOperations {
 
                 // Just to test that it worked
                 String userDetails = forename + " " + surname + "\n" +
-                        emailAddress;
-                return userDetails;
+                        emailAddress + " " + userCustomer;
+                System.out.println(userDetails);
+
+                return new Account(userID, combineUserRoles(userCustomer,
+                        userStaff, userManager), emailAddress, password,
+                                                            forename, surname);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "User not found.";
+        throw new Error("User not found.");
     }
+
+    // Combine user roles into List
+    public List<UserRole> combineUserRoles(String userCustomer, String userStaff,
+                                 String userManager) {
+        List<UserRole> userRoles = new ArrayList<>();
+
+        if (Integer.parseInt(userCustomer) == 1)
+            userRoles.add(UserRole.CUSTOMER);
+        if (Integer.parseInt(userStaff) == 1)
+            userRoles.add(UserRole.STAFF);
+        if (Integer.parseInt(userManager) == 1)
+            userRoles.add(UserRole.MANAGER);
+
+        return userRoles;
+    };
 
     // Save account details into database
     public void saveAccount() {

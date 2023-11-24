@@ -1,9 +1,9 @@
 package src.services;
 
 public class Service {
-    private int currentUserID;
+    private String currentUserID;
 
-    public int getCurrentUserID() {
+    public String getCurrentUserID() {
         return currentUserID;
     }
 }
