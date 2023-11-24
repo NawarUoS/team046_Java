@@ -67,6 +67,7 @@ public class AccountOperations {
         String forename = account.getForename();
         String surname = account.getSurname();
         String emailAddress = account.getEmailAddress();
+        // Cancels operation if account with this email already exists
         if (checkAccountInDatabase(connection, emailAddress)) {
             return "Account with this name already exists.";
         }
@@ -105,13 +106,31 @@ public class AccountOperations {
     }
 
     public boolean checkAccountInDatabase(Connection connection,
-                                          String emailAddress) {
+                                                         String emailAddress) {
         try {
             String sql = "SELECT userID FROM Accounts WHERE email_address = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, emailAddress);
             ResultSet resultSet = statement.executeQuery();
 
+            // Account exists if result set is not empty
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkUserIDInDatabase(Connection connection, String userID) {
+        try {
+            String sql = "SELECT email_address FROM Accounts WHERE userID = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, userID);
+            ResultSet resultSet = statement.executeQuery();
+
+            // Account exists if result set is not empty
             if (resultSet.next()) {
                 return true;
             }
@@ -124,12 +143,16 @@ public class AccountOperations {
     public String updateAccountDetails(Connection connection, String userID,
                  String forename, String surname, String emailAddress,
                                                             String password) {
-        if (!checkAccountInDatabase(connection, emailAddress))
-            return "Account does not exist.";
+        // Cancels operation if account with this userID does not exist
+        if (!checkUserIDInDatabase(connection, userID))
+            return "Account does not exist. Couldn't update account details.";
         try {
+            // Query the database to update user information
             String sql = "UPDATE Accounts SET forename = ?, surname = ?, " +
                 "email_address = ?, password = ?, unique_password_hash = ?" +
                 "WHERE userID = ?";
+
+            // Set parameters for the query
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, forename);
             statement.setString(2, surname);
@@ -141,6 +164,7 @@ public class AccountOperations {
             statement.setString(5, passwordHash);
             statement.setString(6, userID);
 
+            // Executes the update statement
             statement.executeUpdate();
 
             // Close the statement to release resources
@@ -152,26 +176,32 @@ public class AccountOperations {
         return "Successfully updated account details!";
     }
 
+    // Main method used to test functionality
     public static void main(String[] args) {
+        // setup new connection to database
         DatabaseConnectionHandler connectionHandler =
                 new DatabaseConnectionHandler();
         try {
+            // opens the connection
             connectionHandler.openConnection();
 
             Account account = new Account(List.of(UserRole.CUSTOMER),
-                    "ash@pokemon.com" , "pikchuballs",
+                    "ash1@pookemon.com" , "pikchuballs",
                     "Ash", "Ketchup");
+
+            // initialises connection variable to be used in account operations
             Connection connection = connectionHandler.getConnection();
 
             AccountOperations accountOperations = new AccountOperations();
+            // saves previously created account into database
             System.out.println(
                 accountOperations.saveAccountIntoDatabase(connection, account));
+            // updates already existing account in database
             System.out.println(accountOperations.updateAccountDetails(
-                    connection, "1234", "Mike",
-                    "LEAN", "mr@gmail.com",
-                    "amongus"));
+                    connection, "124", "Mike", "LEAN",
+                    "mrBEAST@gmail.com", "amongus"));
         } catch (Throwable t) {
-            // Close connection if database crashes.
+            // close connection if database crashes.
             connectionHandler.closeConnection();
             throw new RuntimeException(t);
         }
