@@ -1,6 +1,7 @@
 package src.model;
 
 import src.account.*;
+import src.util.HashedPasswordGenerator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -64,11 +65,11 @@ public class AccountOperations {
                                         Account account) throws Error {
         String userID = account.getUserID();
         String forename = account.getForename();
-        if (checkAccountInDatabase(connection, forename)) {
-            return "Account with this name already exists.";
-        }
         String surname = account.getSurname();
         String emailAddress = account.getEmailAddress();
+        if (checkAccountInDatabase(connection, emailAddress)) {
+            return "Account with this name already exists.";
+        }
         String password = account.getPassword();
         String passwordHash = account.getPasswordHash();
         int userCustomer = account.getUserCustomer();
@@ -104,11 +105,11 @@ public class AccountOperations {
     }
 
     public boolean checkAccountInDatabase(Connection connection,
-                                          String username) {
+                                          String emailAddress) {
         try {
-            String sql = "SELECT userID FROM Accounts WHERE forename = ?";
+            String sql = "SELECT userID FROM Accounts WHERE email_address = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, username);
+            statement.setString(1, emailAddress);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
@@ -120,16 +121,35 @@ public class AccountOperations {
         return false;
     }
 
-    public void updateAccountDetails(Connection connection, String userID,
-        List<UserRole> userRoles, String email, String password,
-                                            String forename, String surname) {
+    public String updateAccountDetails(Connection connection, String userID,
+                 String forename, String surname, String emailAddress,
+                                                            String password) {
+        if (!checkAccountInDatabase(connection, emailAddress))
+            return "Account does not exist.";
         try {
-            String sql = "UPDATE Accounts SET email = ?, ";
+            String sql = "UPDATE Accounts SET forename = ?, surname = ?, " +
+                "email_address = ?, password = ?, unique_password_hash = ?" +
+                "WHERE userID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            
+            statement.setString(1, forename);
+            statement.setString(2, surname);
+            statement.setString(3, emailAddress);
+            statement.setString(4, password);
+            String passwordHash =
+                    HashedPasswordGenerator.hashPassword(password.toCharArray(),
+                            userID);
+            statement.setString(5, passwordHash);
+            statement.setString(6, userID);
+
+            statement.executeUpdate();
+
+            // Close the statement to release resources
+            statement.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "Successfully updated account details!";
     }
 
     public static void main(String[] args) {
@@ -146,6 +166,10 @@ public class AccountOperations {
             AccountOperations accountOperations = new AccountOperations();
             System.out.println(
                 accountOperations.saveAccountIntoDatabase(connection, account));
+            System.out.println(accountOperations.updateAccountDetails(
+                    connection, "1234", "Mike",
+                    "LEAN", "mr@gmail.com",
+                    "amongus"));
         } catch (Throwable t) {
             // Close connection if database crashes.
             connectionHandler.closeConnection();
