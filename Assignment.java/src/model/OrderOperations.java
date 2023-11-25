@@ -1,11 +1,14 @@
 package src.model;
 
 import src.order.Order;
+import src.order.OrderLine;
+import src.order.OrderStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class OrderOperations {
     // add class attributes so can access them globally
@@ -25,18 +28,22 @@ public class OrderOperations {
                 double total_cost = resultSet.getDouble("order_date");
                 String order_status = resultSet.getString("order_status");
                 String userID = resultSet.getString("userID");
-                 
-                //return new Order(OrderStatus.stringToEnum(order_status),
-                        //            order_number, order_date, total_cost,
-                        //new List);
-            }
+                // TODO make it return with list of order lines
+                return new Order(OrderStatus.stringToEnum(order_status), order_number, order_date, total_cost, null);
+
+            }  
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        throw new Error("User does not have bank details.");
+        throw new Error("Order does not exist.");
     }
 
-    // Save account details into database
+    // TODO implement combine order lines into List
+    public List<OrderLine> combineOrderLines() {
+    
+        return null;
+    };
+    // Save order into database
     public void saveOrder() {
 
     }
