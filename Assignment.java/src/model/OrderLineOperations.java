@@ -108,7 +108,7 @@ public class OrderLineOperations {
             statement.setInt(2, quantity);
             statement.setDouble(3, orderLineCost);
             statement.setString(4, productCode);
-            statement.setInt(6, orderNumber);
+            statement.setInt(5, orderNumber);
 
             // Executes the update statement
             statement.executeUpdate();
