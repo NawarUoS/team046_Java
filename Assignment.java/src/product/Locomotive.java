@@ -6,9 +6,9 @@ public class Locomotive extends Product {
     private List<Integer> eraCode;
     private String dccCode;
 
-    public Locomotive(String brandName, String productName, String productCode, double productPrice, String gaugeType,
+    public Locomotive(String productCode, String brandName, String productName, double productPrice, String gaugeType,
             int modelScale, int stockLevel, List<Integer> eraCode, String dccCode) {
-        super(brandName, productName, productCode, productPrice, gaugeType, modelScale, stockLevel);
+        super(productCode, brandName, productName, productPrice, gaugeType, modelScale, stockLevel);
         this.eraCode = eraCode;
         this.dccCode = dccCode;
     }

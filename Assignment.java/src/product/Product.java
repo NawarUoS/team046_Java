@@ -10,11 +10,11 @@ public class Product {
     private int modelScale;
     private int stockLevel;
 
-    public Product(String brandName, String productName, String productCode, double productPrice, String gaugeType,
+    public Product(String productCode, String brandName, String productName, double productPrice, String gaugeType,
             int modelScale, int stockLevel) {
+        this.productCode = productCode;
         this.brandName = brandName;
         this.productName = productName;
-        this.productCode = productCode;
         this.productPrice = productPrice;
         this.gaugeType = gaugeType;
         this.modelScale = modelScale;
