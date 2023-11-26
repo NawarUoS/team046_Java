@@ -74,8 +74,54 @@ public class BankDetailsOperations {
         return "Successfully added bank details!";
     }
  
-    public boolean hasBankDetails() {
+    public String updateAccountDetails(Connection connection, String userID, 
+                            String cardName, String cardHolder, int cardNumber, 
+                            String expiryDate, int securityCode) {
+        // Cancels operation if account with this userID does not exist
+        if (!checkBankDetailsInDatabase(connection, userID))
+            return "Account does not exist. Couldn't update account details.";
+        try {
+            // Query the database to update user information
+            String sql = "UPDATE BankDetails SET card_name = ?, card_holder = ?, " +
+                "expiry_date = ?, security_code = ? WHERE userID = ?";
+
+            // Set parameters for the query
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, userID);
+            statement.setString(2, cardName);
+            statement.setString(3, cardHolder);
+            statement.setInt(4, cardNumber);
+            statement.setString(5, expiryDate);
+            statement.setInt(6, securityCode);
+
+            // Executes the update statement
+            statement.executeUpdate();
+
+            // Close the statement to release resources
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Successfully updated bank details!";
+    }
+
+    // Refrences card_number to update 
+    public boolean checkBankDetailsInDatabase(Connection connection, String userID) {
         // TODO implement hasBankDetails
+        try {
+            String sql = "SELECT card_number FROM BankDetails WHERE userID = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, userID);
+            ResultSet resultSet = statement.executeQuery();
+
+            // Account exists if result set is not empty
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
