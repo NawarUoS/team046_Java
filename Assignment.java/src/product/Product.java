@@ -7,17 +7,15 @@ public class Product {
     private String productName; 
     private double productPrice;
     private String gaugeType;
-    private int modelScale;
     private int stockLevel;
 
     public Product(String productCode, String brandName, String productName, double productPrice, String gaugeType,
-            int modelScale, int stockLevel) {
+                   int stockLevel) {
         this.productCode = productCode;
         this.brandName = brandName;
         this.productName = productName;
         this.productPrice = productPrice;
         this.gaugeType = gaugeType;
-        this.modelScale = modelScale;
         this.stockLevel = stockLevel;
     }
     // Getter method
@@ -35,9 +33,6 @@ public class Product {
     }
     public String getGaugeType() {
         return gaugeType;
-    }
-    public int getModelScale() {
-        return modelScale;
     }
     public int getStockLevel() {
         return stockLevel;
@@ -58,9 +53,6 @@ public class Product {
     }
     public void setGaugeType(String gaugeType) {
         this.gaugeType = gaugeType;
-    }
-    public void setModelScale(int modelScale) {
-        this.modelScale = modelScale;
     }
     public void setStockLevel(int stockLevel) {
         this.stockLevel = stockLevel;

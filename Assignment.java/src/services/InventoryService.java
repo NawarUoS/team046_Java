@@ -39,7 +39,7 @@ public class InventoryService {
     public void addControllerToInventory(Account member, String brand, String name, String code, 
                             Double price, String gauge, int scale, int stock, Boolean isDig) throws IllegalArgumentException{
         try {
-            Controller object = new Controller(code, name, brand, price, gauge, scale, stock, isDig);
+            Controller object = new Controller(code, name, brand, price, gauge, stock, isDig);
         } catch (IllegalArgumentException e) {
             System.err.println("One or more input fields is invalid");
         }
@@ -48,7 +48,7 @@ public class InventoryService {
     public void addLocomotiveToInventory(Account member, String brand, String name, String code, 
                             Double price, String gauge, int scale, int stock, List<Integer> eras, String ddcCode) throws IllegalArgumentException{
         try {
-            Locomotive object = new Locomotive(code, name, brand, price, gauge, scale, stock, eras, ddcCode);
+            Locomotive object = new Locomotive(code, name, brand, price, gauge, stock, eras, ddcCode);
         } catch (IllegalArgumentException e) {
             System.err.println("One or more input fields is invalid");
         }
@@ -57,7 +57,7 @@ public class InventoryService {
     public void addRollingStockToInventory(Account member, String brand, String name, String code, 
                             Double price, String gauge, int scale, int stock, List<Integer> eras) throws IllegalArgumentException{
         try {
-            RollingStock object = new RollingStock(code, name, brand, price, gauge, scale, stock, eras);
+            RollingStock object = new RollingStock(code, name, brand, price, gauge, stock, eras);
         } catch (IllegalArgumentException e) {
             System.err.println("One or more input fields is invalid");
         }
@@ -66,7 +66,7 @@ public class InventoryService {
     public void addTrackToInventory(Account member, String brand, String name, String code, 
                             Double price, String gauge, int scale, int stock, String trackName, String type ) throws IllegalArgumentException{
         try {
-            Track object = new Track(code, name, brand, price, gauge, scale, stock);
+            Track object = new Track(code, name, brand, price, gauge, stock);
         } catch (IllegalArgumentException e) {
             System.err.println("One or more input fields is invalid");
         }
@@ -75,7 +75,7 @@ public class InventoryService {
     public void addTrackPackToInventory(Account member, String brand, String name, String code, 
                             Double price, String gauge, int scale, int stock, List<Track> contents) throws IllegalArgumentException{
         try {
-            TrackPack object = new TrackPack(code, name, brand, price, gauge, scale, stock, contents);
+            TrackPack object = new TrackPack(code, name, brand, price, gauge, stock, contents);
         } catch (IllegalArgumentException e) {
             System.err.println("One or more input fields is invalid");
         }
@@ -85,7 +85,7 @@ public class InventoryService {
                             Double price, String gauge, int scale, int stock,List<Locomotive> trainContent, List<TrackPack> trackContent,
                             List<RollingStock> rollingContent, Controller controller) throws IllegalArgumentException{
         try {
-            TrainSet object = new TrainSet(code, name, brand, price, gauge, scale, stock, trainContent, trackContent, rollingContent, controller);
+            TrainSet object = new TrainSet(code, name, brand, price, gauge, stock, trainContent, trackContent, rollingContent, controller);
         } catch (IllegalArgumentException e) {
             System.err.println("One or more input fields is invalid");
         }

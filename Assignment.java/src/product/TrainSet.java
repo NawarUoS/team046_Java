@@ -10,9 +10,9 @@ public class TrainSet extends Product {
     private Controller controller;
 
     public TrainSet(String productCode, String brandName, String productName, double productPrice, String gaugeType,
-            int modelScale, int stockLevel, List<Locomotive> trainContent, List<TrackPack> trackContent,
+            int stockLevel, List<Locomotive> trainContent, List<TrackPack> trackContent,
             List<RollingStock> rollingContent, Controller controller) {
-        super(productCode, brandName, productName, productPrice, gaugeType, modelScale, stockLevel);
+        super(productCode, brandName, productName, productPrice, gaugeType, stockLevel);
         this.trainContent = trainContent;
         this.trackContent = trackContent;
         this.rollingContent = rollingContent;
