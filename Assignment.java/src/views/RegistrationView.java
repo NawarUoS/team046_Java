@@ -1,6 +1,6 @@
 package src.views;
 
-import src.account.Account;
+import src.account.*;
 import src.account.UserRole;
 import src.model.*;
 import src.util.*;
@@ -19,6 +19,12 @@ public class RegistrationView extends JFrame {
     private JTextField surnameField;
     private JTextField usernameField;
     private JPasswordField passwordField;
+    private JTextField houseNumberField;
+    private JTextField streetNameField;
+    private JTextField cityNameField;
+    private JTextField postCodeField;
+
+
     public RegistrationView (Connection connection) throws SQLException {
         // Create the JFrame in the constructor
         this.setTitle("Register");
@@ -37,12 +43,20 @@ public class RegistrationView extends JFrame {
         JLabel surnameLabel = new JLabel("Surname");
         JLabel usernameLabel = new JLabel("Email:");
         JLabel passwordLabel = new JLabel("Password:");
+        JLabel houseNumberLabel = new JLabel("House Number:");
+        JLabel streetNameLabel = new JLabel("Street:");
+        JLabel cityNameLabel = new JLabel("City:");
+        JLabel postCodeLabel = new JLabel("Postcode:");
 
         // Create JTextFields for entering username and password
-        forenameField = new JTextField(20);
-        surnameField = new JTextField(20);
-        usernameField = new JTextField(20);
-        passwordField = new JPasswordField(20);
+        forenameField = new JTextField(40);
+        surnameField = new JTextField(40);
+        usernameField = new JTextField(40);
+        passwordField = new JPasswordField(40);
+        houseNumberField = new JTextField(40);
+        streetNameField = new JTextField(40);
+        cityNameField = new JTextField(40);
+        postCodeField = new JTextField(40);
 
         // Create a JButton for the login action
         JButton registerButton = new JButton("Register");
@@ -56,7 +70,14 @@ public class RegistrationView extends JFrame {
         panel.add(usernameField);
         panel.add(passwordLabel);
         panel.add(passwordField);
-        panel.add(new JLabel());  // Empty label for spacing
+        panel.add(houseNumberLabel);
+        panel.add(houseNumberField);
+        panel.add(streetNameLabel);
+        panel.add(streetNameField);
+        panel.add(cityNameLabel);
+        panel.add(cityNameField);
+        panel.add(postCodeLabel);
+        panel.add(postCodeField);
         panel.add(registerButton);
 
         // Create an ActionListener for the register button
@@ -65,18 +86,30 @@ public class RegistrationView extends JFrame {
             String surname = surnameField.getText();
             String email = usernameField.getText();
             char[] passwordChars = passwordField.getPassword();
+            String houseNumber = houseNumberField.getText();
+            String streetName = streetNameField.getText();
+            String cityName = cityNameField.getText();
+            String postCode = postCodeField.getText();
             System.out.println(forename);
             System.out.println(surname);
             System.out.println(email);
             System.out.println(new String(passwordChars));
+            System.out.println(houseNumber + " " + streetName + " " +
+                                                    cityName + " " + postCode);
             AccountOperations accountOperations =
                     new AccountOperations();
             Account account =
                     new Account(List.of(UserRole.CUSTOMER), email,
                             passwordChars,
                             forename, surname);
+            AddressOperations addressOperations = new AddressOperations();
+            Address address = new Address(account.getUserID(),
+                    Integer.parseInt(houseNumber), streetName, cityName,
+                                                                     postCode);
             System.out.println(accountOperations.saveAccountIntoDatabase(
                     connection, account));
+            System.out.println(addressOperations.saveAddressIntoDatabase(
+                    connection, address));
             // Secure disposal of the password
             Arrays.fill(passwordChars, '\u0000');
         });
