@@ -1,5 +1,7 @@
 package src.model;
 
+import src.product.*;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,11 +9,17 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class InventoryOperations {
-
-    public String getGenProductByID(Connection connection, String ID) {
+    /**
+     * Gets the userId based on the username from the 'Users' table.
+     *
+     * @param connection The database connection.
+     * @param username   The username for which to retrieve the userId.
+     * @return The userId corresponding to the given username.
+     */
+    public Product getGenProductByID(Connection connection, String ID) throws Error{
         try {
             // Query the database to fetch product information
-            String sql = "SELECT brand_name, product_name, gauge_type, " +
+            String sql = "SELECT brand_name, product_name, product_price, gauge_type, " +
             "model_scale, quantity FROM Products " +
                     "WHERE product_code = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -21,20 +29,20 @@ public class InventoryOperations {
             if (resultSet.next()) {
                 String brandName = resultSet.getString("brand_name");
                 String productName = resultSet.getString("product_name");
+                Double productPrice = resultSet.getDouble("productPrice");
                 String gaugeType = resultSet.getString("gauge_type");
                 Integer modelScale = resultSet.getInt("model_scale");
                 Integer quantity = resultSet.getInt("quantity");
-                return (brandName + ", " + productName + ", " + gaugeType + ", " +
-                gaugeType + ", " + modelScale + ", " + quantity);
+                return new Product(ID, brandName, productName, productPrice, gaugeType, modelScale, quantity);
             }
             
         } catch (SQLException e) {
             e.printStackTrace();
         }
-         return "Product not found.";
+        throw new Error("Product not found");
     }
 
-    public String getLocomotiveByID(Connection connection, String ID) {
+    public Locomotive getLocomotiveByID(Connection connection, String ID) {
         try {
             // Query the database to fetch product information
             String sql = "SELECT dcc_code FROM Locomotives " +
@@ -45,16 +53,16 @@ public class InventoryOperations {
 
             if (resultSet.next()) {
                 String dccCode = resultSet.getString("dcc_code");
-                return (dccCode);
+                return new Locomotive(getGenProductByID(connection, ID), getEraByID(connection, ID), dccCode);
             }
             
         } catch (SQLException e) {
             e.printStackTrace();
         }
-         return "Product not found.";
+        throw new Error("Product not found");
     }
 
-    public String getControllerByID(Connection connection, String ID) {
+    public Controller getControllerByID(Connection connection, String ID) {
         try {
             // Query the database to fetch product information
             String sql = "SELECT is_digital FROM Controller " +
@@ -64,17 +72,17 @@ public class InventoryOperations {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                String isDigital = resultSet.getString("is_digital");
-                return(isDigital);
+                Boolean isDigital = resultSet.getBoolean("is_digital");
+                return new Controller(getGenProductByID(connection, ID), isDigital);
             }
             
         } catch (SQLException e) {
             e.printStackTrace();
         }
-         return "Product not found.";
+        throw new Error("Product not found");
     }
 
-    public String getEraByID(Connection connection, String ID) {
+    public List<Integer> getEraByID(Connection connection, String ID) {
         try {
             // Query the database to fetch product information
             String sql = "SELECT era_code FROM Eras " +
@@ -83,18 +91,19 @@ public class InventoryOperations {
             statement.setString(1, ID);
             ResultSet resultSet = statement.executeQuery();
 
-            if (resultSet.next()) {
-                String eras = resultSet.getString("era_code");
+            List<Integer> eras = new ArrayList<Integer>();
+            while (resultSet.next()) {
+                eras.add(resultSet.getInt("era_code"));
                 return(eras);
             }
             
         } catch (SQLException e) {
             e.printStackTrace();
         }
-         return "Product not found.";
+        throw new Error("Product not found");
     }
 
-    public String getPackByID(Connection connection, String ID) {
+    public List<String[]> getPackByID(Connection connection, String ID) {
         try {
             // Query the database to fetch product information
             String sql = "SELECT component_code, quantity FROM Packs " +
@@ -103,43 +112,20 @@ public class InventoryOperations {
             statement.setString(1, ID);
             ResultSet resultSet = statement.executeQuery();
 
-            if (resultSet.next()) {
+            List<String[]> components = new ArrayList<String[]>();
+            String[] newComp = new String[]{"1", "2"};
+            while (resultSet.next()) {
                 // If this kicks off use a list
-                String component = resultSet.getString("component_code");
-                String quantity = resultSet.getString("quantity");                
-                return(component + ", " + quantity);
+                newComp[0] = (resultSet.getString("component_code"));
+                newComp[1] = resultSet.getString("quantity");  
+                components.add(newComp);
             }
+            return (components);
             
         } catch (SQLException e) {
             e.printStackTrace();
         }
-         return "Product not found.";
-    }
-
-    public String getProductByID(Connection connection, String ID) {
-        char firstLetter = ID.charAt(0);
-        String type = String.valueOf(firstLetter);
-        String typeProperties;
-        switch (type) {
-            case "C":
-                typeProperties = getControllerByID(connection, ID);
-                break;
-            case "L":
-                typeProperties = getLocomotiveByID(connection, ID) + getEraByID(connection, ID);
-                break;
-            case "S":
-                typeProperties = getEraByID(connection, ID);
-                break;
-            case "M":
-                typeProperties = getPackByID(connection, ID);
-                break;
-            case "P":
-                typeProperties = getPackByID(connection, ID);
-                break;
-            default:
-                typeProperties = "";
-        }
-        return (getGenProductByID(connection, ID) + typeProperties);
+        throw new Error("Product not found");
     }
 
     public void addProduct(Connection connection, String productID, String brandName, String productName, 

@@ -13,6 +13,16 @@ public class Locomotive extends Product {
         this.dccCode = dccCode;
     }
 
+    public Locomotive(Product genProduct, List<Integer> eraCode, String dccCode) {
+        super(genProduct.getProductCode(), genProduct.getBrandName(), 
+        genProduct.getProductName(), genProduct.getProductPrice(), 
+        genProduct.getGaugeType(), genProduct.getModelScale(), 
+        genProduct.getStockLevel());
+        this.eraCode = eraCode;
+        this.dccCode = dccCode;
+    }
+
+
     //Get methods
     public List<Integer> getEraCode() {
         return eraCode;

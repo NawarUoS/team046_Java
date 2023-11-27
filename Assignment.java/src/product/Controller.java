@@ -9,6 +9,14 @@ public class Controller extends Product {
         this.isDigital = isDigital;
     }
 
+    public Controller(Product genProduct, Boolean isDigital) {
+        super(genProduct.getProductCode(), genProduct.getBrandName(), 
+        genProduct.getProductName(), genProduct.getProductPrice(), 
+        genProduct.getGaugeType(), genProduct.getModelScale(), 
+        genProduct.getStockLevel());
+        this.isDigital = isDigital;
+    }
+
     public Boolean getDigital() {
         return isDigital;
     }
