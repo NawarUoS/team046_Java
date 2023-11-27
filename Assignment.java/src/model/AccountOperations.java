@@ -27,7 +27,8 @@ public class AccountOperations {
                 String surname = resultSet.getString("surname");
                 String emailAddress =
                         resultSet.getString("email_address");
-                String password = resultSet.getString("password");
+                char[] password =
+                    resultSet.getString("password").toCharArray();
                 String userCustomer =
                         resultSet.getString("user_customer");
                 String userStaff =
@@ -71,7 +72,6 @@ public class AccountOperations {
         if (checkAccountInDatabase(connection, emailAddress)) {
             return "Account with this name already exists.";
         }
-        String password = account.getPassword();
         String passwordHash = account.getPasswordHash();
         int userCustomer = account.getUserCustomer();
         int userStaff = account.getUserStaff();
@@ -79,8 +79,8 @@ public class AccountOperations {
         try {
             // Query the database to insert user information
             String sql = "INSERT INTO Accounts (userID, forename, surname, " +
-            "email_address, password, unique_password_hash, user_customer, " +
-            "user_staff, user_manager) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "email_address, unique_password_hash, user_customer, " +
+            "user_staff, user_manager) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             // Set parameters for the query
@@ -88,11 +88,10 @@ public class AccountOperations {
             statement.setString(2, forename);
             statement.setString(3, surname);
             statement.setString(4, emailAddress);
-            statement.setString(5, password);
-            statement.setString(6, passwordHash);
-            statement.setInt(7, userCustomer);
-            statement.setInt(8, userStaff);
-            statement.setInt(9, userManager);
+            statement.setString(5, passwordHash);
+            statement.setInt(6, userCustomer);
+            statement.setInt(7, userStaff);
+            statement.setInt(8, userManager);
 
             // Execute the insert statement
             statement.executeUpdate();
@@ -186,7 +185,7 @@ public class AccountOperations {
             connectionHandler.openConnection();
 
             Account account = new Account(List.of(UserRole.CUSTOMER),
-                    "ash1@pookemon.com" , "pikchuballs",
+                    "ash1@pookemon.com" , "pikballs".toCharArray(),
                     "Ash", "Ketchup");
 
             // initialises connection variable to be used in account operations
