@@ -110,30 +110,30 @@ public class InventoryOperations {
         throw new Error("Product not found");
     }
 
-//    public List<String[]> getPackByID(Connection connection, String ID) {
-//        try {
-//            // Query the database to fetch product information
-//            String sql = "SELECT component_code, quantity FROM Packs " +
-//                    "WHERE product_code = ?";
-//            PreparedStatement statement = connection.prepareStatement(sql);
-//            statement.setString(1, ID);
-//            ResultSet resultSet = statement.executeQuery();
-//
-//            List<String[]> components = new ArrayList<String[]>();
-//            String[] newComp = new String[]{"1", "2"};
-//            while (resultSet.next()) {
-//                // If this kicks off use a list
-//                newComp[0] = (resultSet.getString("component_code"));
-//                newComp[1] = resultSet.getString("quantity");
-//                components.add(newComp);
-//            }
-//            return (components);
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        throw new Error("Product not found");
-//    }
+    public List<String[]> getPackByID(Connection connection, String ID) {
+        try {
+            // Query the database to fetch product information
+            String sql = "SELECT component_code, quantity FROM Packs " +
+                    "WHERE product_code = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, ID);
+            ResultSet resultSet = statement.executeQuery();
+
+            List<String[]> components = new ArrayList<String[]>();
+            String[] newComp = new String[]{"1", "2"};
+            while (resultSet.next()) {
+                // If this kicks off use a list
+                newComp[0] = (resultSet.getString("component_code"));
+                newComp[1] = resultSet.getString("quantity");
+                components.add(newComp);
+            }
+            return (components);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new Error("Product not found");
+    }
 
     public static void addProduct(Connection connection, String productID, String brandName, String productName,
                                   Double price, String gaugeType, Integer quantity) {
@@ -209,17 +209,22 @@ public class InventoryOperations {
             e.printStackTrace();
         }
     }
+    public void addPacks(Connection connection, String productID, List<String[]> packContent) {
+        try {
+            for (int i = 0; i < packContent.size(); i++) {
+                String sql = "INSERT into Packs(product_code, component_code, quantity VALUES (?, ?, ?)";
+                PreparedStatement statement = connection.prepareStatement(sql);
+
+                statement.setString(1, productID);
+                statement.setString(2, packContent.get(i)[0]);
+                statement.setString(3, packContent.get(i)[1]);
+
+                statement.executeUpdate();
+
+                statement.close();
+            }
+        } catch (SQLException e) {
+                e.printStackTrace();
+        }
+    }
 }
-//    public void addPacks(Connection connection, String productID, String[][] packContent) {
-//        try {
-//            for (int i = 0; i < packContent.length; i++) {
-//                String sql = "INSERT into Packs(" + productID +", "+ packContent[i][0] +
-//                            ","+ packContent[i][1] +")";
-//                PreparedStatement statement = connection.prepareStatement(sql);
-//                statement.executeQuery();
-//            }
-//        } catch (SQLException e) {
-//                e.printStackTrace();
-//        }
-//    }
-//}
