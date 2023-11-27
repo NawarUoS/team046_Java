@@ -1,6 +1,5 @@
 package src.account;
 
-import javax.print.attribute.HashPrintJobAttributeSet;
 import src.util.*;
 import java.util.*;
 
@@ -56,21 +55,21 @@ public class Account {
         return userRoles;
     }
 
-    public int getUserCustomer() {
+    public int isCustomer() {
         if (userRoles.contains(UserRole.CUSTOMER))
             return 1;
         else
             return 0;
     }
 
-    public int getUserStaff() {
+    public int isStaff() {
         if (userRoles.contains(UserRole.STAFF))
             return 1;
         else
             return 0;
     }
 
-    public int getUserManager() {
+    public int isManager() {
         if (userRoles.contains(UserRole.MANAGER))
             return 1;
         else

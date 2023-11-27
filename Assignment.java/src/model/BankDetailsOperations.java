@@ -22,12 +22,16 @@ public class BankDetailsOperations {
 
             if (resultSet.next()) {
                 int card_number = resultSet.getInt("card_number");
-                String card_holder_name = resultSet.getString("card_holder_name");
+                String card_holder_name =
+                        resultSet.getString("card_holder_name");
                 String card_name = resultSet.getString("card_name");
-                String expiry_date = resultSet.getString("expiry_date");
-                int security_code = resultSet.getInt("security_code");
+                String expiry_date =
+                        resultSet.getString("expiry_date");
+                int security_code =
+                        resultSet.getInt("security_code");
 
-                return new BankDetails(card_name, card_holder_name, card_number, expiry_date, security_code);
+                return new BankDetails(card_name, card_holder_name, card_number,
+                        expiry_date, security_code);
             }
 
         } catch (SQLException e) {
@@ -50,8 +54,9 @@ public class BankDetailsOperations {
         try {
             // TODO fix sql statement when table is updated
             // Query the database to insert user information
-            String sql = "INSERT INTO BankDetails (userID, card_name, card_holder, " +
-            "card_number, expiry_date, security_code) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO BankDetails (userID, card_name, " +
+                    "card_holder, card_number, expiry_date, security_code) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             // Set parameters for the query
@@ -71,19 +76,20 @@ public class BankDetailsOperations {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "Successfully added bank details!";
+        return "Successfully added bank details to user!";
     }
  
-    public String updateAccountDetails(Connection connection, String userID, 
+    public String updateBankDetails(Connection connection, String userID,
                             String cardName, String cardHolder, int cardNumber, 
                             String expiryDate, int securityCode) {
         // Cancels operation if account with this userID does not exist
         if (!checkBankDetailsInDatabase(connection, userID))
-            return "Account does not exist. Couldn't update account details.";
+            return "Account does not exist. Couldn't update bank details.";
         try {
             // Query the database to update user information
-            String sql = "UPDATE BankDetails SET card_name = ?, card_holder = ?, " +
-                "expiry_date = ?, security_code = ? WHERE userID = ?";
+            String sql = "UPDATE BankDetails SET card_name = ?," +
+                    " card_holder = ?, expiry_date = ?, security_code = ? " +
+                    "WHERE userID = ?";
 
             // Set parameters for the query
             PreparedStatement statement = connection.prepareStatement(sql);

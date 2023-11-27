@@ -1,31 +1,38 @@
 package src.model;
 
-import src.views.LoginView;
-import src.views.RegistrationView;
+import src.views.*;
 
 import javax.swing.*;
 
 public class ConnectionMain {
     public static void main(String[] args) {
         // Create an instance of DatabaseConnectionHandler for managing database connections
-        DatabaseConnectionHandler databaseConnectionHandler = new DatabaseConnectionHandler();
+        DatabaseConnectionHandler databaseConnectionHandler =
+                new DatabaseConnectionHandler();
 
         // Execute the Swing GUI application on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
             RegistrationView registrationView = null;
             LoginView loginView = null;
+            ManagerView managerView = null;
             try {
                 // Open a database connection
                 databaseConnectionHandler.openConnection();
 
+                // test registration
                 registrationView =
                 new RegistrationView(databaseConnectionHandler.getConnection());
-                registrationView.setVisible(true);
+                registrationView.setVisible(false);
 
-                // Create and initialize the LoanTableDisplay view using the database connection
+                // test login
                 loginView =
                     new LoginView(databaseConnectionHandler.getConnection());
-                loginView.setVisible(true);
+                loginView.setVisible(false);
+
+                // test manager
+                managerView =
+                    new ManagerView(databaseConnectionHandler.getConnection());
+                managerView.setVisible(true);
 
             } catch (Throwable t) {
                 // Close connection if database crashes.

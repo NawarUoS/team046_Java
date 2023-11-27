@@ -58,7 +58,7 @@ public class RegistrationView extends JFrame {
         cityNameField = new JTextField(40);
         postCodeField = new JTextField(40);
 
-        // Create a JButton for the login action
+        // Create a JButton for the register action
         JButton registerButton = new JButton("Register");
 
         // Add components to the panel

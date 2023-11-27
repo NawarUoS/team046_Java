@@ -3,6 +3,7 @@ package src.model;
 import src.account.*;
 import src.util.HashedPasswordGenerator;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,6 +30,41 @@ public class AccountOperations {
                         resultSet.getString("email_address");
                 char[] password =
                     resultSet.getString("password").toCharArray();
+                String userCustomer =
+                        resultSet.getString("user_customer");
+                String userStaff =
+                        resultSet.getString("user_staff");
+                String userManager =
+                        resultSet.getString("user_manager");
+
+                return new Account(userID, combineUserRoles(userCustomer,
+                        userStaff, userManager), emailAddress, password,
+                        forename, surname);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new Error("User not found.");
+    }
+
+    public Account getAccountByEmail(Connection connection, String emailAddress)
+            throws Error {
+        try {
+            // Query the database to fetch user information
+            String sql = "SELECT userID, forename, surname, password, " +
+                    "user_customer, user_staff, user_manager FROM Accounts " +
+                    "WHERE email_address = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, emailAddress);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String userID =
+                        resultSet.getString("userID");
+                String forename = resultSet.getString("forename");
+                String surname = resultSet.getString("surname");
+                char[] password =
+                        resultSet.getString("password").toCharArray();
                 String userCustomer =
                         resultSet.getString("user_customer");
                 String userStaff =
@@ -73,9 +109,9 @@ public class AccountOperations {
             return "Account with this name already exists.";
         }
         String passwordHash = account.getPasswordHash();
-        int userCustomer = account.getUserCustomer();
-        int userStaff = account.getUserStaff();
-        int userManager = account.getUserManager();
+        int userCustomer = account.isCustomer();
+        int userStaff = account.isStaff();
+        int userManager = account.isManager();
         try {
             // Query the database to insert user information
             String sql = "INSERT INTO Accounts (userID, forename, surname, " +
@@ -137,6 +173,21 @@ public class AccountOperations {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public ResultSet getStaff(Connection connection) throws SQLException {
+        ResultSet resultSet = null;
+        try {
+            // Execute the SQL query
+            String sqlQuery = "SELECT userID, forename, surname, " +
+                    "email_address, user_staff FROM Accounts " +
+                    "WHERE user_staff = 1";
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+            resultSet = statement.executeQuery(sqlQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 
     public String updateAccountDetails(Connection connection, String userID,

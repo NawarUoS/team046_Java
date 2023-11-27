@@ -51,8 +51,7 @@ public class AddressOperations {
         try {
             // Query the database to insert user information
             String sql = "INSERT INTO Addresses (house_number, street_name, " +
-                    "city_name, postcode, userID) VALUES (?, ?, " +
-                                                                    "?, ?, ?)";
+                    "city_name, postcode, userID) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             // Set parameters for the query
