@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public class eraTest {
-    public String getEraByID(Connection connection, String ID) {
+    public static String getEraByID(Connection connection, String ID) {
         try {
             // Query the database to fetch product information
             String sql = "SELECT era_code FROM Eras " +
@@ -29,7 +29,7 @@ public class eraTest {
          return "Product not found.";
     }
 
-    public void addEras(Connection connection, String productID, List<Integer> eras) {
+    public static void addEras(Connection connection, String productID, List<Integer> eras) {
         try {
             for (int i = 0; i < eras.size(); i++) {
                 String sql = "INSERT into Eras (" + productID +", " + eras.get(i) +")";
@@ -41,7 +41,7 @@ public class eraTest {
         }
     }
 
-    public void main(String[] args) {
+    public static void main(String[] args) {
        // setup new connection to database
         DatabaseConnectionHandler connectionHandler =
                     new DatabaseConnectionHandler();
