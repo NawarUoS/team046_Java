@@ -8,28 +8,28 @@ public class Account {
     private String userID;
     private List<UserRole> userRoles;
     private String emailAddress;
-    private String password;
+    private String passwordHash;
     private String forename;
     private String surname;
 
     // Constructor
     public Account(String userID, List<UserRole> userRoles, String email,
-                   String password, String forename, String surname) {
+                   char[] password, String forename, String surname) {
         this.userID = userID;
         this.userRoles = userRoles;
         this.emailAddress = email;
-        this.password = password;
+        this.passwordHash = HashedPasswordGenerator.hashPassword(password, userID);
         this.forename = forename;
         this.surname = surname;
     }
 
     // randomly generated userID
-    public Account(List<UserRole> userRoles, String email, String password,
+    public Account(List<UserRole> userRoles, String email, char[] password,
                    String forename, String surname) {
         this.userID = UniqueUserIDGenerator.generateUniqueUserID();
         this.userRoles = userRoles;
         this.emailAddress = email;
-        this.password = password;
+        this.passwordHash = HashedPasswordGenerator.hashPassword(password, userID);
         this.forename = forename;
         this.surname = surname;
     }
@@ -81,13 +81,9 @@ public class Account {
         return emailAddress;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
     public String getPasswordHash() {
-        return HashedPasswordGenerator.hashPassword(password.toCharArray(),
-                userID);
+        return passwordHash;
     }
 
     public String getForename() {
@@ -104,8 +100,9 @@ public class Account {
         this.emailAddress = emailAddress;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(char[] password) {
+        this.passwordHash =
+                HashedPasswordGenerator.hashPassword(password, getUserID());
     }
 
     public void setForename(String forename) {
@@ -121,7 +118,7 @@ public class Account {
         return "User ID: " + userID + "\n" +
                 "User: " + forename + " " + surname + "\n" +
                 "Email: " + emailAddress + "\n" +
-                "Password: " + password + "\n" +
+                "Hashed password: " + new String(passwordHash) + "\n" +
                 "Roles: " + userRoles;
     }
 }

@@ -1,6 +1,7 @@
 package src.model;
 
 import src.views.LoginView;
+import src.views.RegistrationView;
 
 import javax.swing.*;
 
@@ -11,13 +12,19 @@ public class ConnectionMain {
 
         // Execute the Swing GUI application on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
+            RegistrationView registrationView = null;
             LoginView loginView = null;
             try {
                 // Open a database connection
                 databaseConnectionHandler.openConnection();
 
+                registrationView =
+                new RegistrationView(databaseConnectionHandler.getConnection());
+                registrationView.setVisible(true);
+
                 // Create and initialize the LoanTableDisplay view using the database connection
-                loginView = new LoginView(databaseConnectionHandler.getConnection());
+                loginView =
+                    new LoginView(databaseConnectionHandler.getConnection());
                 loginView.setVisible(true);
 
             } catch (Throwable t) {
