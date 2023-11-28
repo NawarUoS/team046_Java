@@ -73,7 +73,7 @@ public class InventoryService {
     }
 
     public void addTrackPackToInventory(Account member, String brand, String name, String code, 
-                            Double price, String gauge, int scale, int stock, List<Track> contents) throws IllegalArgumentException{
+                            Double price, String gauge, int scale, int stock, List<String[]> contents) throws IllegalArgumentException{
         try {
             TrackPack object = new TrackPack(code, name, brand, price, gauge, stock, contents);
         } catch (IllegalArgumentException e) {
@@ -82,10 +82,9 @@ public class InventoryService {
     }
 
     public void addTrainSetToInventory(Account member, String brand, String name, String code, 
-                            Double price, String gauge, int scale, int stock,List<Locomotive> trainContent, List<TrackPack> trackContent,
-                            List<RollingStock> rollingContent, Controller controller) throws IllegalArgumentException{
+                            Double price, String gauge, int stock,List<String[]> content) throws IllegalArgumentException{
         try {
-            TrainSet object = new TrainSet(code, name, brand, price, gauge, stock, trainContent, trackContent, rollingContent, controller);
+            TrainSet object = new TrainSet(code, name, brand, price, gauge, stock, content);
         } catch (IllegalArgumentException e) {
             System.err.println("One or more input fields is invalid");
         }
