@@ -212,7 +212,7 @@ public class InventoryOperations {
     public void addPacks(Connection connection, String productID, List<String[]> packContent) {
         try {
             for (int i = 0; i < packContent.size(); i++) {
-                String sql = "INSERT into Packs(product_code, component_code, quantity VALUES (?, ?, ?)";
+                String sql = "INSERT into Packs(product_code, component_code, quantity) VALUES (?, ?, ?)";
                 PreparedStatement statement = connection.prepareStatement(sql);
 
                 statement.setString(1, productID);
@@ -225,6 +225,37 @@ public class InventoryOperations {
             }
         } catch (SQLException e) {
                 e.printStackTrace();
+        }
+    }
+
+    public void addStock (Connection connection, String productID, Integer quantity) {
+        try {
+            String sql1 = "SELECT quantity FROM products WHERE product_code = ?";
+            PreparedStatement getStatement = connection.prepareStatement(sql1);
+
+            getStatement.setString(1, productID);
+
+            ResultSet resultSet = getStatement.executeQuery();
+
+            if (resultSet.next()) {
+                Integer currQuantity = resultSet.getInt("quantity");
+                Integer newQuantity = currQuantity + quantity;
+                try {
+                    String sql2 = "UPDATE Products SET quantity = ? WHERE product_code = ?";
+                    PreparedStatement setStatement = connection.prepareStatement(sql2);
+
+                    setStatement.setInt(1, newQuantity);
+                    setStatement.setString(2, productID);
+
+                    getStatement.executeUpdate();
+                    getStatement.close();
+
+                } catch (SQLException i) {
+                    i.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
