@@ -1,22 +1,28 @@
+
+
+
+
+
 package src.views;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class ProfileView extends JFrame {
     // Components
     private JTextField firstNameField;
     private JTextField lastNameField;
     private JTextField emailField;
-    private JTextField addressField;
+    private JTextField houseNumberField;
+    private JTextField roadNameField;
+    private JTextField cityNameField;
+    private JTextField postcodeField;
     private JTextField cardNumberField;
     private JTextField cardHolderField;
     private JTextField cardExpiryField;
     private JTextField securityCodeField;
 
-    public ProfileView(Connection connection) throws SQLException {
+    public ProfileView() {
         // GUI Initialization
         this.setTitle("Customer Profile");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,8 +45,17 @@ public class ProfileView extends JFrame {
         JLabel emailLabel = new JLabel("Email:");
         emailField = new JTextField(20);
 
-        JLabel addressLabel = new JLabel("Address:");
-        addressField = new JTextField(20);
+        JLabel houseNumberLabel = new JLabel("House Number:");
+        houseNumberField = new JTextField(20);
+
+        JLabel roadNameLabel = new JLabel("Road Name:");
+        roadNameField = new JTextField(20);
+
+        JLabel cityNameLabel = new JLabel("City Name:");
+        cityNameField = new JTextField(20);
+
+        JLabel postcodeLabel = new JLabel("Postcode:");
+        postcodeField = new JTextField(20);
 
         JLabel cardNumberLabel = new JLabel("Card Number:");
         cardNumberField = new JTextField(20);
@@ -71,8 +86,14 @@ public class ProfileView extends JFrame {
         panel.add(lastNameField);
         panel.add(emailLabel);
         panel.add(emailField);
-        panel.add(addressLabel);
-        panel.add(addressField);
+        panel.add(houseNumberLabel);
+        panel.add(houseNumberField);
+        panel.add(roadNameLabel);
+        panel.add(roadNameField);
+        panel.add(cityNameLabel);
+        panel.add(cityNameField);
+        panel.add(postcodeLabel);
+        panel.add(postcodeField);
         panel.add(cardNumberLabel);
         panel.add(cardNumberField);
         panel.add(cardHolderLabel);
