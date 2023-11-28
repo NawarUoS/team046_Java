@@ -1,8 +1,7 @@
+
 package src.model;
 
-import src.views.LoginView;
-import src.views.ManagerView;
-import src.views.RegistrationView;
+import src.views.*;
 
 import javax.swing.*;
 
@@ -17,11 +16,15 @@ public class ConnectionMainI {
             RegistrationView registrationView = null;
             LoginView loginView = null;
             ManagerView managerView = null;
+            CartView cartView = null;
             try {
                 // Open a database connection
                 databaseConnectionHandler.openConnection();
 
-                // test view
+                // test cart
+                cartView=
+                        new CartView(databaseConnectionHandler.getConnection());
+                cartView.setVisible(true);
 
 
             } catch (Throwable t) {
