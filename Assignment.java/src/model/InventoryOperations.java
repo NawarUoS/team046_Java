@@ -2,6 +2,7 @@ package src.model;
 
 import src.product.*;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -417,11 +418,11 @@ public class InventoryOperations {
     public Integer getStock(Connection connection, String productID) {
         try {
             String sql = "SELECT quantity FROM products WHERE product_code = ?";
-            PreparedStatement Statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
 
-            Statement.setString(1, productID);
+            statement.setString(1, productID);
 
-            ResultSet resultSet = Statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 return resultSet.getInt("quantity");
@@ -430,5 +431,24 @@ public class InventoryOperations {
             e.printStackTrace();
         }
         throw new Error("Product not found");
+    }
+
+    public ResultSet getProducts(Connection connection) {
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT product_code, product_name, brand_name, " +
+                    "gauge_type, dcc_code, is_digital FROM Products " +
+                    "WHERE is_pack = 0";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet getPacks(Connection connection) {
+        // TODO IMPLEMENT THIS FUNCTION
+        return null;
     }
 }

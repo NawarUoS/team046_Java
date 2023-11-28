@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class ManagerOperations {
-    public ResultSet getStaff(Connection connection) throws SQLException {
+    public ResultSet getStaff(Connection connection) {
         ResultSet resultSet = null;
         try {
             // Execute the SQL query

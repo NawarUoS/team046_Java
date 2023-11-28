@@ -86,7 +86,7 @@ public class ManagerView extends JFrame {
         // Create a JScrollPane to display the table
         JScrollPane scrollPane = new JScrollPane(staffTable);
 
-        // Add components to the panel
+        // Add components to the left panel
         leftPanel.add(promoteLabel);
         leftPanel.add(userPromote1Field);
         leftPanel.add(userPromote2Field);
@@ -109,16 +109,16 @@ public class ManagerView extends JFrame {
             String userPromote2 = userPromote2Field.getText();
 
             List<String> usersToPromote = List.of(userPromote1, userPromote2);
-            System.out.println(managerOperations.promoteUsersToStaff(connection,
-                    usersToPromote));
+            System.out.println(managerOperations.promoteUsersToStaff(
+                    connection, usersToPromote));
         });
 
         // Create an ActionListener for the dismiss user button
         dismissUserButton.addActionListener(e -> {
             String userDismiss1 = userDismiss1Field.getText();
 
-            System.out.println(managerOperations.dismissUserFromStaff(connection,
-                    userDismiss1));
+            System.out.println(managerOperations.dismissUserFromStaff(
+                    connection, userDismiss1));
         });
     }
 }
