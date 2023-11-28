@@ -1,10 +1,12 @@
 package src.model;
 
-import src.views.*;
+import src.views.LoginView;
+import src.views.ManagerView;
+import src.views.RegistrationView;
 
 import javax.swing.*;
 
-public class ConnectionMain {
+public class ConnectionMainE {
     public static void main(String[] args) {
         // Create an instance of DatabaseConnectionHandler for managing database connections
         DatabaseConnectionHandler databaseConnectionHandler =
@@ -19,10 +21,7 @@ public class ConnectionMain {
                 // Open a database connection
                 databaseConnectionHandler.openConnection();
 
-                // test manager
-                managerView =
-                    new ManagerView(databaseConnectionHandler.getConnection());
-                managerView.setVisible(true);
+                // test view
 
 
             } catch (Throwable t) {
