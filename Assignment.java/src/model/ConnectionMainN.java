@@ -22,7 +22,9 @@ public class ConnectionMainN {
                 databaseConnectionHandler.openConnection();
 
                 // test view
-
+                managerView =
+                        new ManagerView(databaseConnectionHandler.getConnection());
+                managerView.setVisible(true);
 
             } catch (Throwable t) {
                 // Close connection if database crashes.

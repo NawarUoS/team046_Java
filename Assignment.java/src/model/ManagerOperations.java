@@ -58,7 +58,7 @@ public class ManagerOperations {
 
     public String dismissUserFromStaff(Connection connection, String email) {
         if (!checkAccountInDatabase(connection, email))
-            return "Account does not exist. Couldn't promote user to " +
+            return "Account does not exist. Couldn't dismiss user from " +
                     "staff.";
         try {
             // Query the database to update user information

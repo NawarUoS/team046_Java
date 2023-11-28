@@ -31,10 +31,16 @@ public class ManagerView extends JFrame {
 
         // Create a JPanel to hold the components
         JPanel panel = new JPanel();
+        JPanel leftPanel = new JPanel();
+        JPanel rightPanel = new JPanel();
+        panel.add(leftPanel);
+        panel.add(rightPanel);
         this.add(panel);
 
         // Set a layout manager for the panel (e.g., GridLayout)
-        panel.setLayout(new GridLayout(4, 3));
+        panel.setLayout(new GridLayout(1, 2));
+        leftPanel.setLayout(new GridLayout(8, 1));
+        rightPanel.setLayout(new GridLayout(1, 1));
 
         // Create JLabels for username and password
         JLabel promoteLabel = new JLabel("Promote Users to Staff:");
@@ -81,19 +87,21 @@ public class ManagerView extends JFrame {
         JScrollPane scrollPane = new JScrollPane(staffTable);
 
         // Add components to the panel
-        panel.add(promoteLabel);
-        panel.add(userPromote1Field);
-        panel.add(new JLabel());
-        panel.add(new JLabel());
-        panel.add(userPromote2Field);
-        panel.add(scrollPane);
-        panel.add(dismissLabel);
-        panel.add(userDismiss1Field);
-        panel.add(new JLabel());
+        leftPanel.add(promoteLabel);
+        leftPanel.add(userPromote1Field);
+        leftPanel.add(userPromote2Field);
+        leftPanel.add(promoteUsersButton);
+        leftPanel.add(new JLabel());
+        leftPanel.add(dismissLabel);
+        leftPanel.add(userDismiss1Field);
+        leftPanel.add(dismissUserButton);
 
-        // Add buttons
-        panel.add(promoteUsersButton);
-        panel.add(dismissUserButton);
+        // Add table
+        rightPanel.add(scrollPane);
+
+        // Combine it all in main panel
+        panel.add(leftPanel);
+        panel.add(rightPanel);
 
         // Create an ActionListener for the promote users button
         promoteUsersButton.addActionListener(e -> {
