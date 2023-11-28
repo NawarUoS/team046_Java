@@ -1,5 +1,6 @@
 package src.views;
 
+import com.mysql.cj.log.Log;
 import src.account.*;
 import src.account.UserRole;
 import src.model.*;
@@ -29,7 +30,7 @@ public class RegistrationView extends JFrame {
         // Create the JFrame in the constructor
         this.setTitle("Register");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(300, 250);
+        this.setSize(500, 250);
 
         // Create a JPanel to hold the components
         JPanel panel = new JPanel();
@@ -60,6 +61,7 @@ public class RegistrationView extends JFrame {
 
         // Create a JButton for the register action
         JButton registerButton = new JButton("Register");
+        JButton loginButton = new JButton("Login Instead");
 
         // Add components to the panel
         panel.add(forenameLabel);
@@ -78,6 +80,9 @@ public class RegistrationView extends JFrame {
         panel.add(cityNameField);
         panel.add(postCodeLabel);
         panel.add(postCodeField);
+        panel.add(new JLabel());
+        panel.add(new JLabel());
+        panel.add(loginButton);
         panel.add(registerButton);
 
         // Create an ActionListener for the register button
@@ -112,6 +117,28 @@ public class RegistrationView extends JFrame {
                     connection, address));
             // Secure disposal of the password
             Arrays.fill(passwordChars, '\u0000');
+
+            // Closes current register view
+            dispose();
+            // Create and show the new LoginView JFrame
+            try {
+                LoginView loginView = new LoginView(connection);
+                loginView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        loginButton.addActionListener(e -> {
+            // Closes current register view
+            dispose();
+            // Create and show the new LoginView JFrame
+            try {
+                LoginView loginView = new LoginView(connection);
+                loginView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         });
     }
 }
