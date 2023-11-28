@@ -18,6 +18,8 @@ public class QueueView extends JPanel {
 
     public QueueView(Connection connection, CardLayout cardLayout, JPanel cardPanel) {
         this.connection = connection;
+        this.cardLayout = cardLayout;
+        this.cardPanel = cardPanel;
 
         setLayout(new BorderLayout());
 
@@ -39,17 +41,21 @@ public class QueueView extends JPanel {
         JButton changeStatusButton = new JButton("Change Status");
         changeStatusButton.addActionListener(e -> changeOrderStatus(table));
 
+        // Refresh button
+        JButton refreshButton = new JButton("Refresh");
+        refreshButton.addActionListener(e -> refreshTable(table));
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(backButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(changeStatusButton);
+        buttonPanel.add(refreshButton);
 
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
     }
-
     private JTable createTableFromSQL() {
-        String[] columnNames = {"Order Number", "Order Date", "Total Cost", "Order Status", "User ID"};
+        String[] columnNames = { "Order Number", "Order Date", "Total Cost", "Order Status", "User ID" };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         // SQL query to retrieve data from your table
@@ -76,21 +82,28 @@ public class QueueView extends JPanel {
     }
 
     private void deleteOrder(JTable table) {
-        int selectedRow = table.getSelectedRow();
+        int[] selectedRows = table.getSelectedRows();
     
-        if (selectedRow != -1) { // Check if a row is selected
-            int orderNumber = (int) table.getValueAt(selectedRow, 0);
+        if (selectedRows.length > 0) { // Check if at least one row is selected
+            List<Integer> orderNumbers = new ArrayList<>();
     
             // Confirm the deletion with a dialog box
-            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this order?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the selected orders?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
     
             if (option == JOptionPane.YES_OPTION) {
                 // User confirmed deletion
+                // Collect order numbers for selected rows
+                for (int selectedRow : selectedRows) {
+                    int orderNumber = (int) table.getValueAt(selectedRow, 0);
+                    orderNumbers.add(orderNumber);
+                }
+    
+                // Implement the logic to delete the selected orders
                 try {
-                    // Example SQL query to delete the order
-                    String deleteQuery = "DELETE FROM Orders WHERE order_number = ?";
+                    // Example SQL query to delete multiple orders
+                    String deleteQuery = "DELETE FROM Orders WHERE order_number IN (" +
+                            String.join(",", orderNumbers.stream().map(String::valueOf).toArray(String[]::new)) + ")";
                     try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
-                        preparedStatement.setInt(1, orderNumber);
                         preparedStatement.executeUpdate();
                     }
     
@@ -98,15 +111,16 @@ public class QueueView extends JPanel {
                     refreshTable(table);
     
                     // Display a confirmation message
-                    JOptionPane.showMessageDialog(this, "Order deleted successfully.", "Deletion Successful", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Selected orders deleted successfully.", "Deletion Successful", JOptionPane.INFORMATION_MESSAGE);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Please select a row to delete.", "Delete Order", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select at least one row to delete.", "Delete Order", JOptionPane.WARNING_MESSAGE);
         }
-    }        
+    }
+    
     private void changeOrderStatus(JTable table) {
         int[] selectedRows = table.getSelectedRows();
 
@@ -139,24 +153,27 @@ public class QueueView extends JPanel {
                     e.printStackTrace();
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Invalid status. Please enter p, c, or f.", "Change Order Status", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Invalid status. Please enter p, c, or f.", "Change Order Status",
+                        JOptionPane.WARNING_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Please select at least one row to change the status.", "Change Order Status", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select at least one row to change the status.",
+                    "Change Order Status", JOptionPane.WARNING_MESSAGE);
         }
-    }        
+    }
+
     private void refreshTable(JTable table) {
         // Clear the existing rows
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
-    
+
         // Repopulate the table with updated data
         try {
             // SQL query to retrieve data from your table
             String sqlQuery = "SELECT order_number, order_date, total_cost, order_status, userID FROM Orders";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
                 ResultSet resultSet = preparedStatement.executeQuery();
-    
+
                 while (resultSet.next()) {
                     Object[] row = {
                             resultSet.getInt("order_number"),
@@ -171,7 +188,7 @@ public class QueueView extends JPanel {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    
+
         model.fireTableDataChanged();
-    }    
+    }
 }
