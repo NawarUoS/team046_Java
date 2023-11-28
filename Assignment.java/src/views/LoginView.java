@@ -36,13 +36,14 @@ public class LoginView extends JFrame {
 
         // Create a JButton for the login action
         JButton loginButton = new JButton("Login");
+        JButton registerButton = new JButton("Sign Up");
 
         // Add components to the panel
         panel.add(usernameLabel);
         panel.add(usernameField);
         panel.add(passwordLabel);
         panel.add(passwordField);
-        panel.add(new JLabel());  // Empty label for spacing
+        panel.add(registerButton);
         panel.add(loginButton);
 
         // Create an ActionListener for the login button
@@ -57,6 +58,19 @@ public class LoginView extends JFrame {
                     connection, username, passwordChars));
             // Secure disposal of the password
             Arrays.fill(passwordChars, '\u0000');
+        });
+
+        registerButton.addActionListener(e -> {
+            // Closes current login view
+            dispose();
+            // Create and show the new RegistrationView JFrame
+            try {
+                RegistrationView registerView =
+                        new RegistrationView(connection);
+                registerView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         });
     }
 }
