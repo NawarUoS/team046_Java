@@ -20,6 +20,7 @@ CREATE TABLE Eras (
 CREATE TABLE Packs (
 	product_code varchar(6),
     component_code varchar(6),
+    quantity integer,
     PRIMARY KEY (product_code),
     FOREIGN KEY (product_code) REFERENCES Products(product_code),
     FOREIGN KEY (component_code) REFERENCES Products(product_code)
