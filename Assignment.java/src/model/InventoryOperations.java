@@ -209,6 +209,7 @@ public class InventoryOperations {
             e.printStackTrace();
         }
     }
+
     public void addPacks(Connection connection, String productID, List<String[]> packContent) {
         try {
             for (int i = 0; i < packContent.size(); i++) {
@@ -224,11 +225,11 @@ public class InventoryOperations {
                 statement.close();
             }
         } catch (SQLException e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
-    public void addStock (Connection connection, String productID, Integer quantity) {
+    public void addStock(Connection connection, String productID, Integer quantity) {
         try {
             String sql1 = "SELECT quantity FROM products WHERE product_code = ?";
             PreparedStatement getStatement = connection.prepareStatement(sql1);
@@ -257,5 +258,24 @@ public class InventoryOperations {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Integer getStock(Connection connection, String productID) {
+        try {
+            String sql = "SELECT quantity FROM products WHERE product_code = ?";
+            PreparedStatement Statement = connection.prepareStatement(sql);
+
+            Statement.setString(1, productID);
+
+            ResultSet resultSet = Statement.executeQuery();
+
+            if (resultSet.next()) {
+                Integer quantity = resultSet.getInt("quantity");
+                return (quantity);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new Error("Product not found");
     }
 }
