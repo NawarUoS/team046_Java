@@ -3,45 +3,34 @@ package src.product;
 import java.util.List;
 
 public class TrainSet extends Product {
-    
-    private List<Locomotive> trainContent;
-    private List<TrackPack> trackContent;
-    private List<RollingStock> rollingContent;
-    private Controller controller;
 
-    public TrainSet(String productCode, String brandName, String productName, double productPrice, String gaugeType,
-            int stockLevel, List<Locomotive> trainContent, List<TrackPack> trackContent,
-            List<RollingStock> rollingContent, Controller controller) {
+    // Type defintion for content in the format List<String[ProductID, quantity]>
+    private List<String[]> content;
+
+    // Constructs a TrainSet object traditionally
+    public TrainSet(String productCode, String brandName, String productName,
+                    double productPrice, String gaugeType, int stockLevel,
+                    List<String[]> content) {
         super(productCode, brandName, productName, productPrice, gaugeType, stockLevel);
-        this.trainContent = trainContent;
-        this.trackContent = trackContent;
-        this.rollingContent = rollingContent;
-        this.controller = controller;
+        this.content = content;
     }
 
-    public List<Locomotive> getTrainContent() {
-        return trainContent;
-    }
-    public List<TrackPack> getTrackContent() {
-        return trackContent;
-    }
-    public List<RollingStock> getRollingContent() {
-        return rollingContent;
-    }
-    public Controller getController() {
-        return controller;
+    // Constructs a TrainSet object when given a product object and a contents
+    // list
+    public TrainSet(Product genProduct, List<String[]> content) {
+        super(genProduct.getProductCode(), genProduct.getBrandName(),
+                genProduct.getProductName(), genProduct.getProductPrice(),
+                genProduct.getGaugeType(), genProduct.getStockLevel());
+        this.content = content;
     }
 
-    public void setController(Controller controller) {
-        this.controller = controller;
+    // Getter methods
+    public List<String[]> getContent() {
+        return content;
     }
-    public void setTrackContent(List<TrackPack> trackContent) {
-        this.trackContent = trackContent;
-    }
-    public void setRollingContent(List<RollingStock> rollingContent) {
-        this.rollingContent = rollingContent;
-    }
-    public void setTrainContent(List<Locomotive> trainContent) {
-        this.trainContent = trainContent;
+
+    // Setter methods
+    public void setContent(List<String[]> content) {
+        this.content = content;
     }
 }

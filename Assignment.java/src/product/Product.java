@@ -2,6 +2,7 @@ package src.product;
 
 public class Product {
 
+    // Type definitions
     String productCode;
     private String brandName;
     private String productName; 
@@ -9,8 +10,8 @@ public class Product {
     private String gaugeType;
     private int stockLevel;
 
-    public Product(String productCode, String brandName, String productName, double productPrice, String gaugeType,
-                   int stockLevel) {
+    public Product(String productCode, String brandName, String productName,
+                   double productPrice, String gaugeType, int stockLevel) {
         this.productCode = productCode;
         this.brandName = brandName;
         this.productName = productName;
@@ -18,7 +19,8 @@ public class Product {
         this.gaugeType = gaugeType;
         this.stockLevel = stockLevel;
     }
-    // Getter method
+
+    // Getter methods
     public String getBrandName() {
         return brandName;
     }
