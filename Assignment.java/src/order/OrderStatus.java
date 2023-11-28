@@ -3,7 +3,8 @@ package src.order;
 public enum OrderStatus {
     PENDING,
     CONFIRMED,
-    FULFILLED;
+    FULFILLED,
+    BLOCKED;
 
     public String enumToString(OrderStatus orderStatus) {
         return "";
