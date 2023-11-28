@@ -1,18 +1,26 @@
 package src.views;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+import src.model.AccountOperations;
+import src.model.DatabaseConnectionHandler;
+import src.model.OrderOperations;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class StaffDashboardView extends JFrame {
+public class StaffView extends JFrame {
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
+    private JTable historyTable;
 
-    public StaffDashboardView(Connection connection) throws SQLException {
+    public StaffView(Connection connection) throws SQLException {
 
         // Create the JFrame in the constructor
         this.setTitle("Staff Dashboard");
@@ -28,7 +36,7 @@ public class StaffDashboardView extends JFrame {
         // Create screens (JPanel instances)
         JPanel inventoryScreen = new InventoryScreen();
         JPanel queueScreen = new QueueScreen();
-        JPanel historyScreen = new HistoryScreen();
+        JPanel historyScreen = new HistoryView(connection, cardLayout, cardPanel);
 
         // Add screens to the cardPanel with associated names
         cardPanel.add(inventoryScreen, "Inventory");
@@ -92,20 +100,4 @@ public class StaffDashboardView extends JFrame {
         }
     }
 
-    private class HistoryScreen extends JPanel {
-        public HistoryScreen() {
-            setLayout(new BorderLayout());
-
-            // Content for History Screen
-            add(new JLabel("History Screen Content", SwingConstants.CENTER));
-
-            // Back button to the initial screen
-            JButton backButton = new JButton("Back to Main Screen");
-            backButton.addActionListener(e -> cardLayout.show(cardPanel, "Initial"));
-
-            JPanel buttonPanel = new JPanel();
-            buttonPanel.add(backButton);
-            add(buttonPanel, BorderLayout.SOUTH);
-        }
-    }
 }
