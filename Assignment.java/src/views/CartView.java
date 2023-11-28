@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class CartView extends JFrame {
     // Components
@@ -11,7 +12,7 @@ public class CartView extends JFrame {
     private JButton checkoutButton;
     private JButton removeItemButton;
 
-    public CartView(Connection connection) {
+    public CartView(Connection connection) throws SQLException {
         // GUI Initialization
         this.setTitle("Shopping Cart");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
