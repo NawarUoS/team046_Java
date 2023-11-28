@@ -417,8 +417,7 @@ public class InventoryOperations {
             ResultSet resultSet = Statement.executeQuery();
 
             if (resultSet.next()) {
-                Integer quantity = resultSet.getInt("quantity");
-                return (quantity);
+                return resultSet.getInt("quantity");
             }
         } catch (SQLException e) {
             e.printStackTrace();
