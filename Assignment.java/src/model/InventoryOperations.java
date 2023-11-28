@@ -437,8 +437,8 @@ public class InventoryOperations {
         ResultSet resultSet = null;
         try {
             String sql = "SELECT product_code, product_name, brand_name, " +
-                    "gauge_type, dcc_code, is_digital FROM Products " +
-                    "WHERE is_pack = 0";
+                    "gauge_type, dcc_code, is_digital, quantity FROM Products" +
+                    " WHERE is_pack = 0";
             PreparedStatement statement = connection.prepareStatement(sql);
             resultSet = statement.executeQuery();
         } catch (Exception e) {
@@ -450,5 +450,19 @@ public class InventoryOperations {
     public ResultSet getPacks(Connection connection) {
         // TODO IMPLEMENT THIS FUNCTION
         return null;
+    }
+
+    public String inStock(int quantity) {
+        if (quantity > 1)
+            return "Yes";
+        else
+            return "No";
+    }
+
+    public String isDigital(boolean isDigital) {
+        if (isDigital)
+            return "Yes";
+        else
+            return "No";
     }
 }

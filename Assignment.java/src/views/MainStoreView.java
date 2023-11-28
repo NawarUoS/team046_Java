@@ -61,6 +61,7 @@ public class MainStoreView extends JFrame {
         tableModel.addColumn("Gauge Type");
         tableModel.addColumn("DCC Code");
         tableModel.addColumn("Digital?");
+        tableModel.addColumn("In Stock?");
 
         InventoryOperations inventoryOperations = new InventoryOperations();
         ResultSet resultSet1 = inventoryOperations.getProducts(connection);
@@ -73,7 +74,11 @@ public class MainStoreView extends JFrame {
                     resultSet1.getString("product_name"),
                     resultSet1.getString("gauge_type"),
                     resultSet1.getString("dcc_code"),
-                    resultSet1.getBoolean("is_digital")
+                    inventoryOperations.isDigital(resultSet1.getBoolean(
+                            "is_digital")),
+                    inventoryOperations.inStock(resultSet1.getInt(
+                            "quantity"))
+
             });
         }
 
