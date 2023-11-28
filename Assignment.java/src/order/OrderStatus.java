@@ -17,7 +17,9 @@ public enum OrderStatus {
             case "C":
                 return OrderStatus.CONFIRMED; 
             case "F":
-                return OrderStatus.FULFILLED; 
+                return OrderStatus.FULFILLED;
+            case "B":
+                return OrderStatus.BLOCKED;
             default:
                 break;
         }
