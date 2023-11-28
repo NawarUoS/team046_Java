@@ -309,6 +309,44 @@ public class InventoryOperations {
     }
 
     /**
+     * Calls addProduct and adds entries to the packs database
+     *
+     * @param connection The database connection.
+     * @param productID The unique ID for each product
+     * @param brandName The name of the product manufacturer/brand
+     * @param productName The name of the product
+     * @param price Price of the product
+     * @param gaugeType Gauge/scale of the product
+     * @param quantity initial stock of the product
+     * @param packContent A list of strings containing packContent in format:
+     *                    List<String[productID, quantity]>
+     */
+    public void addPacks(Connection connection, String productID, String brandName,
+                         String productName, Double price, String gaugeType,
+                         Integer quantity, List<String[]> packContent) {
+        try {
+            addProduct(connection, productID, brandName, productName, price,
+                    gaugeType, quantity);
+            // Iterates through the list, passing the String[] into the loop
+            for (int i = 0; i < packContent.size(); i++) {
+                String sql = "INSERT into Packs(product_code, component_code, " +
+                        "quantity) VALUES (?, ?, ?)";
+                PreparedStatement statement = connection.prepareStatement(sql);
+
+                statement.setString(1, productID);
+                statement.setString(2, packContent.get(i)[0]);
+                statement.setString(3, packContent.get(i)[1]);
+
+                statement.executeUpdate();
+
+                statement.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Adds era entries into Eras database, called by addLocomotive
      * and addRollingStock
      *
@@ -335,37 +373,6 @@ public class InventoryOperations {
             e.printStackTrace();
         }
         throw new Error("Invalid product details");
-    }
-
-    /**
-     * Adds all shared product fields to database, specific procedures add
-     * specific bits of data to the database
-     *
-     * @param connection The database connection.
-     * @param productID The unique ID for each product
-     * @param packContent A list of strings containing packContent in format:
-     *                    List<String[productID, quantity]>
-     */
-    public void addPacks(Connection connection, String productID,
-                         List<String[]> packContent) {
-        try {
-            // Iterates through the list, passing the String[] into the loop
-            for (int i = 0; i < packContent.size(); i++) {
-                String sql = "INSERT into Packs(product_code, component_code, " +
-                        "quantity) VALUES (?, ?, ?)";
-                PreparedStatement statement = connection.prepareStatement(sql);
-
-                statement.setString(1, productID);
-                statement.setString(2, packContent.get(i)[0]);
-                statement.setString(3, packContent.get(i)[1]);
-
-                statement.executeUpdate();
-
-                statement.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
