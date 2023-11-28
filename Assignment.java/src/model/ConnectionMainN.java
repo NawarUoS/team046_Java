@@ -2,6 +2,7 @@ package src.model;
 
 import com.mysql.cj.log.Log;
 import src.views.LoginView;
+import src.views.MainStoreView;
 import src.views.ManagerView;
 import src.views.RegistrationView;
 
@@ -18,14 +19,15 @@ public class ConnectionMainN {
             RegistrationView registrationView = null;
             LoginView loginView = null;
             ManagerView managerView = null;
+            MainStoreView mainStoreView = null;
             try {
                 // Open a database connection
                 databaseConnectionHandler.openConnection();
 
                 // test view
-                loginView =
-                        new LoginView(databaseConnectionHandler.getConnection());
-                loginView.setVisible(true);
+                mainStoreView =
+                    new MainStoreView(databaseConnectionHandler.getConnection());
+                mainStoreView.setVisible(true);
 
             } catch (Throwable t) {
                 // Close connection if database crashes.

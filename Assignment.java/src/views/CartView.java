@@ -5,14 +5,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 
-public class CartPage extends JFrame {
+public class CartView extends JFrame {
     private DefaultListModel<String> cartListModel;
     private JList<String> cartList;
     private JButton removeButton;
 
     private Connection connection;
 
-    public CartPage(Connection connection) throws SQLException {
+    public CartView(Connection connection) throws SQLException {
         this.setTitle("Shopping Cart");
         this.setSize(400, 300);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

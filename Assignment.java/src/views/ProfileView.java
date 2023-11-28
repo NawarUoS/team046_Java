@@ -2,14 +2,8 @@ package src.views;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
-public class CustomerProfile extends JFrame {
+public class ProfileView extends JFrame {
     // Components
     private JTextField firstNameField;
     private JTextField lastNameField;
@@ -20,7 +14,7 @@ public class CustomerProfile extends JFrame {
     private JTextField cardExpiryField;
     private JTextField securityCodeField;
 
-    public CustomerProfile() {
+    public ProfileView() {
         // GUI Initialization
         this.setTitle("Customer Profile");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -37,7 +37,7 @@ public class ManagerView extends JFrame {
         panel.add(rightPanel);
         this.add(panel);
 
-        // Set a layout manager for the panel (e.g., GridLayout)
+        // Set a layout manager for the panels
         panel.setLayout(new GridLayout(1, 2));
         leftPanel.setLayout(new GridLayout(8, 1));
         rightPanel.setLayout(new GridLayout(1, 1));
