@@ -15,30 +15,15 @@ public class ConnectionMain {
             RegistrationView registrationView = null;
             LoginView loginView = null;
             ManagerView managerView = null;
-            StaffView staffView = null;
             try {
                 // Open a database connection
                 databaseConnectionHandler.openConnection();
 
-                // test registration
-                registrationView =
-                new RegistrationView(databaseConnectionHandler.getConnection());
-                registrationView.setVisible(false);
-
-                // test login
-                loginView =
-                    new LoginView(databaseConnectionHandler.getConnection());
-                loginView.setVisible(false);
-
                 // test manager
                 managerView =
                     new ManagerView(databaseConnectionHandler.getConnection());
-                managerView.setVisible(false);
-                
-                // test staff 
-                staffView =
-                    new StaffView(databaseConnectionHandler.getConnection());
-                staffView.setVisible(true);
+                managerView.setVisible(true);
+
 
             } catch (Throwable t) {
                 // Close connection if database crashes.

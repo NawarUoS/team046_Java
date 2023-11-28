@@ -65,11 +65,9 @@ public class ManagerView extends JFrame {
 
 
         // Populate the JTable with query results
-        DatabaseConnectionHandler connectionHandler =
-                new DatabaseConnectionHandler();
-        AccountOperations accountOperations = new AccountOperations();
+        ManagerOperations managerOperations = new ManagerOperations();
         ResultSet resultSet =
-                accountOperations.getStaff(connection);
+                managerOperations.getStaff(connection);
         // Populate the JTable with the query results
         while (resultSet.next()) {
             tableModel.addRow(new Object[]{
@@ -79,8 +77,6 @@ public class ManagerView extends JFrame {
             });
         }
 
-        resultSet.close();
-        connection.close();
         // Create a JScrollPane to display the table
         JScrollPane scrollPane = new JScrollPane(staffTable);
 
@@ -104,11 +100,17 @@ public class ManagerView extends JFrame {
             String userPromote1 = userPromote1Field.getText();
             String userPromote2 = userPromote2Field.getText();
 
+            List<String> usersToPromote = List.of(userPromote1, userPromote2);
+            System.out.println(managerOperations.promoteUsersToStaff(connection,
+                    usersToPromote));
         });
 
         // Create an ActionListener for the dismiss user button
         dismissUserButton.addActionListener(e -> {
             String userDismiss1 = userDismiss1Field.getText();
+
+            System.out.println(managerOperations.dismissUserFromStaff(connection,
+                    userDismiss1));
         });
     }
 }

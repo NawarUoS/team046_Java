@@ -175,21 +175,6 @@ public class AccountOperations {
         return false;
     }
 
-    public ResultSet getStaff(Connection connection) throws SQLException {
-        ResultSet resultSet = null;
-        try {
-            // Execute the SQL query
-            String sqlQuery = "SELECT userID, forename, surname, " +
-                    "email_address, user_staff FROM Accounts " +
-                    "WHERE user_staff = 1";
-            PreparedStatement statement = connection.prepareStatement(sqlQuery);
-            resultSet = statement.executeQuery(sqlQuery);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return resultSet;
-    }
-
     public String updateAccountDetails(Connection connection, String userID,
                  String forename, String surname, String emailAddress,
                                                             String password) {
@@ -199,7 +184,7 @@ public class AccountOperations {
         try {
             // Query the database to update user information
             String sql = "UPDATE Accounts SET forename = ?, surname = ?, " +
-                "email_address = ?, password = ?, unique_password_hash = ?" +
+                "email_address = ?, password = ?, unique_password_hash = ? " +
                 "WHERE userID = ?";
 
             // Set parameters for the query
