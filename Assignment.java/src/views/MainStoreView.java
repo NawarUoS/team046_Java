@@ -33,12 +33,16 @@ public class MainStoreView extends JFrame {
         JPanel panel = new JPanel();
         JPanel topPanel = new JPanel();
         JPanel middlePanel = new JPanel();
+        JPanel productsPanel = new JPanel();
+        JPanel packsPanel = new JPanel();
         JPanel bottomPanel = new JPanel();
 
         // Set a layout manager for the panels
         panel.setLayout(new BorderLayout());
+        productsPanel.setLayout(new BorderLayout());
+        packsPanel.setLayout(new BorderLayout());
         topPanel.setLayout(new GridLayout(1, 5));
-        middlePanel.setLayout(new BorderLayout());
+        middlePanel.setLayout(new GridLayout(2, 1));
         bottomPanel.setLayout(new GridLayout(1, 5));
 
         panel.add(topPanel, BorderLayout.NORTH);
@@ -86,7 +90,7 @@ public class MainStoreView extends JFrame {
 
         // Create components for panel
         JScrollPane jScrollPaneProducts = new JScrollPane(productsTable);
-        //JScrollPane jScrollPanePacks = new JScrollPane(packsTable);
+        JScrollPane jScrollPanePacks = new JScrollPane(new JTable()); // Create a new JTable for packs
 
         JButton cartButton = new JButton("Cart");
         JButton profileButton = new JButton("Profile");
@@ -102,8 +106,13 @@ public class MainStoreView extends JFrame {
         topPanel.add(profileButton);
 
         // Add table to middle panel
-        middlePanel.add(new JLabel("Products List"), BorderLayout.NORTH);
-        middlePanel.add(jScrollPaneProducts, BorderLayout.CENTER);
+        productsPanel.add(new JLabel("Products List"), BorderLayout.NORTH);
+        productsPanel.add(jScrollPaneProducts, BorderLayout.CENTER);
+        packsPanel.add(new JLabel("Packs List"), BorderLayout.NORTH);
+        packsPanel.add(jScrollPanePacks, BorderLayout.CENTER);
+
+        middlePanel.add(productsPanel);
+        middlePanel.add(packsPanel);
 
         // Add components to bottom panel
         bottomPanel.add(new JLabel());
@@ -111,5 +120,30 @@ public class MainStoreView extends JFrame {
         bottomPanel.add(new JLabel());
         bottomPanel.add(addToOrderButton);
         bottomPanel.add(saveOrderButton);
+
+        profileButton.addActionListener(e -> {
+            // Closes current login view
+            dispose();
+            // Create and show the new RegistrationView JFrame
+            try {
+                ProfileView profileView = new ProfileView(connection);
+                profileView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        cartButton.addActionListener(e -> {
+            // Closes current login view
+            dispose();
+            // Create and show the new RegistrationView JFrame
+            try {
+                CartView cartView =
+                        new CartView(connection);
+                cartView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 }

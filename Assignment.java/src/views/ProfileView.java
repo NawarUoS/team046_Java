@@ -2,6 +2,8 @@ package src.views;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class ProfileView extends JFrame {
     // Components
@@ -14,7 +16,7 @@ public class ProfileView extends JFrame {
     private JTextField cardExpiryField;
     private JTextField securityCodeField;
 
-    public ProfileView() {
+    public ProfileView(Connection connection) throws SQLException {
         // GUI Initialization
         this.setTitle("Customer Profile");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
