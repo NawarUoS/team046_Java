@@ -54,7 +54,7 @@ public class HistoryView extends JPanel {
                         resultSet.getDate("order_date"), // Adjust the data type if necessary
                         resultSet.getDouble("total_cost"),
                         resultSet.getString("order_status"),
-                        resultSet.getInt("userID")
+                        resultSet.getString("userID")
                 };
                 model.addRow(row);
             }
