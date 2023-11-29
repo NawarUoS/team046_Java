@@ -107,16 +107,17 @@ public class MainStoreView extends JFrame {
         JScrollPane jScrollPaneProducts = new JScrollPane(productsTable);
         JScrollPane jScrollPanePacks = new JScrollPane(packsTable);
 
+        JButton recentOrders = new JButton("Recent Orders");
         JButton cartButton = new JButton("Cart");
         JButton profileButton = new JButton("Profile");
 
-        JButton addToOrderButton = new JButton("Add to Order");
+        JButton addToOrderButton = new JButton("Add to Cart");
         JButton saveOrderButton = new JButton("Save Order");
 
         // Add components to top panel
         topPanel.add(new JLabel());
         topPanel.add(new JLabel());
-        topPanel.add(new JLabel());
+        topPanel.add(recentOrders);
         topPanel.add(cartButton);
         topPanel.add(profileButton);
 
