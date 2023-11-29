@@ -83,21 +83,4 @@ public class StaffView extends JFrame {
         }
     }
 
-    // private class QueueScreen extends JPanel {
-    //     public QueueScreen() {
-    //         setLayout(new BorderLayout());
-
-    //         // Content for Queue Screen
-    //         add(new JLabel("Queue Screen Content", SwingConstants.CENTER));
-
-    //         // Back button to the initial screen
-    //         JButton backButton = new JButton("Back to Main Screen");
-    //         backButton.addActionListener(e -> cardLayout.show(cardPanel, "Initial"));
-
-    //         JPanel buttonPanel = new JPanel();
-    //         buttonPanel.add(backButton);
-    //         add(buttonPanel, BorderLayout.SOUTH);
-    //     }
-    // }
-
 }
