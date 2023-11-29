@@ -1,4 +1,3 @@
-
 package src.model;
 
 import src.views.*;
@@ -17,6 +16,7 @@ public class ConnectionMainI {
             LoginView loginView = null;
             ManagerView managerView = null;
             CartView cartView = null;
+            ProfileView profileView = null;
             try {
                 // Open a database connection
                 databaseConnectionHandler.openConnection();
@@ -24,7 +24,12 @@ public class ConnectionMainI {
                 // test cart
                 cartView=
                         new CartView(databaseConnectionHandler.getConnection(), 1);
-                cartView.setVisible(true);
+                cartView.setVisible(false);
+
+                // test profile
+                profileView =
+                        new ProfileView(databaseConnectionHandler.getConnection());
+                profileView.setVisible(true);
 
 
             } catch (Throwable t) {
