@@ -1,5 +1,7 @@
 package src.views;
 
+import src.util.CurrentUserCache;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -39,39 +41,51 @@ public class ProfileView extends JFrame {
         // Create Labels and Text Fields
         JLabel firstNameLabel = new JLabel("First Name:");
         forename = new JTextField(20);
+        forename.setText(CurrentUserCache.getLoggedInUser().getForename());
 
         JLabel lastNameLabel = new JLabel("Last Name:");
         surname = new JTextField(20);
+        surname.setText(CurrentUserCache.getLoggedInUser().getSurname());
 
         JLabel emailLabel = new JLabel("Email:");
         emailAddress = new JTextField(20);
+        emailAddress.setText(CurrentUserCache.getLoggedInUser().getEmailAddress());
 
         JLabel houseNumberLabel = new JLabel("House Number:");
         houseNumber = new JTextField(20);
+        houseNumber.setText(CurrentUserCache.getLoggedInUser().getHouseNumber());
 
         JLabel roadNameLabel = new JLabel("Road Name:");
         roadName = new JTextField(20);
+        roadName.setText(CurrentUserCache.getLoggedInUser().getRoadName());
 
         JLabel cityNameLabel = new JLabel("City Name:");
         cityName = new JTextField(20);
+        cityName.setText(CurrentUserCache.getLoggedInUser().getCityName());
 
         JLabel postcodeLabel = new JLabel("Postcode:");
         postCode = new JTextField(20);
+        postCode.setText(CurrentUserCache.getLoggedInUser().getPostCode());
 
         JLabel cardNameLabel = new JLabel("Card Name: ");
         cardName = new JTextField(20);
+        cardName.setText(CurrentUserCache.getLoggedInUser().getCardName());
 
         JLabel cardNumberLabel = new JLabel("Card Number:");
         cardNumber = new JTextField(20);
+        cardNumber.setText(CurrentUserCache.getLoggedInUser().getCardNumber());
 
         JLabel cardHolderLabel = new JLabel("Cardholder Name:");
         cardHolder = new JTextField(20);
+        cardHolder.setText(CurrentUserCache.getLoggedInUser().getCardHolder());
 
         JLabel cardExpiryLabel = new JLabel("Card Expiry (mm/yy):");
         expiryDate = new JTextField(20);
+        expiryDate.setText(CurrentUserCache.getLoggedInUser().getExpiryDate());
 
         JLabel securityCodeLabel = new JLabel("Security Code:");
         securityCode = new JTextField(20);
+        securityCode.setText(CurrentUserCache.getLoggedInUser().getSecurityCode());
 
         // Button to Save Changes
         JButton saveButton = new JButton("Save");
@@ -79,7 +93,7 @@ public class ProfileView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    updateDetails(connection, userID);
+                    updateDetails(connection, CurrentUserCache.getLoggedInUser().getUserID());
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     // Handle any SQL exceptions here
