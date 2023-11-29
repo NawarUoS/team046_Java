@@ -448,8 +448,17 @@ public class InventoryOperations {
     }
 
     public ResultSet getPacks(Connection connection) {
-        // TODO IMPLEMENT THIS FUNCTION
-        return null;
+        ResultSet resultSet = null;
+        try {
+            String sql =
+                    "SELECT product_code, component_code, quantity " +
+                    "FROM Packs";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 
     public String inStock(int quantity) {

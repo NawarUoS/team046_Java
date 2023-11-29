@@ -50,7 +50,7 @@ public class MainStoreView extends JFrame {
         panel.add(bottomPanel, BorderLayout.SOUTH);
         this.add(panel);
 
-        DefaultTableModel tableModel = new DefaultTableModel() {
+        DefaultTableModel tableModelProducts = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 //all cells false
@@ -58,21 +58,29 @@ public class MainStoreView extends JFrame {
             }
         };
 
-        productsTable = new JTable(tableModel);
-        tableModel.addColumn("Product Code");
-        tableModel.addColumn("Brand Name");
-        tableModel.addColumn("Product Name");
-        tableModel.addColumn("Gauge Type");
-        tableModel.addColumn("DCC Code");
-        tableModel.addColumn("Digital?");
-        tableModel.addColumn("In Stock?");
+        DefaultTableModel tableModelPacks = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+        };
+
+        productsTable = new JTable(tableModelProducts);
+        tableModelProducts.addColumn("Product Code");
+        tableModelProducts.addColumn("Brand Name");
+        tableModelProducts.addColumn("Product Name");
+        tableModelProducts.addColumn("Gauge Type");
+        tableModelProducts.addColumn("DCC Code");
+        tableModelProducts.addColumn("Digital?");
+        tableModelProducts.addColumn("In Stock?");
 
         InventoryOperations inventoryOperations = new InventoryOperations();
         ResultSet resultSet1 = inventoryOperations.getProducts(connection);
-        //ResultSet resultSet2 = inventoryOperations.getPacks(connection);
+        ResultSet resultSet2 = inventoryOperations.getPacks(connection);
 
         while (resultSet1.next()) {
-            tableModel.addRow(new Object[]{
+            tableModelProducts.addRow(new Object[]{
                     resultSet1.getString("product_code"),
                     resultSet1.getString("brand_name"),
                     resultSet1.getString("product_name"),
@@ -86,11 +94,18 @@ public class MainStoreView extends JFrame {
             });
         }
 
-        //TODO IMPLEMENT WHILE LOOP FOR RESULT SET 2
+        packsTable = new JTable(tableModelPacks);
+        tableModelPacks.addColumn("Product Code");
+
+        while (resultSet2.next()) {
+            tableModelPacks.addRow(new Object[]{
+                    resultSet1.getString("product_code")
+            });
+        }
 
         // Create components for panel
         JScrollPane jScrollPaneProducts = new JScrollPane(productsTable);
-        JScrollPane jScrollPanePacks = new JScrollPane(new JTable()); // Create a new JTable for packs
+        JScrollPane jScrollPanePacks = new JScrollPane(packsTable);
 
         JButton cartButton = new JButton("Cart");
         JButton profileButton = new JButton("Profile");
@@ -139,7 +154,7 @@ public class MainStoreView extends JFrame {
             // Create and show the new RegistrationView JFrame
             try {
                 CartView cartView =
-                        new CartView(connection);
+                        new CartView(connection, 1);
                 cartView.setVisible(true);
             } catch (SQLException ex) {
                 ex.printStackTrace();

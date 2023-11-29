@@ -1,13 +1,19 @@
+package src.controller;
 
-package src.model;
-
-import src.views.*;
+import src.model.DatabaseConnectionHandler;
+import src.views.LoginView;
+import src.views.MainStoreView;
+import src.views.ManagerView;
+import src.views.RegistrationView;
 
 import javax.swing.*;
+import java.awt.*;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ConnectionMainI {
+public class MainViewController {
     public static void main(String[] args) {
-        // Create an instance of DatabaseConnectionHandler for managing database connections
         DatabaseConnectionHandler databaseConnectionHandler =
                 new DatabaseConnectionHandler();
 
@@ -16,16 +22,16 @@ public class ConnectionMainI {
             RegistrationView registrationView = null;
             LoginView loginView = null;
             ManagerView managerView = null;
-            CartView cartView = null;
+            MainStoreView mainStoreView = null;
             try {
                 // Open a database connection
                 databaseConnectionHandler.openConnection();
+                Connection connection = databaseConnectionHandler.getConnection();
 
-                // test cart
-                cartView=
-                        new CartView(databaseConnectionHandler.getConnection(), 1);
-                cartView.setVisible(true);
-
+                // test view
+                mainStoreView =
+                        new MainStoreView(connection);
+                mainStoreView.setVisible(true);
 
             } catch (Throwable t) {
                 // Close connection if database crashes.

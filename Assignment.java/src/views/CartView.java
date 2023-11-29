@@ -16,7 +16,7 @@ public class CartView extends JFrame {
     private int orderNumber; // Assuming each CartView is associated with a unique order_number
     private JTable table;
 
-    public CartView(Connection connection, int orderNumber) {
+    public CartView(Connection connection, int orderNumber) throws SQLException {
         // Create the JFrame in the constructor
         this.setTitle("Cart");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
