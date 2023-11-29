@@ -55,11 +55,20 @@ public class QueueView extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
     private JTable createTableFromSQL() {
-        String[] columnNames = { "Order Number", "Order Date", "Total Cost", "Order Status", "User ID" };
+        String[] columnNames = {"Order Number", "Date", "Customer Info", "Email", "Postal Address", "Order Contents", "Order Cost", "Order Status", "Valid Bank Card"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
-        // SQL query to retrieve data from your table
-        String sqlQuery = "SELECT order_number, order_date, total_cost, order_status, userID FROM Orders";
+        // SQL query to retrieve confirmed orders with relevant information
+        String sqlQuery = "SELECT o.order_number, o.order_date, a.forename, a.surname, a.email_address, ad.house_number, ad.street_name, ad.city_name, ad.postcode, "
+        + "GROUP_CONCAT(ol.product_code SEPARATOR ', ') AS order_contents, SUM(ol.order_line_cost) AS order_cost, o.order_status, a.userID, b.card_number "
+        + "FROM Orders o "
+        + "JOIN Accounts a ON o.userID = a.userID "
+        + "JOIN Addresses ad ON a.userID = ad.userID "
+        + "JOIN OrderLines ol ON o.order_number = ol.order_number "
+        + "LEFT JOIN BankDetails b ON a.userID = b.userID "
+        + "WHERE o.order_status = 'c' "
+        + "GROUP BY o.order_number, o.order_date, a.forename, a.surname, a.email_address, ad.house_number, ad.street_name, ad.city_name, ad.postcode, o.order_status, a.userID, b.card_number";
+
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -67,10 +76,14 @@ public class QueueView extends JPanel {
             while (resultSet.next()) {
                 Object[] row = {
                         resultSet.getInt("order_number"),
-                        resultSet.getDate("order_date"), // Adjust the data type if necessary
-                        resultSet.getDouble("total_cost"),
+                        resultSet.getDate("order_date"),
+                        resultSet.getString("forename") + " " + resultSet.getString("surname"),
+                        resultSet.getString("email_address"),
+                        getAddressString(resultSet),
+                        resultSet.getString("order_contents"),
+                        resultSet.getDouble("order_cost"),
                         resultSet.getString("order_status"),
-                        resultSet.getInt("userID")
+                        resultSet.getString("card_number") != null ? "Yes" : "No"
                 };
                 model.addRow(row);
             }
@@ -81,6 +94,13 @@ public class QueueView extends JPanel {
         return new JTable(model);
     }
 
+    private String getAddressString(ResultSet resultSet) throws SQLException {
+        // Construct and return the postal address as a string
+        return resultSet.getInt("house_number") + " " +
+               resultSet.getString("street_name") + ", " +
+               resultSet.getString("city_name") + ", " +
+               resultSet.getString("postcode");
+    }
     private void deleteOrder(JTable table) {
         int[] selectedRows = table.getSelectedRows();
     
@@ -163,32 +183,21 @@ public class QueueView extends JPanel {
     }
 
     private void refreshTable(JTable table) {
-        // Clear the existing rows
         DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.setRowCount(0);
-
-        // Repopulate the table with updated data
-        try {
-            // SQL query to retrieve data from your table
-            String sqlQuery = "SELECT order_number, order_date, total_cost, order_status, userID FROM Orders";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
-                ResultSet resultSet = preparedStatement.executeQuery();
-
-                while (resultSet.next()) {
-                    Object[] row = {
-                            resultSet.getInt("order_number"),
-                            resultSet.getDate("order_date"), // Adjust the data type if necessary
-                            resultSet.getDouble("total_cost"),
-                            resultSet.getString("order_status"),
-                            resultSet.getInt("userID")
-                    };
-                    model.addRow(row);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        model.fireTableDataChanged();
+        model.setRowCount(0); // Clear existing rows
+    
+        // SQL query to retrieve confirmed orders with relevant information
+        String sqlQuery = "SELECT o.order_number, o.order_date, a.forename, a.surname, a.email_address, ad.house_number, ad.street_name, ad.city_name, ad.postcode, "
+                + "GROUP_CONCAT(ol.product_code SEPARATOR ', ') AS order_contents, SUM(ol.order_line_cost) AS order_cost, o.order_status, a.userID, b.card_number "
+                + "FROM Orders o "
+                + "JOIN Accounts a ON o.userID = a.userID "
+                + "JOIN Addresses ad ON a.userID = ad.userID "
+                + "JOIN OrderLines ol ON o.order_number = ol.order_number "
+                + "LEFT JOIN BankDetails b ON a.userID = b.userID "
+                + "WHERE o.order_status = 'confirmed' "
+                + "GROUP BY o.order_number, o.order_date, a.forename, a.surname, a.email_address, ad.house_number, ad.street_name, ad.city_name, ad.postcode, o.order_status, a.userID, b.card_number";
+    
+        table.setModel(createTableFromSQL().getModel()); // Populate the table with updated data
     }
+
 }
