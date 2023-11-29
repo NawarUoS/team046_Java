@@ -2,8 +2,10 @@ package src.views;
 
 import src.account.Account;
 import src.model.*;
+import src.util.CurrentUserCache;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +18,7 @@ public class LoginView extends JFrame {
     private JPasswordField passwordField;
     private String email;
     private Connection connection;
+    private boolean loginSuccess;
     public LoginView (Connection connection) throws SQLException {
         // Create the JFrame in the constructor
         this.setTitle("Login");
@@ -61,6 +64,35 @@ public class LoginView extends JFrame {
                     new LoginOperations();
             System.out.println(loginOperations.verifyLogin(
                     connection, email, passwordChars));
+            AccountOperations accountOperations = new AccountOperations();
+            CurrentUserCache.storeUserInformation(
+                    accountOperations.getAccountByEmail(connection, email));
+            // Continue only if login is successful
+            DatabaseConnectionHandler databaseConnectionHandler =
+                    new DatabaseConnectionHandler();
+            MainStoreView mainStoreView = null;
+            if (loginOperations.verifyLogin(connection, email, passwordChars))
+                loginSuccess = true;
+            if (getLoginSuccess()) {
+                dispose();
+                try {
+                    // Open a new database connection
+                    databaseConnectionHandler.openConnection();
+
+                    mainStoreView =
+                            new MainStoreView(databaseConnectionHandler.getConnection());
+                    mainStoreView.setVisible(true);
+                    System.out.println(
+                            CurrentUserCache.getLoggedInUser().getForename());
+                } catch (Throwable t) {
+                    // Close connection if the database crashes.
+                    databaseConnectionHandler.closeConnection();
+                    throw new RuntimeException(t);
+                }
+            } else {
+                System.out.println("NO");
+                // TODO reset login view
+            }
             // Secure disposal of the password
             Arrays.fill(passwordChars, '\u0000');
         });
@@ -79,8 +111,7 @@ public class LoginView extends JFrame {
         });
     }
 
-    public Account getUserInfo() {
-        AccountOperations accountOperations = new AccountOperations();
-        return accountOperations.getAccountByEmail(connection, email);
+    public boolean getLoginSuccess() {
+        return loginSuccess;
     }
 }

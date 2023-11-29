@@ -186,7 +186,7 @@ public class AccountOperations {
         try {
             // Query the database to update user information
             String sql = "UPDATE Accounts SET forename = ?, surname = ?, " +
-                "email_address = ?, password = ?, unique_password_hash = ? " +
+                "email_address = ?, unique_password_hash = ? " +
                 "WHERE userID = ?";
 
             // Set parameters for the query
@@ -194,12 +194,11 @@ public class AccountOperations {
             statement.setString(1, forename);
             statement.setString(2, surname);
             statement.setString(3, emailAddress);
-            statement.setString(4, password);
             String passwordHash =
                     HashedPasswordGenerator.hashPassword(password.toCharArray(),
                             userID);
-            statement.setString(5, passwordHash);
-            statement.setString(6, userID);
+            statement.setString(4, passwordHash);
+            statement.setString(5, userID);
 
             // Executes the update statement
             statement.executeUpdate();

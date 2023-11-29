@@ -13,7 +13,7 @@ public class LoginOperations {
 
     private static String userID;
 
-    public String verifyLogin(Connection connection, String emailAddress,
+    public boolean verifyLogin(Connection connection, String emailAddress,
                               char[] enteredPassword) {
         try {
             // Query the database to fetch user information
@@ -30,15 +30,17 @@ public class LoginOperations {
 
                 // Verify the entered password against the stored hash
                 if (verifyPassword(enteredPassword, storedPasswordHash)) {
-                    return "Login successful for user: " + emailAddress;
+                    System.out.println(
+                            "Login successful for user: " + emailAddress);
+                    return true;
                 } else {
-                    return "Incorrect password";
+                    return false;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "User not found.";
+        return false;
     }
 
     private static boolean verifyPassword(char[] enteredPassword,
