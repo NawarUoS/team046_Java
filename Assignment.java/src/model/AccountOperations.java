@@ -16,7 +16,8 @@ public class AccountOperations {
                                                                 throws Error {
         try {
             // Query the database to fetch user information
-            String sql = "SELECT forename, surname, email_address, password, " +
+            String sql = "SELECT forename, surname, email_address, " +
+                    "unique_password_hash, " +
                     "user_customer, user_staff, user_manager FROM Accounts " +
                     "WHERE userID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -28,8 +29,8 @@ public class AccountOperations {
                 String surname = resultSet.getString("surname");
                 String emailAddress =
                         resultSet.getString("email_address");
-                char[] password =
-                    resultSet.getString("password").toCharArray();
+                String passwordHash =
+                    resultSet.getString("unique_password_hash");
                 String userCustomer =
                         resultSet.getString("user_customer");
                 String userStaff =
@@ -38,7 +39,7 @@ public class AccountOperations {
                         resultSet.getString("user_manager");
 
                 return new Account(userID, combineUserRoles(userCustomer,
-                        userStaff, userManager), emailAddress, password,
+                        userStaff, userManager), emailAddress, passwordHash,
                         forename, surname);
             }
         } catch (SQLException e) {
@@ -51,7 +52,8 @@ public class AccountOperations {
             throws Error {
         try {
             // Query the database to fetch user information
-            String sql = "SELECT userID, forename, surname, password, " +
+            String sql = "SELECT userID, forename, surname, " +
+                    "unique_password_hash, " +
                     "user_customer, user_staff, user_manager FROM Accounts " +
                     "WHERE email_address = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -63,8 +65,8 @@ public class AccountOperations {
                         resultSet.getString("userID");
                 String forename = resultSet.getString("forename");
                 String surname = resultSet.getString("surname");
-                char[] password =
-                        resultSet.getString("password").toCharArray();
+                String passwordHash =
+                        resultSet.getString("unique_password_hash");
                 String userCustomer =
                         resultSet.getString("user_customer");
                 String userStaff =
@@ -73,7 +75,7 @@ public class AccountOperations {
                         resultSet.getString("user_manager");
 
                 return new Account(userID, combineUserRoles(userCustomer,
-                        userStaff, userManager), emailAddress, password,
+                        userStaff, userManager), emailAddress, passwordHash,
                         forename, surname);
             }
         } catch (SQLException e) {

@@ -126,7 +126,7 @@ public class MainStoreView extends JFrame {
         productsPanel.add(jScrollPaneProducts, BorderLayout.CENTER);
         packsPanel.add(new JLabel("Packs List"), BorderLayout.NORTH);
         packsPanel.add(jScrollPanePacks, BorderLayout.CENTER);
-
+        
         middlePanel.add(productsPanel);
         middlePanel.add(packsPanel);
 
@@ -134,7 +134,7 @@ public class MainStoreView extends JFrame {
         bottomPanel.add(new JLabel());
         bottomPanel.add(new JLabel());
         bottomPanel.add(new JLabel());
-        bottomPanel.add(addToOrderButton);
+        bottomPanel.add(new JLabel());
         bottomPanel.add(saveOrderButton);
 
         profileButton.addActionListener(e -> {

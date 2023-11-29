@@ -1,5 +1,6 @@
 package src.views;
 
+import src.account.Account;
 import src.model.*;
 
 import javax.swing.*;
@@ -11,13 +12,17 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 public class LoginView extends JFrame {
-    private JTextField usernameField;
+    private JTextField emailField;
     private JPasswordField passwordField;
+    private String email;
+    private Connection connection;
     public LoginView (Connection connection) throws SQLException {
         // Create the JFrame in the constructor
         this.setTitle("Login");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(300, 150);
+
+        this.connection = connection;
 
         // Create a JPanel to hold the components
         JPanel panel = new JPanel();
@@ -31,7 +36,7 @@ public class LoginView extends JFrame {
         JLabel passwordLabel = new JLabel("Password:");
 
         // Create JTextFields for entering username and password
-        usernameField = new JTextField(20);
+        emailField = new JTextField(20);
         passwordField = new JPasswordField(20);
 
         // Create a JButton for the login action
@@ -40,7 +45,7 @@ public class LoginView extends JFrame {
 
         // Add components to the panel
         panel.add(usernameLabel);
-        panel.add(usernameField);
+        panel.add(emailField);
         panel.add(passwordLabel);
         panel.add(passwordField);
         panel.add(registerButton);
@@ -48,14 +53,14 @@ public class LoginView extends JFrame {
 
         // Create an ActionListener for the login button
         loginButton.addActionListener(e -> {
-            String username = usernameField.getText();
+            email = emailField.getText();
             char[] passwordChars = passwordField.getPassword();
-            System.out.println(username);
+            System.out.println(email);
             System.out.println(new String(passwordChars));
             LoginOperations loginOperations =
                     new LoginOperations();
             System.out.println(loginOperations.verifyLogin(
-                    connection, username, passwordChars));
+                    connection, email, passwordChars));
             // Secure disposal of the password
             Arrays.fill(passwordChars, '\u0000');
         });
@@ -72,5 +77,10 @@ public class LoginView extends JFrame {
                 ex.printStackTrace();
             }
         });
+    }
+
+    public Account getUserInfo() {
+        AccountOperations accountOperations = new AccountOperations();
+        return accountOperations.getAccountByEmail(connection, email);
     }
 }

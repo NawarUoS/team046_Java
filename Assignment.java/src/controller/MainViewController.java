@@ -1,5 +1,6 @@
 package src.controller;
 
+import src.account.Account;
 import src.model.DatabaseConnectionHandler;
 import src.views.LoginView;
 import src.views.MainStoreView;
@@ -13,26 +14,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainViewController {
+    private static Account currentUser;
     public static void main(String[] args) {
         DatabaseConnectionHandler databaseConnectionHandler =
                 new DatabaseConnectionHandler();
 
         // Execute the Swing GUI application on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
-            RegistrationView registrationView = null;
             LoginView loginView = null;
-            ManagerView managerView = null;
-            MainStoreView mainStoreView = null;
             try {
                 // Open a database connection
                 databaseConnectionHandler.openConnection();
-                Connection connection = databaseConnectionHandler.getConnection();
 
-                // test view
-                mainStoreView =
-                        new MainStoreView(connection);
-                mainStoreView.setVisible(true);
-
+                loginView =
+                    new LoginView(databaseConnectionHandler.getConnection());
+                loginView.setVisible(true);
+                currentUser = loginView.getUserInfo();
             } catch (Throwable t) {
                 // Close connection if database crashes.
                 databaseConnectionHandler.closeConnection();

@@ -33,6 +33,17 @@ public class Account {
         this.surname = surname;
     }
 
+    public Account(String userID, List<UserRole> userRoles, String email,
+                          String passwordHash, String forename,
+                   String surname) {
+        this.userID = userID;
+        this.userRoles = userRoles;
+        this.emailAddress = email;
+        this.passwordHash = passwordHash;
+        this.forename = forename;
+        this.surname = surname;
+    }
+
     // ManagerService methods
     public void addUserRole(UserRole userRole) {
         List<UserRole> newUserRoles = getUserRoles();
