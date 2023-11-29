@@ -149,17 +149,17 @@ public class MainStoreView extends JFrame {
             }
         });
 
-        cartButton.addActionListener(e -> {
-            // Closes current login view
-            dispose();
-            // Create and show the new RegistrationView JFrame
-            try {
-                CartView cartView =
-                        new CartView(connection, 1);
-                cartView.setVisible(true);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        });
+//        cartButton.addActionListener(e -> {
+//            // Closes current login view
+//            dispose();
+//            // Create and show the new RegistrationView JFrame
+//            try {
+//                CartView cartView =
+//                        new CartView(connection);
+//                cartView.setVisible(true);
+//            } catch (SQLException ex) {
+//                ex.printStackTrace();
+//            }
+//        });
     }
 }
