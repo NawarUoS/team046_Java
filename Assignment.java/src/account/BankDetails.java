@@ -4,12 +4,12 @@ public class BankDetails {
     private String userID;
     private String cardName;
     private String cardHolder;
-    private int cardNumber;
+    private long cardNumber;
     private String expiryDate;
     private int securityCode;
 
     // Constructor
-    public BankDetails(String cardName, String cardHolder, int cardNumber,
+    public BankDetails(String cardName, String cardHolder, long cardNumber,
                        String expiryDate, int securityCode) {
         this.cardName = cardName;
         this.cardHolder = cardHolder;
@@ -30,7 +30,7 @@ public class BankDetails {
         return cardHolder;
     }
 
-    public int getCardNumber() {
+    public long getCardNumber() {
         return cardNumber;
     }
 

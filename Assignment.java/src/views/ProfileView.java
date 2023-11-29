@@ -1,5 +1,10 @@
 package src.views;
 
+import src.account.Account;
+import src.account.Address;
+import src.account.BankDetails;
+import src.model.AddressOperations;
+import src.model.BankDetailsOperations;
 import src.util.CurrentUserCache;
 
 import javax.swing.*;
@@ -38,54 +43,73 @@ public class ProfileView extends JFrame {
 
         panel.setLayout(new GridLayout(12, 2, 10, 10));
 
+        Account currentUser = CurrentUserCache.getLoggedInUser();
+
+        AddressOperations addressOperations = new AddressOperations();
+        BankDetailsOperations bankDetailsOperations =
+                new BankDetailsOperations();
+
+        Address address = addressOperations.getAddressByUserID(connection,
+                        currentUser.getUserID());
+
+        BankDetails bankDetails;
+        if (bankDetailsOperations.checkBankDetailsInDatabase(connection,
+                currentUser.getUserID())) {
+            bankDetails =
+                    bankDetailsOperations.getBankDetailsByUserID(connection,
+                            currentUser.getUserID());
+        } else {
+            bankDetails = new BankDetails("N/A", "N/A", 0000000000000000, "00" +
+                    "-00-0000", 000);
+        }
         // Create Labels and Text Fields
         JLabel firstNameLabel = new JLabel("First Name:");
         forename = new JTextField(20);
-        forename.setText(CurrentUserCache.getLoggedInUser().getForename());
+        forename.setText(currentUser.getForename());
 
         JLabel lastNameLabel = new JLabel("Last Name:");
         surname = new JTextField(20);
-        surname.setText(CurrentUserCache.getLoggedInUser().getSurname());
+        surname.setText(currentUser.getSurname());
 
         JLabel emailLabel = new JLabel("Email:");
         emailAddress = new JTextField(20);
-        emailAddress.setText(CurrentUserCache.getLoggedInUser().getEmailAddress());
+        emailAddress.setText(currentUser.getEmailAddress());
 
         JLabel houseNumberLabel = new JLabel("House Number:");
         houseNumber = new JTextField(20);
-        houseNumber.setText(CurrentUserCache.getLoggedInUser().getHouseNumber());
+        houseNumber.setText(String.valueOf(address.getHouseNumber()));
 
         JLabel roadNameLabel = new JLabel("Road Name:");
         roadName = new JTextField(20);
-        roadName.setText(CurrentUserCache.getLoggedInUser().getRoadName());
+        roadName.setText(address.getStreetName());
 
         JLabel cityNameLabel = new JLabel("City Name:");
         cityName = new JTextField(20);
-        cityName.setText(CurrentUserCache.getLoggedInUser().getCityName());
+        cityName.setText(address.getCityName());
 
         JLabel postcodeLabel = new JLabel("Postcode:");
         postCode = new JTextField(20);
-        postCode.setText(CurrentUserCache.getLoggedInUser().getPostCode());
+        postCode.setText(address.getPostCode());
 
         JLabel cardNameLabel = new JLabel("Card Name: ");
         cardName = new JTextField(20);
-        cardName.setText(CurrentUserCache.getLoggedInUser().getCardName());
+        cardName.setText(bankDetails.getCardName());
 
         JLabel cardNumberLabel = new JLabel("Card Number:");
         cardNumber = new JTextField(20);
-        cardNumber.setText(CurrentUserCache.getLoggedInUser().getCardNumber());
+        cardNumber.setText(String.valueOf(bankDetails.getCardNumber()));
 
         JLabel cardHolderLabel = new JLabel("Cardholder Name:");
         cardHolder = new JTextField(20);
-        cardHolder.setText(CurrentUserCache.getLoggedInUser().getCardHolder());
+        cardHolder.setText(bankDetails.getCardHolder());
 
         JLabel cardExpiryLabel = new JLabel("Card Expiry (mm/yy):");
         expiryDate = new JTextField(20);
-        expiryDate.setText(CurrentUserCache.getLoggedInUser().getExpiryDate());
+        expiryDate.setText(bankDetails.getExpiryDate());
 
         JLabel securityCodeLabel = new JLabel("Security Code:");
         securityCode = new JTextField(20);
-        securityCode.setText(CurrentUserCache.getLoggedInUser().getSecurityCode());
+        securityCode.setText(String.valueOf(bankDetails.getSecurityCode()));
 
         // Button to Save Changes
         JButton saveButton = new JButton("Save");
@@ -93,7 +117,7 @@ public class ProfileView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    updateDetails(connection, CurrentUserCache.getLoggedInUser().getUserID());
+                    updateDetails(connection, currentUser.getUserID());
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     // Handle any SQL exceptions here
@@ -134,7 +158,8 @@ public class ProfileView extends JFrame {
     private void updateDetails(Connection connection, String userID) throws SQLException {
 
         // Update Account table
-        String updateAccountSql = "UPDATE Account SET forename = ?, surname = ?, emailAddress = ? WHERE userID = ?";
+        String updateAccountSql = "UPDATE Accounts SET forename = ?, surname " +
+                "= ?, emailAddress = ? WHERE userID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateAccountSql)) {
             pstmt.setString(1, forename.getText());
             pstmt.setString(2, surname.getText());
@@ -145,7 +170,8 @@ public class ProfileView extends JFrame {
         }
 
         // Update Address table
-        String updateAddressSql = "UPDATE Address SET houseNumber = ?, roadName = ?, cityName = ?, postCode = ? WHERE userID = ?";
+        String updateAddressSql = "UPDATE Addresses SET houseNumber = ?, " +
+                "roadName = ?, cityName = ?, postCode = ? WHERE userID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateAddressSql)) {
             pstmt.setInt(1, Integer.parseInt(houseNumber.getText()));
             pstmt.setString(2, roadName.getText());

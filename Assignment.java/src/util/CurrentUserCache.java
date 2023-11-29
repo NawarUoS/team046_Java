@@ -1,6 +1,8 @@
 package src.util;
 
 import src.account.Account;
+import src.account.Address;
+import src.model.AddressOperations;
 
 public class CurrentUserCache {
     private static Account userLoggedIn;
