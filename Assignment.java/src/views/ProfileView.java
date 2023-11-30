@@ -6,6 +6,7 @@ import src.account.BankDetails;
 import src.model.AddressOperations;
 import src.model.BankDetailsOperations;
 import src.util.CurrentUserCache;
+import src.util.UniqueUserIDGenerator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Random;
 
 public class ProfileView extends JFrame {
     // Components
@@ -52,12 +54,15 @@ public class ProfileView extends JFrame {
         Address address = addressOperations.getAddressByUserID(connection,
                         currentUser.getUserID());
 
+        BankDetails bankDetails = null;
         boolean hasBankDetails =
                 bankDetailsOperations.checkBankDetailsInDatabase(connection,
                         currentUser.getUserID());
-        BankDetails bankDetails =
-                bankDetailsOperations.getBankDetailsByUserID(connection,
+        if (hasBankDetails) {
+            bankDetails =
+                    bankDetailsOperations.getBankDetailsByUserID(connection,
                             currentUser.getUserID());
+        }
 
         // Create Labels and Text Fields
         JLabel firstNameLabel = new JLabel("First Name:");
