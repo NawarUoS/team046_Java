@@ -1,10 +1,12 @@
 package src.account;
 
+import src.util.HashedBankDetailsGenerator;
+
 public class BankDetails {
     private String userID;
     private String cardName;
     private String cardHolder;
-    private long cardNumber;
+    private String cardNumberHash;
     private String expiryDate;
 
     // Constructor
@@ -12,7 +14,8 @@ public class BankDetails {
                        String expiryDate, String userID) {
         this.cardName = cardName;
         this.cardHolder = cardHolder;
-        this.cardNumber = cardNumber;
+        this.cardNumberHash = HashedBankDetailsGenerator.hashBankDetail(
+                String.valueOf(cardNumber),userID);
         this.expiryDate = expiryDate;
         this.userID = userID;
     }
@@ -29,8 +32,8 @@ public class BankDetails {
         return cardHolder;
     }
 
-    public long getCardNumber() {
-        return cardNumber;
+    public String getCardNumberHash() {
+        return cardNumberHash;
     }
 
     public String getExpiryDate() {
@@ -50,8 +53,10 @@ public class BankDetails {
         this.cardHolder = cardHolder;
     }
 
-    public void setCardNumber(int cardNumber) {
-        this.cardNumber = cardNumber;
+    public void setCardNumber(long cardNumber) {
+        this.cardNumberHash =
+            HashedBankDetailsGenerator.hashBankDetail(
+                    String.valueOf(cardNumber), userID);
     }
 
     public void setExpiryDate(String expiryDate) {
