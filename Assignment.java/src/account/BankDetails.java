@@ -20,6 +20,15 @@ public class BankDetails {
         this.userID = userID;
     }
 
+    public BankDetails(String cardName, String cardHolder,
+                   String cardNumberHash, String expiryDate, String userID) {
+        this.cardName = cardName;
+        this.cardHolder = cardHolder;
+        this.cardNumberHash = cardNumberHash;
+        this.expiryDate = expiryDate;
+        this.userID = userID;
+    }
+
     // Getter methods
     public String getUserID() { 
         return userID; }
