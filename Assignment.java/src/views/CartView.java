@@ -188,20 +188,35 @@ public class CartView extends JFrame {
     }
         
     private void editQuantity() {
-        // Implement the logic for editing order quantity
+        // Get the selected row in the current orders table
         int selectedRow = currentOrdersTable.getSelectedRow();
+    
         if (selectedRow != -1) {
-            // Assuming orderNumber is the first column in the table
-            int orderNumber = (int) currentOrdersTable.getValueAt(selectedRow, 0);
-            System.out.println("Editing quantity for order: " + orderNumber);
-
-            // Perform database update (modify as needed)
-            // For example, open a dialog for quantity input and update the database
+            // Assuming orderLineNumber is the first column in the table
+            int orderLineNumber = (int) currentOrdersTable.getValueAt(selectedRow, 0);
+    
+            // Prompt the user for the new quantity
+            String input = JOptionPane.showInputDialog(this, "Enter new quantity:");
+            if (input != null && !input.isEmpty()) {
+                try {
+                    int newQuantity = Integer.parseInt(input);
+    
+                    // Perform database update (modify as needed)
+                    updateOrderLineQuantity(orderLineNumber, newQuantity);
+    
+                    // Refresh the page
+                    refreshPage();
+    
+                    // Notify the user that the quantity was updated
+                    JOptionPane.showMessageDialog(this, "Quantity updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Please enter a valid integer for quantity.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Please select an order to edit quantity.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
     private void removeOrder() {
         // Implement the logic for removing orders
         int selectedRow = currentOrdersTable.getSelectedRow();
@@ -249,6 +264,29 @@ public class CartView extends JFrame {
         }
     }
 
+    private void updateOrderLineQuantity(int orderLineNumber, int newQuantity) {
+        try {
+            // SQL query to update the quantity in the OrderLines table
+            String updateQuery = "UPDATE OrderLines SET items_quantity = ? WHERE order_line_number = ?";
+    
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+                preparedStatement.setInt(1, newQuantity);
+                preparedStatement.setInt(2, orderLineNumber);
+    
+                // Execute the update statement
+                int rowsAffected = preparedStatement.executeUpdate();
+    
+                if (rowsAffected > 0) {
+                    System.out.println("Order line quantity updated successfully.");
+                } else {
+                    System.out.println("Failed to update order line quantity.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void refreshPage() {
         // Refresh the current orders table
         DefaultTableModel currentOrdersModel = (DefaultTableModel) currentOrdersTable.getModel();
