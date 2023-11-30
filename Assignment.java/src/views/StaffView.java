@@ -46,12 +46,34 @@ public class StaffView extends JFrame {
         cardPanel.add(historyScreen, "History");
 
         // Create buttons
+        JPanel initialScreen = getInitialScreen(connection);
+
+        // Add the initial screen to the cardPanel
+        cardPanel.add(initialScreen, "Initial");
+
+        // Show the initial screen
+        cardLayout.show(cardPanel, "Initial");
+    }
+
+    private JPanel getInitialScreen(Connection connection) {
+        JButton mainStoreButton = new JButton("Main Store View");
         JButton inventoryButton = new JButton("Store Inventory");
         JButton queueButton = new JButton("Orders Queue");
         JButton historyButton = new JButton("Sales History");
         JButton discreteManagerButton = new JButton("Discrete Button");
 
         // Add ActionListener to buttons for screen navigation
+        mainStoreButton.addActionListener(e -> {
+            // Closes current view
+            dispose();
+            // Create and show the new JFrame
+            try {
+                MainStoreView mainStoreView = new MainStoreView(connection);
+                mainStoreView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
         inventoryButton.addActionListener(
                     e -> cardLayout.show(cardPanel, "Inventory"));
         queueButton.addActionListener(
@@ -59,9 +81,9 @@ public class StaffView extends JFrame {
         historyButton.addActionListener(
                     e -> cardLayout.show(cardPanel, "History"));
         discreteManagerButton.addActionListener(e -> {
-            // Closes current login view
+            // Closes current view
             dispose();
-            // Create and show the new RegistrationView JFrame
+            // Create and show the new JFrame
             try {
                 if (CurrentUserCache.getLoggedInUser().getUserRoles().contains(
                         UserRole.MANAGER)) {
@@ -84,12 +106,7 @@ public class StaffView extends JFrame {
                 UserRole.MANAGER)) {
             initialScreen.add(discreteManagerButton, BorderLayout.SOUTH);
         }
-
-        // Add the initial screen to the cardPanel
-        cardPanel.add(initialScreen, "Initial");
-
-        // Show the initial screen
-        cardLayout.show(cardPanel, "Initial");
+        return initialScreen;
     }
 
     private class InventoryScreen extends JPanel {
