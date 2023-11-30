@@ -14,4 +14,8 @@ public class CurrentUserCache {
     public static Account getLoggedInUser() {
         return userLoggedIn;
     }
+
+    public static void clearCache() {
+        userLoggedIn = null;
+    }
 }
