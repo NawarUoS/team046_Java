@@ -49,6 +49,13 @@ public class AlterStockView extends JFrame {
 
         // Create a JButton for the register action
         JButton changeStockButton = new JButton("Change Stock");
+        JButton backButton = new JButton("Stock View");
+        backButton.addActionListener(e -> {
+            dispose();
+            InventoryView inventoryView =
+                    new InventoryView(connection);
+            inventoryView.setVisible(true);
+        });
 
         // Add components to the panel
         panel.add(IDLabel);
@@ -57,6 +64,7 @@ public class AlterStockView extends JFrame {
         panel.add(stockChangeField);
         panel.add(new JLabel());
         panel.add(new JLabel());
+        panel.add(backButton);
         panel.add(changeStockButton);
 
         // Create an ActionListener for the register button

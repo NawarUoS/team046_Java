@@ -87,6 +87,14 @@ public class AddProductView extends JFrame {
         // Create a JButton for the register action
         JButton addProductButton = new JButton("Register");
 
+        JButton backButton = new JButton("Stock View");
+        backButton.addActionListener(e -> {
+            dispose();
+            InventoryView inventoryView =
+                    new InventoryView(connection);
+            inventoryView.setVisible(true);
+        });
+
         // Add components to the panel
         panel.add(IDLabel);
         panel.add(productIDField);
@@ -110,6 +118,7 @@ public class AddProductView extends JFrame {
         panel.add(componentsListField);
         panel.add(new JLabel());
         panel.add(new JLabel());
+        panel.add(backButton);
         panel.add(addProductButton);
 
         // Create an ActionListener for the register button
@@ -154,6 +163,7 @@ public class AddProductView extends JFrame {
             int erasTokenCount = erasTokens.countTokens();
             for (int i = 0; i < erasTokenCount; i++) {
                 erasList.add(Integer.parseInt(erasTokens.nextToken()));
+                System.out.println(erasList.get(i));
             }
 
             // Converting componentComp into a List<String[]>
