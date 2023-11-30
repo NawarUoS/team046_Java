@@ -34,7 +34,15 @@ public class CartView extends JFrame {
 
         // Back button to the initial screen
         JButton backButton = new JButton("Back to Main Screen");
-        backButton.addActionListener(e -> cardLayout.show(cardPanel, "Initial"));
+        backButton.addActionListener(e -> {
+            dispose();
+            try {
+                MainStoreView mainStoreView = new MainStoreView(connection);
+                mainStoreView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
 
         // Table with data from the current orders
         currentOrdersTable = createCartTable();
