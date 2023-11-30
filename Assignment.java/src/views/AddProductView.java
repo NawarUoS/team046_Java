@@ -20,7 +20,6 @@ import java.util.StringTokenizer;
 public class AddProductView extends JFrame {
     private CardLayout cardLayout;
     private JPanel cardPanel;
-    private JTable historyTable;
 
     private JTextField productIDField;
     private JTextField brandNameField;
@@ -33,6 +32,7 @@ public class AddProductView extends JFrame {
     private JTextField erasListField;
     private JTextField componentsListField;
     Boolean flag;
+    Boolean isPack;
 
     public void clearTextPanels(){
         productIDField.setText("");
@@ -118,7 +118,9 @@ public class AddProductView extends JFrame {
             String productID = productIDField.getText();
             String brandName = brandNameField.getText();
             String productName = productNameField.getText();
-            String sPrice = priceLabel.getText();
+            System.out.println("productname" + productName);
+            String sPrice = priceField.getText();
+            System.out.print("price" + sPrice);
             Double price = Double.parseDouble(sPrice);
             String gauge = gaugeTypeField.getText();
             String sQuantity = quantityField.getText();
@@ -143,6 +145,11 @@ public class AddProductView extends JFrame {
                 flag = false;
             }
 
+            if (componentComp.length() < 3) {
+                isPack = false;
+            } else {
+                isPack = true;
+            }
             // Converting erasComp into a list<Integer>
             List<Integer> erasList = new ArrayList<Integer>();
             StringTokenizer erasTokens = new StringTokenizer(erasComp, ",");
@@ -168,24 +175,24 @@ public class AddProductView extends JFrame {
                 switch (productID.substring(0, 1)) {
                     case "L":
                         inventoryOperations.addLocomotive(connection, productID, brandName,
-                                productName, price, gauge, quantity, dccCode, erasList);
+                                productName, price, gauge, quantity, isPack, dccCode, erasList);
                         break;
                     case "S":
                         inventoryOperations.addRollingStock(connection, productID,
-                                brandName, productName, price, gauge, quantity, erasList);
+                                brandName, productName, price, gauge, quantity, isPack, erasList);
                         break;
                     case "C":
                         inventoryOperations.addController(connection, productID, brandName,
-                                productName, price, gauge, quantity, isDigital);
+                                productName, price, gauge, quantity, isPack, isDigital);
                         break;
                     case "P":
                     case "M":
                         inventoryOperations.addPacks(connection, productID, brandName,
-                                productName, price, gauge, quantity, componentList);
+                                productName, price, gauge, quantity, isPack, componentList);
                         break;
                     case "R":
                         inventoryOperations.addProduct(connection, productID,
-                                brandName, productName, price, gauge, quantity);
+                                brandName, productName, price, gauge, quantity, isPack);
                     default:
                         System.out.println("Invalid productID");
                 }
