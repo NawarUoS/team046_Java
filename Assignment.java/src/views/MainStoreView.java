@@ -108,6 +108,7 @@ public class MainStoreView extends JFrame {
         JScrollPane jScrollPaneProducts = new JScrollPane(productsTable);
         JScrollPane jScrollPanePacks = new JScrollPane(packsTable);
 
+        JButton logoutButton = new JButton("Logout");
         JButton cartButton = new JButton("Cart & Recent Orders");
         JButton profileButton = new JButton("Profile");
 
@@ -115,7 +116,7 @@ public class MainStoreView extends JFrame {
         JButton addToOrderButton = new JButton("Add to Cart");
 
         // Add components to top panel
-        topPanel.add(new JLabel());
+        topPanel.add(logoutButton);
         topPanel.add(new JLabel());
         topPanel.add(new JLabel());
         topPanel.add(cartButton);
@@ -142,10 +143,21 @@ public class MainStoreView extends JFrame {
         bottomPanel.add(new JLabel());
         bottomPanel.add(addToOrderButton);
 
-        profileButton.addActionListener(e -> {
-            // Closes current login view
+        logoutButton.addActionListener(e -> {
             dispose();
-            // Create and show the new RegistrationView JFrame
+            try {
+                CurrentUserCache.clearCache();
+                LoginView loginView = new LoginView(connection);
+                loginView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        profileButton.addActionListener(e -> {
+            // Closes current view
+            dispose();
+            // Create and show the new JFrame
             try {
                 ProfileView profileView = new ProfileView(connection);
                 profileView.setVisible(true);
