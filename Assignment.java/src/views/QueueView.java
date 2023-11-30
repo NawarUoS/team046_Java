@@ -2,21 +2,23 @@ package src.views;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import src.model.InventoryOperations;
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
+import java.util.HashMap; 
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class QueueView extends JPanel {
     private Connection connection;
     private CardLayout cardLayout;
     private JPanel cardPanel;
 
-    public QueueView(Connection connection, CardLayout cardLayout, JPanel cardPanel) {
+    public QueueView(
+            Connection connection, CardLayout cardLayout, JPanel cardPanel) {
         this.connection = connection;
         this.cardLayout = cardLayout;
         this.cardPanel = cardPanel;
@@ -56,35 +58,43 @@ public class QueueView extends JPanel {
     }
 
     private JTable createTableFromSQL() {
-        String[] columnNames = { "Order Number", "Date", "Customer Info", "Email", "Postal Address", "Order Contents",
-                "Order Cost", "Order Status", "Valid Bank Card" };
+        String[] columnNames = { "Order Number", "Date", "Customer Info", 
+                "Email", "Postal Address", "Order Contents", "Order Cost", 
+                "Order Status", "Valid Bank Card" };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         // SQL query to retrieve confirmed orders with relevant information
-        String sqlQuery = "SELECT o.order_number, o.order_date, a.forename, a.surname, a.email_address, ad.house_number, ad.street_name, ad.city_name, ad.postcode, "
-                + "GROUP_CONCAT(ol.product_code SEPARATOR ', ') AS order_contents, SUM(ol.order_line_cost) AS order_cost, o.order_status, a.userID, b.card_number "
-                + "FROM Orders o "
+        String sqlQuery = "SELECT o.order_number, o.order_date, a.forename, " 
+                + "a.surname, a.email_address, ad.house_number, ad.street_name, " 
+                + "ad.city_name, ad.postcode, GROUP_CONCAT(ol.product_code SEPARATOR ', ') " 
+                + "AS order_contents, SUM(ol.order_line_cost) AS order_cost, " 
+                + "o.order_status, a.userID, b.card_number FROM Orders o "
                 + "JOIN Accounts a ON o.userID = a.userID "
                 + "JOIN Addresses ad ON a.userID = ad.userID "
                 + "JOIN OrderLines ol ON o.order_number = ol.order_number "
                 + "LEFT JOIN BankDetails b ON a.userID = b.userID "
                 + "WHERE o.order_status = 'c' "
-                + "GROUP BY o.order_number, o.order_date, a.forename, a.surname, a.email_address, ad.house_number, ad.street_name, ad.city_name, ad.postcode, o.order_status, a.userID, b.card_number";
+                + "GROUP BY o.order_number, o.order_date, a.forename, a.surname, " 
+                + "a.email_address, ad.house_number, ad.street_name, ad.city_name, " 
+                + "ad.postcode, o.order_status, a.userID, b.card_number";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+        try (PreparedStatement preparedStatement 
+                                    = connection.prepareStatement(sqlQuery)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 Object[] row = {
                         resultSet.getInt("order_number"),
                         resultSet.getDate("order_date"),
-                        resultSet.getString("forename") + " " + resultSet.getString("surname"),
+                        resultSet.getString("forename") + " " 
+                            + resultSet.getString("surname"),
                         resultSet.getString("email_address"),
                         getAddressString(resultSet),
                         resultSet.getString("order_contents"),
                         resultSet.getDouble("order_cost"),
                         resultSet.getString("order_status"),
-                        resultSet.getString("card_number") != null ? "Yes" : "No"
+                        resultSet.getString("card_number") 
+                            != null ? "Yes" : "No"
                 };
                 model.addRow(row);
             }
@@ -110,8 +120,9 @@ public class QueueView extends JPanel {
             List<Integer> orderNumbers = new ArrayList<>();
 
             // Confirm the deletion with a dialog box
-            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the selected orders?",
-                    "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+            int option = JOptionPane.showConfirmDialog(this, 
+                "Are you sure you want to delete the selected orders?",
+                "Confirm Deletion", JOptionPane.YES_NO_OPTION);
 
             if (option == JOptionPane.YES_OPTION) {
                 // User confirmed deletion
@@ -125,8 +136,11 @@ public class QueueView extends JPanel {
                 try {
                     // Example SQL query to delete multiple orders
                     String deleteQuery = "DELETE FROM Orders WHERE order_number IN (" +
-                            String.join(",", orderNumbers.stream().map(String::valueOf).toArray(String[]::new)) + ")";
-                    try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
+                            String.join(
+                                ",", orderNumbers.stream().map(
+                                    String::valueOf).toArray(String[]::new)) + ")";
+                    try (PreparedStatement preparedStatement = 
+                                    connection.prepareStatement(deleteQuery)) {
                         preparedStatement.executeUpdate();
                     }
 
@@ -134,14 +148,16 @@ public class QueueView extends JPanel {
                     refreshTable(table);
 
                     // Display a confirmation message
-                    JOptionPane.showMessageDialog(this, "Selected orders deleted successfully.", "Deletion Successful",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, 
+                        "Selected orders deleted successfully.", 
+                        "Deletion Successful", JOptionPane.INFORMATION_MESSAGE);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Please select at least one row to delete.", "Delete Order",
+            JOptionPane.showMessageDialog(this, 
+                "Please select at least one row to delete.", "Delete Order",
                     JOptionPane.WARNING_MESSAGE);
         }
     }
@@ -150,26 +166,47 @@ public class QueueView extends JPanel {
         int[] selectedRows = table.getSelectedRows();
     
         if (selectedRows.length > 0) { // Check if at least one row is selected
-            List<Integer> orderNumbers = new ArrayList<>();
+            Map<String, Integer> productQuantities = new HashMap<>();
     
             // Confirm order fulfillment
             int confirmResult = JOptionPane.showConfirmDialog(this,
-                    "Are you sure you want to fulfill the selected order(s)?", "Fulfill Order Confirmation",
-                    JOptionPane.YES_NO_OPTION);
+                    "Are you sure you want to fulfill the selected order(s)?", 
+                    "Fulfill Order Confirmation", JOptionPane.YES_NO_OPTION);
     
             if (confirmResult == JOptionPane.YES_OPTION) {
                 // Implement the logic to change the status of the selected orders to "f" (fulfilled)
                 try {
                     // Example SQL query to update the order status for multiple orders
-                    String updateQuery = "UPDATE Orders SET order_status = 'f' WHERE order_number IN (" +
-                            String.join(",", orderNumbers.stream().map(String::valueOf).toArray(String[]::new)) + ")";
-                    try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+                    String updateQuery = 
+                        "UPDATE Orders SET order_status = 'f' WHERE order_number IN (" +
+                        String.join(",", Arrays.stream(selectedRows).mapToObj(
+                            String::valueOf).toArray(String[]::new)) + ")";
+                    try (PreparedStatement preparedStatement = 
+                                    connection.prepareStatement(updateQuery)) {
                         preparedStatement.executeUpdate();
                     }
     
+                    // Collect product codes and quantities for selected rows
+                    for (int selectedRow : selectedRows) {
+                        String productCode = 
+                            (String) table.getValueAt(selectedRow, 5); // Assuming "Product Code" is the first column
+                        int quantity = 1; // Assuming the quantity to be subtracted is 1, modify as needed
+    
+                        // If the product code already exists in the map, update the quantity
+                        if (productQuantities.containsKey(productCode)) {
+                            quantity += productQuantities.get(productCode);
+                        }
+    
+                        productQuantities.put(productCode, quantity);
+                    }
+    
+                    // Update stock using the updateStock method
+                    updateStock(productQuantities);
+    
                     // Display a success message
-                    JOptionPane.showMessageDialog(this, "Order(s) fulfilled successfully!", "Fulfill Order",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, 
+                        "Order(s) fulfilled successfully!", 
+                        "Fulfill Order", JOptionPane.INFORMATION_MESSAGE);
     
                     // Refresh the table after status change
                     refreshTable(table);
@@ -178,17 +215,39 @@ public class QueueView extends JPanel {
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Please select at least one row to fulfill the order.",
-                    "Fulfill Order", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                "Please select at least one row to fulfill the order.",
+                "Fulfill Order", JOptionPane.WARNING_MESSAGE);
         }
     }
-    
+
+    private void updateStock(Map<String, Integer> productQuantities) {
+        // Assuming you have access to an instance of the InventoryOperations class
+        InventoryOperations inventoryOperations = new InventoryOperations();
+
+        for (Map.Entry<String, Integer> entry : productQuantities.entrySet()) {
+            String productCode = entry.getKey();
+            int quantity = entry.getValue();
+
+            // Assuming the quantity to be subtracted is specified in the map, modify as
+            // needed
+            inventoryOperations.addStock(connection, productCode, -quantity);
+        }
+    }
+
     private void refreshTable(JTable table) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0); // Clear existing rows
 
         // SQL query to retrieve confirmed orders with relevant information
-        String sqlQuery = "SELECT o.order_number, o.order_date, a.forename, a.surname, a.email_address, ad.house_number, ad.street_name, ad.city_name, ad.postcode, "
+
+        table.setModel(createTableFromSQL().getModel()); // Populate the table with updated data
+    }
+
+}
+
+/*         from refreshTable
+ *         String sqlQuery = "SELECT o.order_number, o.order_date, a.forename, a.surname, a.email_address, ad.house_number, ad.street_name, ad.city_name, ad.postcode, "
                 + "GROUP_CONCAT(ol.product_code SEPARATOR ', ') AS order_contents, SUM(ol.order_line_cost) AS order_cost, o.order_status, a.userID, b.card_number "
                 + "FROM Orders o "
                 + "JOIN Accounts a ON o.userID = a.userID "
@@ -198,7 +257,4 @@ public class QueueView extends JPanel {
                 + "WHERE o.order_status = 'confirmed' "
                 + "GROUP BY o.order_number, o.order_date, a.forename, a.surname, a.email_address, ad.house_number, ad.street_name, ad.city_name, ad.postcode, o.order_status, a.userID, b.card_number";
 
-        table.setModel(createTableFromSQL().getModel()); // Populate the table with updated data
-    }
-
-}
+ */

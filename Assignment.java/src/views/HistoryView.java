@@ -13,7 +13,8 @@ public class HistoryView extends JPanel {
     private CardLayout cardLayout;
     private JPanel cardPanel;
 
-    public HistoryView(Connection connection, CardLayout cardLayout, JPanel cardPanel) {
+    public HistoryView(
+            Connection connection, CardLayout cardLayout, JPanel cardPanel) {
         this.connection = connection;
         this.cardLayout = cardLayout;
         this.cardPanel = cardPanel;
@@ -25,7 +26,8 @@ public class HistoryView extends JPanel {
 
         // Back button to the initial screen
         JButton backButton = new JButton("Back to Main Screen");
-        backButton.addActionListener(e -> cardLayout.show(cardPanel, "Initial"));
+        backButton.addActionListener(
+            e -> cardLayout.show(cardPanel, "Initial"));
 
         // Table with data from the SQL table
         JTable table = createTableFromSQL();
@@ -39,13 +41,16 @@ public class HistoryView extends JPanel {
     }
 
     private JTable createTableFromSQL() {
-        String[] columnNames = {"Order Number", "Order Date", "Total Cost", "Order Status", "User ID"};
+        String[] columnNames = {"Order Number", "Order Date", "Total Cost", 
+                                "Order Status", "User ID"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         // SQL query to retrieve data from your table
-        String sqlQuery = "SELECT order_number, order_date, total_cost, order_status, userID FROM Orders";
+        String sqlQuery = "SELECT order_number, order_date, total_cost, " 
+                        + "order_status, userID FROM Orders";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+        try (PreparedStatement preparedStatement = 
+                                    connection.prepareStatement(sqlQuery)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
