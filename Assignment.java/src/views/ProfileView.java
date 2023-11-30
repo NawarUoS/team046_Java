@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Random;
 
 public class ProfileView extends JFrame {
@@ -179,7 +180,7 @@ public class ProfileView extends JFrame {
     private void updateDetails(Connection connection, String userID) throws SQLException {
         AccountOperations accountOperations = new AccountOperations();
         if (accountOperations.checkAccountInDatabase(connection,
-                email_address.getText())) {
+                email_address.getText()) && !Objects.equals(CurrentUserCache.getLoggedInUser().getEmailAddress(), email_address.getText())) {
             email_address.setText("User with that email already exists");
             return;
         }
