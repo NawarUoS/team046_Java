@@ -22,8 +22,8 @@ public class ConnectionMainI {
                 databaseConnectionHandler.openConnection();
 
                 // test cart
-                cartView=
-                        new CartView(databaseConnectionHandler.getConnection(), 1);
+                cartView =
+                        new CartView(databaseConnectionHandler.getConnection());
                 cartView.setVisible(false);
 
                 // test profile
