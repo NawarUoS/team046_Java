@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Random;
 
 
@@ -213,7 +214,7 @@ public class MainStoreView extends JFrame {
                         if (checkInventoryAvailability(productCode, quantity)) {
                             addToCart(productCode, quantity);
 
-                            JOptionPane.showMessageDialog(this, "Product added to cart successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            //JOptionPane.showMessageDialog(this, "Product added to cart successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             JOptionPane.showMessageDialog(this, "Insufficient quantity in store inventory.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
@@ -243,6 +244,13 @@ public class MainStoreView extends JFrame {
         }
 
         try {
+            // Check if the user has a pending order
+            int pendingOrderNumber = getPendingOrderNumber();
+
+            // If the user doesn't have a pending order, create one
+            if (pendingOrderNumber == -1) {
+                pendingOrderNumber = createPendingOrder();
+            }
             // Calculate the order line cost
             double orderLineCost = calculateOrderLineCost(productCode, quantity);
 
@@ -269,23 +277,44 @@ public class MainStoreView extends JFrame {
             JOptionPane.showMessageDialog(this, "Error adding product to cart.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }    
-    private int getPendingOrderNumber() throws SQLException {
-        // Example SQL query to retrieve the order number of the user's pending order
-        String query = "SELECT order_number FROM Orders WHERE userID = ? AND order_status = 'p' LIMIT 1";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, CurrentUserCache.getLoggedInUser().getUserID());
-    
-            ResultSet resultSet = preparedStatement.executeQuery();
-    
-            if (resultSet.next()) {
-                return resultSet.getInt("order_number");
-            } else {
-                // No pending order found for the user
-                return -1;
+private int getPendingOrderNumber() throws SQLException {
+    String query = "SELECT order_number FROM Orders WHERE userID = ? AND order_status = 'p'";
+    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        preparedStatement.setString(1, CurrentUserCache.getLoggedInUser().getUserID());
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return resultSet.getInt("order_number");
+        } else {
+            return -1;
+            //throw new SQLException("No pending order found for the user.");
+        }
+    }
+}    //getPendingOrderNumber() == -1
+
+    private int createPendingOrder() throws SQLException {
+        if (getPendingOrderNumber() == -1) {
+            try {
+                // Generate a unique order number
+                int orderNumber = generateUniqueOrderNumber();
+
+                // Example SQL query to insert a new pending order with all fields initialized
+                String insertQuery = "INSERT INTO Orders (order_number, order_date, total_cost, order_status, userID) " +
+                        "VALUES (?, CURRENT_DATE, 0, 'p', ?)";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                    preparedStatement.setInt(1, orderNumber);
+                    preparedStatement.setString(2, CurrentUserCache.getLoggedInUser().getUserID());
+                    preparedStatement.executeUpdate();
+                }
+
+                return orderNumber;
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
+        // If a pending order already exists, return its order number
+        return getPendingOrderNumber();
     }   
-    
+
     private double calculateOrderLineCost(String productCode, int quantity) throws SQLException {
         // Ensure that quantity is positive
         if (quantity <= 0) {
@@ -318,4 +347,20 @@ public class MainStoreView extends JFrame {
 
     return (int) (timestamp + randomSuffix);
     }
+
+    private int generateUniqueOrderNumber() throws SQLException {
+        String query = "SELECT MAX(order_number) FROM Orders";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int maxOrderNumber = resultSet.getInt(1);
+                // Increment the max order number to generate a unique order number
+                return maxOrderNumber + 1;
+            } else {
+                // If no existing orders, start with order number 1
+                return 1;
+            }
+        }
+    }
 }
+
