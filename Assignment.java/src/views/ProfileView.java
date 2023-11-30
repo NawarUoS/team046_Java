@@ -3,6 +3,7 @@ package src.views;
 import src.account.Account;
 import src.account.Address;
 import src.account.BankDetails;
+import src.model.AccountOperations;
 import src.model.AddressOperations;
 import src.model.BankDetailsOperations;
 import src.util.CurrentUserCache;
@@ -102,7 +103,7 @@ public class ProfileView extends JFrame {
         card_number = new JTextField(20);
         card_number.setText(hasBankDetails ?
                 String.valueOf(bankDetails.getCardNumber()) :
-                "0000000000000000");
+                "");
 
         JLabel cardHolderLabel = new JLabel("Cardholder Name:");
         card_name = new JTextField(20);
@@ -176,6 +177,12 @@ public class ProfileView extends JFrame {
     }
 
     private void updateDetails(Connection connection, String userID) throws SQLException {
+        AccountOperations accountOperations = new AccountOperations();
+        if (accountOperations.checkAccountInDatabase(connection,
+                email_address.getText())) {
+            email_address.setText("User with that email already exists");
+            return;
+        }
 
         // Update Account table
         String updateAccountSql = "UPDATE Accounts SET forename = ?, surname " +
