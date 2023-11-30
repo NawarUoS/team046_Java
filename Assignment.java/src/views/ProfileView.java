@@ -191,6 +191,13 @@ public class ProfileView extends JFrame {
         try (PreparedStatement pstmt = connection.prepareStatement(updateAccountSql)) {
             pstmt.setString(1, forename.getText());
             pstmt.setString(2, surname.getText());
+            if (!email_address.getText().matches("^[a-zA-Z0-9_+&*-]+" +
+                    "(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+" +
+                    "[a-zA-Z]{2,7}$")) {
+                // Invalid email, tell user and return.
+                email_address.setText("Invalid email.");
+                return;
+            }
             pstmt.setString(3, email_address.getText());
             pstmt.setString(4, userID);
 

@@ -18,7 +18,7 @@ import java.util.List;
 public class RegistrationView extends JFrame {
     private JTextField forenameField;
     private JTextField surnameField;
-    private JTextField usernameField;
+    private JTextField emailField;
     private JPasswordField passwordField;
     private JTextField houseNumberField;
     private JTextField streetNameField;
@@ -52,7 +52,7 @@ public class RegistrationView extends JFrame {
         // Create JTextFields for entering username and password
         forenameField = new JTextField(40);
         surnameField = new JTextField(40);
-        usernameField = new JTextField(40);
+        emailField = new JTextField(40);
         passwordField = new JPasswordField(40);
         houseNumberField = new JTextField(40);
         streetNameField = new JTextField(40);
@@ -69,7 +69,7 @@ public class RegistrationView extends JFrame {
         panel.add(surnameLabel);
         panel.add(surnameField);
         panel.add(usernameLabel);
-        panel.add(usernameField);
+        panel.add(emailField);
         panel.add(passwordLabel);
         panel.add(passwordField);
         panel.add(houseNumberLabel);
@@ -89,7 +89,14 @@ public class RegistrationView extends JFrame {
         registerButton.addActionListener(e -> {
             String forename = forenameField.getText();
             String surname = surnameField.getText();
-            String email = usernameField.getText();
+            String email = emailField.getText();
+            if (!email.matches("^[a-zA-Z0-9_+&*-]+" +
+                    "(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+" +
+                    "[a-zA-Z]{2,7}$")) {
+                // Invalid email, tell user and return.
+                emailField.setText("Invalid email.");
+                return;
+            }
             char[] passwordChars = passwordField.getPassword();
             String houseNumber = houseNumberField.getText();
             String streetName = streetNameField.getText();
