@@ -19,8 +19,7 @@ public class BankDetailsOperations {
         try {
             // Query the database to fetch user information
             String sql = "SELECT card_number, card_company_name, expiry_date," +
-                    " card_name, " +
-                    "security_code FROM BankDetails WHERE userID = ?";
+                    " card_name FROM BankDetails WHERE userID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, userID);
             ResultSet resultSet = statement.executeQuery();
@@ -33,12 +32,10 @@ public class BankDetailsOperations {
                         "card_company_name");
                 String expiry_date =
                         resultSet.getString("expiry_date");
-                int security_code =
-                        resultSet.getInt("security_code");
 
                 return new BankDetails(card_company_name, card_name,
                         card_number,
-                        expiry_date, security_code, userID);
+                        expiry_date, userID);
             }
 
         } catch (SQLException e) {
@@ -56,16 +53,14 @@ public class BankDetailsOperations {
         String cardHolder = bankDetails.getCardHolder();
         long cardNumber = bankDetails.getCardNumber();
         String expiryDate = bankDetails.getExpiryDate();
-        int securityCode = bankDetails.getSecurityCode();
 
         try {
             // TODO fix sql statement when table is updated
             // Query the database to insert user information
             String sql = "INSERT INTO BankDetails (userID, card_company_name," +
                     " " +
-                    "card_name, card_number, expiry_date, " +
-                    "security_code) " +
-                    "VALUES (?, ?, ?, ?, ?, ?)";
+                    "card_name, card_number, expiry_date) " +
+                    "VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             // Set parameters for the query
@@ -74,7 +69,6 @@ public class BankDetailsOperations {
             statement.setString(3, cardHolder);
             statement.setLong(4, cardNumber);
             statement.setString(5, expiryDate);
-            statement.setInt(6, securityCode);
 
 
             // Execute the insert statement

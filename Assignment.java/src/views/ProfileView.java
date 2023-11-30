@@ -118,8 +118,6 @@ public class ProfileView extends JFrame {
 
         JLabel securityCodeLabel = new JLabel("Security Code:");
         security_code = new JTextField(20);
-        security_code.setText(hasBankDetails ?
-                String.valueOf(bankDetails.getSecurityCode()) : "000");
 
         // Button to Save Changes
         JButton saveButton = new JButton("Save");
@@ -256,7 +254,6 @@ public class ProfileView extends JFrame {
                     card_name.getText(),
                     Long.parseLong(card_number.getText()),
                     expiry_date.getText(),
-                    Integer.parseInt(security_code.getText()),
                     CurrentUserCache.getLoggedInUser().getUserID());
             bankDetailsOperations.saveBankDetailsIntoDatabase(
                     connection, bankDetails);

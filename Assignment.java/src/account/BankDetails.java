@@ -6,16 +6,14 @@ public class BankDetails {
     private String cardHolder;
     private long cardNumber;
     private String expiryDate;
-    private int securityCode;
 
     // Constructor
     public BankDetails(String cardName, String cardHolder, long cardNumber,
-                       String expiryDate, int securityCode, String userID) {
+                       String expiryDate, String userID) {
         this.cardName = cardName;
         this.cardHolder = cardHolder;
         this.cardNumber = cardNumber;
         this.expiryDate = expiryDate;
-        this.securityCode = securityCode;
         this.userID = userID;
     }
 
@@ -39,10 +37,6 @@ public class BankDetails {
         return expiryDate;
     }
 
-    public int getSecurityCode() {
-        return securityCode;
-    }
-
     public void setCardName(String cardName) {
         this.cardName = cardName;
     }
@@ -62,9 +56,5 @@ public class BankDetails {
 
     public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
-    }
-
-    public void setSecurityCode(int securityCode) {
-        this.securityCode = securityCode;
     }
 }
