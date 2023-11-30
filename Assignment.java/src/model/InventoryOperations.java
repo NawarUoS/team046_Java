@@ -207,10 +207,11 @@ public class InventoryOperations {
      */
     public static void addProduct(Connection connection, String productID,
                                   String brandName, String productName,
-                                  Double price, String gaugeType, Integer quantity) {
+                                  Double price, String gaugeType, Integer quantity,
+                                  Boolean isPack) {
         try {
             String sql = "INSERT INTO Products (product_code, brand_name, product_name, " +
-                    "price, gauge_type, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+                    "price, gauge_type, quantity, is_pack) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, productID);
@@ -219,6 +220,7 @@ public class InventoryOperations {
             statement.setDouble(4, price);
             statement.setString(5, gaugeType);
             statement.setInt(6, quantity);
+            statement.setBoolean(7, isPack);
 
             statement.executeUpdate();
 
@@ -244,10 +246,10 @@ public class InventoryOperations {
      */
     public void addLocomotive(Connection connection, String productID, String brandName,
                               String productName, Double price, String gaugeType,
-                              Integer quantity, String dccCode, List<Integer> eras) {
+                              Integer quantity, Boolean isPack, String dccCode, List<Integer> eras) {
         try {
             addProduct(connection, productID, brandName, productName, price,
-                        gaugeType, quantity);
+                        gaugeType, quantity, isPack);
             String sql = "UPDATE Products SET dccCode = ? WHERE productID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -275,9 +277,9 @@ public class InventoryOperations {
      */
     public void addRollingStock(Connection connection, String productID, String brandName,
                                 String productName, Double price, String gaugeType,
-                                Integer quantity, List<Integer> eras) {
+                                Integer quantity, Boolean isPack, List<Integer> eras) {
         addProduct(connection, productID, brandName, productName, price,
-                    gaugeType, quantity);
+                    gaugeType, quantity, isPack);
         addEras(connection, productID, eras);
     }
     /**
@@ -294,9 +296,9 @@ public class InventoryOperations {
      * @param isDigital Whether a controller is digital or not
      */
     public void addController(Connection connection, String productID, String brandName, String productName,
-                              Double price, String gaugeType, Integer quantity, boolean isDigital) {
+                              Double price, String gaugeType, Integer quantity, Boolean isPack, boolean isDigital) {
         try {
-            addProduct(connection, productID, brandName, productName, price, gaugeType, quantity);
+            addProduct(connection, productID, brandName, productName, price, gaugeType, quantity, isPack);
             String sql = "UPDATE Products SET isDigital = ? WHERE productID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -323,10 +325,10 @@ public class InventoryOperations {
      */
     public void addPacks(Connection connection, String productID, String brandName,
                          String productName, Double price, String gaugeType,
-                         Integer quantity, List<String[]> packContent) {
+                         Integer quantity, Boolean isPack, List<String[]> packContent) {
         try {
             addProduct(connection, productID, brandName, productName, price,
-                    gaugeType, quantity);
+                    gaugeType, quantity, isPack);
             // Iterates through the list, passing the String[] into the loop
             for (int i = 0; i < packContent.size(); i++) {
                 String sql = "INSERT into Packs(product_code, component_code, " +
@@ -391,19 +393,13 @@ public class InventoryOperations {
         Integer currQuantity = getStock(connection, productID);
         Integer newQuantity = currQuantity + quantity;
         try {
-            System.out.print("here!" + currQuantity);
-            System.out.print("Now!" + newQuantity);
             // Update Products table
             String sql2 = "UPDATE Products SET quantity = ? WHERE product_code = ?";
             PreparedStatement setStatement = connection.prepareStatement(sql2);
-            System.out.print("Everything above works");
             setStatement.setInt(1, newQuantity);
             setStatement.setString(2, productID);
-            System.out.print("Up here!");
             setStatement.executeUpdate();
             setStatement.close();
-            System.out.print("this all works");
-
             if (productID.substring(0,1) == "P" || productID.substring(0,1) == "M") {
                 for (int i = 0; i < quantity; i++) {
                     List<String[]> packContent = getPackByID(connection, productID);
@@ -413,7 +409,6 @@ public class InventoryOperations {
                     }
                 }
             }
-            System.out.print("maybe");
         } catch (SQLException i) {
             i.printStackTrace();
             throw new Error("Invalid Stock change");
