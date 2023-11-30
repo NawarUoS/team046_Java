@@ -118,9 +118,7 @@ public class AddProductView extends JFrame {
             String productID = productIDField.getText();
             String brandName = brandNameField.getText();
             String productName = productNameField.getText();
-            System.out.println("productname" + productName);
             String sPrice = priceField.getText();
-            System.out.print("price" + sPrice);
             Double price = Double.parseDouble(sPrice);
             String gauge = gaugeTypeField.getText();
             String sQuantity = quantityField.getText();
