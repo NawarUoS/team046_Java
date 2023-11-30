@@ -39,7 +39,7 @@ public class ManagerView extends JFrame {
 
         // Set a layout manager for the panels
         panel.setLayout(new GridLayout(1, 2));
-        leftPanel.setLayout(new GridLayout(8, 1));
+        leftPanel.setLayout(new GridLayout(9, 1));
         rightPanel.setLayout(new GridLayout(1, 1));
 
         // Create JLabels for username and password
@@ -52,6 +52,7 @@ public class ManagerView extends JFrame {
         userDismiss1Field = new JTextField(40);
 
         // Create a JButton for the promote and dismiss actions
+        JButton mainStoreButton = new JButton("Main Store View");
         JButton promoteUsersButton = new JButton("Promote Users");
         JButton dismissUserButton = new JButton("Dismiss User");
 
@@ -87,6 +88,7 @@ public class ManagerView extends JFrame {
         JScrollPane scrollPane = new JScrollPane(staffTable);
 
         // Add components to the left panel
+        leftPanel.add(mainStoreButton);
         leftPanel.add(promoteLabel);
         leftPanel.add(userPromote1Field);
         leftPanel.add(userPromote2Field);
@@ -102,6 +104,17 @@ public class ManagerView extends JFrame {
         // Combine it all in main panel
         panel.add(leftPanel);
         panel.add(rightPanel);
+
+        // Create an ActionListener for the main store view button
+        mainStoreButton.addActionListener(e -> {
+            dispose();
+            try {
+                MainStoreView mainStoreView = new MainStoreView(connection);
+                mainStoreView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
 
         // Create an ActionListener for the promote users button
         promoteUsersButton.addActionListener(e -> {

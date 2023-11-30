@@ -2,6 +2,7 @@ package src.model;
 
 import src.account.Account;
 import src.account.UserRole;
+import src.util.CurrentUserCache;
 import src.util.HashedPasswordGenerator;
 
 import java.lang.management.MemoryNotificationInfo;
@@ -60,6 +61,11 @@ public class ManagerOperations {
         if (!checkAccountInDatabase(connection, email))
             return "Account does not exist. Couldn't dismiss user from " +
                     "staff.";
+        AccountOperations accountOperations = new AccountOperations();
+        if (accountOperations.getAccountByEmail(connection,
+                email).getUserRoles().contains(UserRole.MANAGER)) {
+            return "User is Manager, cannot dismiss manager.";
+        }
         try {
             // Query the database to update user information
             String sql = "UPDATE Accounts SET user_staff = ? " +
