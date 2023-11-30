@@ -22,8 +22,7 @@ public class InventoryOperations {
         try {
             // Query the database to fetch product information
             String sql = "SELECT brand_name, product_name, product_price, " +
-                        "gauge_type, model_scale, quantity " +
-                        "FROM Products WHERE product_code = ?";
+                        "gauge_type, quantity FROM Products WHERE product_code = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, ID);
             ResultSet resultSet = statement.executeQuery();
@@ -402,6 +401,15 @@ public class InventoryOperations {
             setStatement.executeUpdate();
             setStatement.close();
 
+            if (productID.substring(0,1) == "P" || productID.substring(0,1) == "M") {
+                for (int i = 0; i < quantity; i++) {
+                    List<String[]> packContent = getPackByID(connection, productID);
+                    for (int x = 0; x < packContent.size(); x++) {
+                        addStock(connection, packContent.get(x)[0],
+                                Integer.parseInt(packContent.get(x)[1]));
+                    }
+                }
+            }
         } catch (SQLException i) {
             i.printStackTrace();
         }
