@@ -121,4 +121,16 @@ public class OrderLineOperations {
         }
         return "Successfully updated order line details!";
     }
+
+    public void removeOrderLine(Connection connection, int orderLineNumber) {
+        // Placeholder method for removing order from the database (modify as needed)
+        String sqlQuery = "DELETE FROM OrderLines WHERE order_line_number = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            preparedStatement.setInt(1, orderLineNumber);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
