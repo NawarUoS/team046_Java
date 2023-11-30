@@ -52,7 +52,7 @@ public class ManagerView extends JFrame {
         userDismiss1Field = new JTextField(40);
 
         // Create a JButton for the promote and dismiss actions
-        JButton mainStoreButton = new JButton("Main Store View");
+        JButton mainStoreButton = new JButton("Staff View");
         JButton promoteUsersButton = new JButton("Promote Users");
         JButton dismissUserButton = new JButton("Dismiss User");
 
@@ -109,8 +109,8 @@ public class ManagerView extends JFrame {
         mainStoreButton.addActionListener(e -> {
             dispose();
             try {
-                MainStoreView mainStoreView = new MainStoreView(connection);
-                mainStoreView.setVisible(true);
+                StaffView staffView = new StaffView(connection);
+                staffView.setVisible(true);
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
