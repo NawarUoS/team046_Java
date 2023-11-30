@@ -29,6 +29,8 @@ public class MainStoreView extends JFrame {
         this.setTitle("Store");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(WIDTH, HEIGHT);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
 
         // Create a JPanel to hold the components
         JPanel panel = new JPanel();

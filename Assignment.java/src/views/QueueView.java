@@ -115,15 +115,15 @@ public class QueueView extends JPanel {
 
     private void deleteOrder(JTable table) {
         int[] selectedRows = table.getSelectedRows();
-
+    
         if (selectedRows.length > 0) { // Check if at least one row is selected
             List<Integer> orderNumbers = new ArrayList<>();
-
+    
             // Confirm the deletion with a dialog box
             int option = JOptionPane.showConfirmDialog(this, 
                 "Are you sure you want to delete the selected orders?",
                 "Confirm Deletion", JOptionPane.YES_NO_OPTION);
-
+    
             if (option == JOptionPane.YES_OPTION) {
                 // User confirmed deletion
                 // Collect order numbers for selected rows
@@ -131,25 +131,29 @@ public class QueueView extends JPanel {
                     int orderNumber = (int) table.getValueAt(selectedRow, 0);
                     orderNumbers.add(orderNumber);
                 }
-
+    
                 // Implement the logic to delete the selected orders
                 try {
-                    // Example SQL query to delete multiple orders
-                    String deleteQuery = "DELETE FROM Orders WHERE order_number IN (" +
-                            String.join(
-                                ",", orderNumbers.stream().map(
-                                    String::valueOf).toArray(String[]::new)) + ")";
-                    try (PreparedStatement preparedStatement = 
-                                    connection.prepareStatement(deleteQuery)) {
+                    // Delete associated order lines (CASCADE DELETE)
+                    String deleteOrderLinesQuery = "DELETE FROM OrderLines WHERE order_number IN (" +
+                            String.join(",", orderNumbers.stream().map(String::valueOf).toArray(String[]::new)) + ")";
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(deleteOrderLinesQuery)) {
                         preparedStatement.executeUpdate();
                     }
-
+    
+                    // Delete the orders
+                    String deleteOrdersQuery = "DELETE FROM Orders WHERE order_number IN (" +
+                            String.join(",", orderNumbers.stream().map(String::valueOf).toArray(String[]::new)) + ")";
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(deleteOrdersQuery)) {
+                        preparedStatement.executeUpdate();
+                    }
+    
                     // Refresh the table after deletion
                     refreshTable(table);
-
+    
                     // Display a confirmation message
                     JOptionPane.showMessageDialog(this, 
-                        "Selected orders deleted successfully.", 
+                        "Selected orders and associated order lines deleted successfully.", 
                         "Deletion Successful", JOptionPane.INFORMATION_MESSAGE);
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -158,10 +162,10 @@ public class QueueView extends JPanel {
         } else {
             JOptionPane.showMessageDialog(this, 
                 "Please select at least one row to delete.", "Delete Order",
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.WARNING_MESSAGE);
         }
     }
-
+    
 private void fulfillOrder(JTable table) {
     int[] selectedRows = table.getSelectedRows();
 
