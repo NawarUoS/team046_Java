@@ -1,17 +1,8 @@
 package src.views;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-
-import src.model.AccountOperations;
-import src.model.DatabaseConnectionHandler;
-import src.model.OrderOperations;
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class StaffView extends JFrame {
@@ -20,6 +11,12 @@ public class StaffView extends JFrame {
     private JPanel cardPanel;
     private JTable historyTable;
 
+    /**
+     *  StaffView: Class containing classes of staff screens 
+     * 
+     * @param connection
+     * @throws SQLException
+     */
     public StaffView(Connection connection) throws SQLException {
 
         // Create the JFrame in the constructor
@@ -35,8 +32,10 @@ public class StaffView extends JFrame {
 
         // Create screens (JPanel instances)
         JPanel inventoryScreen = new InventoryScreen();
-        JPanel queueScreen = new QueueView(connection, cardLayout, cardPanel);
-        JPanel historyScreen = new HistoryView(connection, cardLayout, cardPanel);
+        JPanel queueScreen = new QueueView(
+                                        connection, cardLayout, cardPanel);
+        JPanel historyScreen = new HistoryView(
+                                        connection, cardLayout, cardPanel);
 
         // Add screens to the cardPanel with associated names
         cardPanel.add(inventoryScreen, "Inventory");
@@ -49,9 +48,12 @@ public class StaffView extends JFrame {
         JButton historyButton = new JButton("Sales History");
 
         // Add ActionListener to buttons for screen navigation
-        inventoryButton.addActionListener(e -> cardLayout.show(cardPanel, "Inventory"));
-        queueButton.addActionListener(e -> cardLayout.show(cardPanel, "Queue"));
-        historyButton.addActionListener(e -> cardLayout.show(cardPanel, "History"));
+        inventoryButton.addActionListener(
+                    e -> cardLayout.show(cardPanel, "Inventory"));
+        queueButton.addActionListener(
+                    e -> cardLayout.show(cardPanel, "Queue"));
+        historyButton.addActionListener(
+                    e -> cardLayout.show(cardPanel, "History"));
 
         // Add buttons to the initial screen
         JPanel initialScreen = new JPanel();
@@ -71,11 +73,13 @@ public class StaffView extends JFrame {
             setLayout(new BorderLayout());
 
             // Content for Inventory Screen
-            add(new JLabel("Inventory Screen Content", SwingConstants.CENTER));
+            add(new JLabel(
+                "Inventory Screen Content", SwingConstants.CENTER));
 
             // Back button to the initial screen
             JButton backButton = new JButton("Back to Main Screen");
-            backButton.addActionListener(e -> cardLayout.show(cardPanel, "Initial"));
+            backButton.addActionListener(
+                e -> cardLayout.show(cardPanel, "Initial"));
 
             JPanel buttonPanel = new JPanel();
             buttonPanel.add(backButton);
