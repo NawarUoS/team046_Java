@@ -20,8 +20,6 @@ public class MainViewController {
         // Execute the Swing GUI application on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
             LoginView loginView = null;
-            MainStoreView mainStoreView = null;
-
             try {
                 // Open a database connection
                 databaseConnectionHandler.openConnection();

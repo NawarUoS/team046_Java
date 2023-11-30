@@ -162,13 +162,17 @@ public class MainStoreView extends JFrame {
         });
 
         discreteStaffButton.addActionListener(e -> {
-            // Closes current login view
-            dispose();
             // Create and show the new RegistrationView JFrame
             try {
-                StaffView staffView =
-                        new StaffView(connection);
-                staffView.setVisible(true);
+                if (CurrentUserCache.getLoggedInUser().getUserRoles().contains(
+                        UserRole.STAFF))
+                {
+                    // Closes current login view
+                    dispose();
+                    StaffView staffView =
+                            new StaffView(connection);
+                    staffView.setVisible(true);
+                }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
