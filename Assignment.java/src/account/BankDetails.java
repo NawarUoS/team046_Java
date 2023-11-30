@@ -10,12 +10,13 @@ public class BankDetails {
 
     // Constructor
     public BankDetails(String cardName, String cardHolder, long cardNumber,
-                       String expiryDate, int securityCode) {
+                       String expiryDate, int securityCode, String userID) {
         this.cardName = cardName;
         this.cardHolder = cardHolder;
         this.cardNumber = cardNumber;
         this.expiryDate = expiryDate;
         this.securityCode = securityCode;
+        this.userID = userID;
     }
 
     // Getter methods

@@ -14,7 +14,8 @@ public class BankDetailsOperations {
     public BankDetails getBankDetailsByUserID(Connection connection, String userID) throws Error {
         try {
             // Query the database to fetch user information
-            String sql = "SELECT card_number, card_name, expiry_date, " +
+            String sql = "SELECT card_number, card_company_name, expiry_date," +
+                    " card_name, " +
                     "security_code FROM BankDetails WHERE userID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, userID);
@@ -22,16 +23,18 @@ public class BankDetailsOperations {
 
             if (resultSet.next()) {
                 int card_number = resultSet.getInt("card_number");
-                String card_holder_name =
-                        resultSet.getString("card_holder_name");
-                String card_name = resultSet.getString("card_name");
+                String card_name =
+                        resultSet.getString("card_name");
+                String card_company_name = resultSet.getString(
+                        "card_company_name");
                 String expiry_date =
                         resultSet.getString("expiry_date");
                 int security_code =
                         resultSet.getInt("security_code");
 
-                return new BankDetails(card_name, card_holder_name, card_number,
-                        expiry_date, security_code);
+                return new BankDetails(card_company_name, card_name,
+                        card_number,
+                        expiry_date, security_code, userID);
             }
 
         } catch (SQLException e) {
@@ -54,8 +57,10 @@ public class BankDetailsOperations {
         try {
             // TODO fix sql statement when table is updated
             // Query the database to insert user information
-            String sql = "INSERT INTO BankDetails (userID, card_name, " +
-                    "card_holder, card_number, expiry_date, security_code) " +
+            String sql = "INSERT INTO BankDetails (userID, card_company_name," +
+                    " " +
+                    "card_name, card_number, expiry_date, " +
+                    "security_code) " +
                     "VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -87,8 +92,8 @@ public class BankDetailsOperations {
 //            return "Account does not exist. Couldn't update bank details.";
 //        try {
 //            // Query the database to update user information
-//            String sql = "UPDATE BankDetails SET card_name = ?," +
-//                    " card_holder = ?, expiry_date = ?, security_code = ? " +
+//            String sql = "UPDATE BankDetails SET card_company_name = ?," +
+//                    " card_name = ?, expiry_date = ?, security_code = ? " +
 //                    "WHERE userID = ?";
 //
 //            // Set parameters for the query
@@ -114,7 +119,6 @@ public class BankDetailsOperations {
 
     // Refrences card_number to update 
     public boolean checkBankDetailsInDatabase(Connection connection, String userID) {
-        // TODO implement hasBankDetails
         try {
             String sql = "SELECT card_number FROM BankDetails WHERE userID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);

@@ -41,7 +41,7 @@ public class ProfileView extends JFrame {
         JPanel panel = new JPanel();
         this.add(panel);
 
-        panel.setLayout(new GridLayout(12, 2, 10, 10));
+        panel.setLayout(new GridLayout(13, 2, 10, 10));
 
         Account currentUser = CurrentUserCache.getLoggedInUser();
 
@@ -52,16 +52,13 @@ public class ProfileView extends JFrame {
         Address address = addressOperations.getAddressByUserID(connection,
                         currentUser.getUserID());
 
-        BankDetails bankDetails;
-        if (bankDetailsOperations.checkBankDetailsInDatabase(connection,
-                currentUser.getUserID())) {
-            bankDetails =
-                    bankDetailsOperations.getBankDetailsByUserID(connection,
+        boolean hasBankDetails =
+                bankDetailsOperations.checkBankDetailsInDatabase(connection,
+                        currentUser.getUserID());
+        BankDetails bankDetails =
+                bankDetailsOperations.getBankDetailsByUserID(connection,
                             currentUser.getUserID());
-        } else {
-            bankDetails = new BankDetails("N/A", "N/A", 0000000000000000, "00" +
-                    "-00-0000", 000);
-        }
+
         // Create Labels and Text Fields
         JLabel firstNameLabel = new JLabel("First Name:");
         forename = new JTextField(20);
@@ -93,23 +90,29 @@ public class ProfileView extends JFrame {
 
         JLabel cardNameLabel = new JLabel("Card Name: ");
         card_company_name = new JTextField(20);
-        card_company_name.setText(bankDetails.getCardName());
+        card_company_name.setText(hasBankDetails ? bankDetails.getCardName()
+                : "");
 
         JLabel cardNumberLabel = new JLabel("Card Number:");
         card_number = new JTextField(20);
-        card_number.setText(String.valueOf(bankDetails.getCardNumber()));
+        card_number.setText(hasBankDetails ?
+                String.valueOf(bankDetails.getCardNumber()) :
+                "0000000000000000");
 
         JLabel cardHolderLabel = new JLabel("Cardholder Name:");
         card_name = new JTextField(20);
-        card_name.setText(bankDetails.getCardHolder());
+        card_name.setText(hasBankDetails ? bankDetails.getCardHolder() :
+                "");
 
         JLabel cardExpiryLabel = new JLabel("Card Expiry (mm/yy):");
         expiry_date = new JTextField(20);
-        expiry_date.setText(bankDetails.getExpiryDate());
+        expiry_date.setText(hasBankDetails ? bankDetails.getExpiryDate() :
+                "00/00");
 
         JLabel securityCodeLabel = new JLabel("Security Code:");
         security_code = new JTextField(20);
-        security_code.setText(String.valueOf(bankDetails.getSecurityCode()));
+        security_code.setText(hasBankDetails ?
+                String.valueOf(bankDetails.getSecurityCode()) : "000");
 
         // Button to Save Changes
         JButton saveButton = new JButton("Save");
@@ -162,6 +165,7 @@ public class ProfileView extends JFrame {
         panel.add(expiry_date);
         panel.add(securityCodeLabel);
         panel.add(security_code);
+        panel.add(mainStoreButton);
         panel.add(saveButton);
 
     }
@@ -194,31 +198,48 @@ public class ProfileView extends JFrame {
             pstmt.executeUpdate();
         }
 
-        // Update BankDetails table
-        String updateBankDetailsSql = "UPDATE BankDetails SET " +
-                "card_company_name" +
-                " " +
-                "=" +
-                " " +
-                "?," +
-                " " +
-                "card_name = ?, card_number = ?, expiry_date = ?, " +
-                "security_code" +
-                " " +
-                "=" +
-                " " +
-                "?" +
-                " " +
-                "WHERE userID = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(updateBankDetailsSql)) {
-            pstmt.setString(1, card_company_name.getText());
-            pstmt.setString(2, card_name.getText());
-            pstmt.setInt(3, Integer.parseInt(card_number.getText()));
-            pstmt.setString(4, expiry_date.getText());
-            pstmt.setInt(5, Integer.parseInt(security_code.getText()));
-            pstmt.setString(6, userID);
+        BankDetailsOperations bankDetailsOperations =
+                new BankDetailsOperations();
 
-            pstmt.executeUpdate();
+        if (bankDetailsOperations.checkBankDetailsInDatabase(connection,
+                userID)) {
+            // Update BankDetails table
+            String updateBankDetailsSql = "UPDATE BankDetails SET " +
+                    "card_company_name" +
+                    " " +
+                    "=" +
+                    " " +
+                    "?," +
+                    " " +
+                    "card_name = ?, card_number = ?, expiry_date = ?, " +
+                    "security_code" +
+                    " " +
+                    "=" +
+                    " " +
+                    "?" +
+                    " " +
+                    "WHERE userID = ?";
+            try (PreparedStatement pstmt = connection.prepareStatement(updateBankDetailsSql)) {
+                pstmt.setString(1, card_company_name.getText());
+                pstmt.setString(2, card_name.getText());
+                pstmt.setLong(3, Long.parseLong(card_number.getText()));
+                pstmt.setString(4, expiry_date.getText());
+                pstmt.setInt(5, Integer.parseInt(
+                        security_code.getText()));
+                pstmt.setString(6, userID);
+
+                pstmt.executeUpdate();
+            }
+        } else {
+            BankDetails bankDetails = new BankDetails(
+                    card_company_name.getText(),
+                    card_name.getText(),
+                    Long.parseLong(card_number.getText()),
+                    expiry_date.getText(),
+                    Integer.parseInt(security_code.getText()),
+                    CurrentUserCache.getLoggedInUser().getUserID());
+            bankDetailsOperations.saveBankDetailsIntoDatabase(
+                    connection, bankDetails);
         }
 
     }
