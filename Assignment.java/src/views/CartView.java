@@ -2,6 +2,9 @@ package src.views;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import src.util.CurrentUserCache;
+
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +20,7 @@ public class CartView extends JFrame {
     private CardLayout cardLayout;
     private JPanel cardPanel;
 
-    public CartView(Connection connection) {
+    public CartView(Connection connection) throws SQLException {
         // Create the JFrame in the constructor
         this.setTitle("Staff Dashboard");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,8 +95,8 @@ public class CartView extends JFrame {
                 + "GROUP BY o.order_number, o.order_date, o.order_status";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
-            // TODO Replace with function to get the actual user ID
-            preparedStatement.setString(1, "4583ef08-25fe-4038-90d0-b1a3523c099d"); // Placeholder user ID
+            // gets the current logged in user ID 
+            preparedStatement.setString(1, CurrentUserCache.getLoggedInUser().getUserID());
             preparedStatement.setString(2, orderStatus);
 
             ResultSet resultSet = preparedStatement.executeQuery();
