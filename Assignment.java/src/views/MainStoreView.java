@@ -107,17 +107,16 @@ public class MainStoreView extends JFrame {
         JScrollPane jScrollPaneProducts = new JScrollPane(productsTable);
         JScrollPane jScrollPanePacks = new JScrollPane(packsTable);
 
-        JButton recentOrders = new JButton("Recent Orders");
-        JButton cartButton = new JButton("Cart");
+        JButton cartButton = new JButton("Cart & Recent Orders");
         JButton profileButton = new JButton("Profile");
 
+        JButton discreteStaffButton = new JButton("Discrete Button");
         JButton addToOrderButton = new JButton("Add to Cart");
-        JButton saveOrderButton = new JButton("Save Order");
 
         // Add components to top panel
         topPanel.add(new JLabel());
         topPanel.add(new JLabel());
-        topPanel.add(recentOrders);
+        topPanel.add(new JLabel());
         topPanel.add(cartButton);
         topPanel.add(profileButton);
 
@@ -131,11 +130,11 @@ public class MainStoreView extends JFrame {
         middlePanel.add(packsPanel);
 
         // Add components to bottom panel
+        bottomPanel.add(discreteStaffButton);
         bottomPanel.add(new JLabel());
         bottomPanel.add(new JLabel());
         bottomPanel.add(new JLabel());
-        bottomPanel.add(new JLabel());
-        bottomPanel.add(saveOrderButton);
+        bottomPanel.add(addToOrderButton);
 
         profileButton.addActionListener(e -> {
             // Closes current login view
@@ -149,17 +148,30 @@ public class MainStoreView extends JFrame {
             }
         });
 
-//        cartButton.addActionListener(e -> {
-//            // Closes current login view
-//            dispose();
-//            // Create and show the new RegistrationView JFrame
-//            try {
-//                CartView cartView =
-//                        new CartView(connection);
-//                cartView.setVisible(true);
-//            } catch (SQLException ex) {
-//                ex.printStackTrace();
-//            }
-//        });
+        cartButton.addActionListener(e -> {
+            // Closes current login view
+            dispose();
+            // Create and show the new RegistrationView JFrame
+            try {
+                CartView cartView =
+                        new CartView(connection);
+                cartView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        discreteStaffButton.addActionListener(e -> {
+            // Closes current login view
+            dispose();
+            // Create and show the new RegistrationView JFrame
+            try {
+                StaffView staffView =
+                        new StaffView(connection);
+                staffView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 }
