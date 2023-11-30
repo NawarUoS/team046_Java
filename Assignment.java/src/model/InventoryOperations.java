@@ -406,7 +406,7 @@ public class InventoryOperations {
                     List<String[]> packContent = getPackByID(connection, productID);
                     for (int x = 0; x < packContent.size(); x++) {
                         addStock(connection, packContent.get(x)[0],
-                                Integer.parseInt(packContent.get(x)[1]));
+                                (~(Integer.parseInt(packContent.get(x)[1]))-1));
                     }
                 }
             }
@@ -425,7 +425,7 @@ public class InventoryOperations {
      */
     public Integer getStock(Connection connection, String productID) {
         try {
-            String sql = "SELECT quantity FROM products WHERE product_code = ?";
+            String sql = "SELECT quantity FROM Products WHERE product_code = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, productID);
