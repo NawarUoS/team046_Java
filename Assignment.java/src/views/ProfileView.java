@@ -113,15 +113,26 @@ public class ProfileView extends JFrame {
 
         // Button to Save Changes
         JButton saveButton = new JButton("Save");
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    updateDetails(connection, currentUser.getUserID());
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    // Handle any SQL exceptions here
-                }
+        saveButton.addActionListener(e -> {
+            try {
+                updateDetails(connection, currentUser.getUserID());
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                // Handle any SQL exceptions here
+            }
+        });
+
+        JButton mainStoreButton = new JButton("Main Store Page");
+        mainStoreButton.addActionListener(e -> {
+            // Closes current login view
+            dispose();
+            // Create and show the new RegistrationView JFrame
+            try {
+                MainStoreView mainStoreView =
+                        new MainStoreView(connection);
+                mainStoreView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         });
 
