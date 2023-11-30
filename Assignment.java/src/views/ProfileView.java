@@ -19,16 +19,16 @@ public class ProfileView extends JFrame {
     // Components
     private JTextField forename;
     private JTextField surname;
-    private JTextField emailAddress;
-    private JTextField houseNumber;
-    private JTextField roadName;
-    private JTextField cityName;
-    private JTextField postCode;
-    private JTextField cardName;
-    private JTextField cardNumber;
-    private JTextField cardHolder;
-    private JTextField expiryDate;
-    private JTextField securityCode;
+    private JTextField email_address;
+    private JTextField house_number;
+    private JTextField road_name;
+    private JTextField city_name;
+    private JTextField post_code;
+    private JTextField card_name;
+    private JTextField card_number;
+    private JTextField card_holder;
+    private JTextField expiry_date;
+    private JTextField security_code;
 
     public ProfileView(Connection connection) throws SQLException {
         // GUI Initialization
@@ -72,44 +72,44 @@ public class ProfileView extends JFrame {
         surname.setText(currentUser.getSurname());
 
         JLabel emailLabel = new JLabel("Email:");
-        emailAddress = new JTextField(20);
-        emailAddress.setText(currentUser.getEmailAddress());
+        email_address = new JTextField(20);
+        email_address.setText(currentUser.getEmailAddress());
 
         JLabel houseNumberLabel = new JLabel("House Number:");
-        houseNumber = new JTextField(20);
-        houseNumber.setText(String.valueOf(address.getHouseNumber()));
+        house_number = new JTextField(20);
+        house_number.setText(String.valueOf(address.getHouseNumber()));
 
         JLabel roadNameLabel = new JLabel("Road Name:");
-        roadName = new JTextField(20);
-        roadName.setText(address.getStreetName());
+        road_name = new JTextField(20);
+        road_name.setText(address.getStreetName());
 
         JLabel cityNameLabel = new JLabel("City Name:");
-        cityName = new JTextField(20);
-        cityName.setText(address.getCityName());
+        city_name = new JTextField(20);
+        city_name.setText(address.getCityName());
 
         JLabel postcodeLabel = new JLabel("Postcode:");
-        postCode = new JTextField(20);
-        postCode.setText(address.getPostCode());
+        post_code = new JTextField(20);
+        post_code.setText(address.getPostCode());
 
         JLabel cardNameLabel = new JLabel("Card Name: ");
-        cardName = new JTextField(20);
-        cardName.setText(bankDetails.getCardName());
+        card_name = new JTextField(20);
+        card_name.setText(bankDetails.getCardName());
 
         JLabel cardNumberLabel = new JLabel("Card Number:");
-        cardNumber = new JTextField(20);
-        cardNumber.setText(String.valueOf(bankDetails.getCardNumber()));
+        card_number = new JTextField(20);
+        card_number.setText(String.valueOf(bankDetails.getCardNumber()));
 
         JLabel cardHolderLabel = new JLabel("Cardholder Name:");
-        cardHolder = new JTextField(20);
-        cardHolder.setText(bankDetails.getCardHolder());
+        card_holder = new JTextField(20);
+        card_holder.setText(bankDetails.getCardHolder());
 
         JLabel cardExpiryLabel = new JLabel("Card Expiry (mm/yy):");
-        expiryDate = new JTextField(20);
-        expiryDate.setText(bankDetails.getExpiryDate());
+        expiry_date = new JTextField(20);
+        expiry_date.setText(bankDetails.getExpiryDate());
 
         JLabel securityCodeLabel = new JLabel("Security Code:");
-        securityCode = new JTextField(20);
-        securityCode.setText(String.valueOf(bankDetails.getSecurityCode()));
+        security_code = new JTextField(20);
+        security_code.setText(String.valueOf(bankDetails.getSecurityCode()));
 
         // Button to Save Changes
         JButton saveButton = new JButton("Save");
@@ -132,25 +132,25 @@ public class ProfileView extends JFrame {
         panel.add(lastNameLabel);
         panel.add(surname);
         panel.add(emailLabel);
-        panel.add(emailAddress);
+        panel.add(email_address);
         panel.add(houseNumberLabel);
-        panel.add(houseNumber);
+        panel.add(house_number);
         panel.add(roadNameLabel);
-        panel.add(roadName);
+        panel.add(road_name);
         panel.add(cityNameLabel);
-        panel.add(cityName);
+        panel.add(city_name);
         panel.add(postcodeLabel);
-        panel.add(postCode);
+        panel.add(post_code);
         panel.add(cardNameLabel);
-        panel.add(cardName);
+        panel.add(card_name);
         panel.add(cardNumberLabel);
-        panel.add(cardNumber);
+        panel.add(card_number);
         panel.add(cardHolderLabel);
-        panel.add(cardHolder);
+        panel.add(card_holder);
         panel.add(cardExpiryLabel);
-        panel.add(expiryDate);
+        panel.add(expiry_date);
         panel.add(securityCodeLabel);
-        panel.add(securityCode);
+        panel.add(security_code);
         panel.add(saveButton);
 
     }
@@ -159,37 +159,37 @@ public class ProfileView extends JFrame {
 
         // Update Account table
         String updateAccountSql = "UPDATE Accounts SET forename = ?, surname " +
-                "= ?, emailAddress = ? WHERE userID = ?";
+                "= ?, email_address = ? WHERE userID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateAccountSql)) {
             pstmt.setString(1, forename.getText());
             pstmt.setString(2, surname.getText());
-            pstmt.setString(3, emailAddress.getText());
+            pstmt.setString(3, email_address.getText());
             pstmt.setString(4, userID);
 
             pstmt.executeUpdate();
         }
 
         // Update Address table
-        String updateAddressSql = "UPDATE Addresses SET houseNumber = ?, " +
-                "roadName = ?, cityName = ?, postCode = ? WHERE userID = ?";
+        String updateAddressSql = "UPDATE Addresses SET house_number = ?, " +
+                "road_number = ?, city_number = ?, post_code = ? WHERE userID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateAddressSql)) {
-            pstmt.setInt(1, Integer.parseInt(houseNumber.getText()));
-            pstmt.setString(2, roadName.getText());
-            pstmt.setString(3, cityName.getText());
-            pstmt.setString(4, postCode.getText());
+            pstmt.setInt(1, Integer.parseInt(house_number.getText()));
+            pstmt.setString(2, road_name.getText());
+            pstmt.setString(3, city_name.getText());
+            pstmt.setString(4, post_code.getText());
             pstmt.setString(5, userID);
 
             pstmt.executeUpdate();
         }
 
         // Update BankDetails table
-        String updateBankDetailsSql = "UPDATE BankDetails SET cardName = ?, cardHolder = ?, cardNumber = ?, expiryDate = ?, securityCode = ? WHERE userID = ?";
+        String updateBankDetailsSql = "UPDATE BankDetails SET card_name = ?, card_holder = ?, card_number = ?, expiry_date = ?, security_code = ? WHERE userID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateBankDetailsSql)) {
-            pstmt.setString(1, cardName.getText());
-            pstmt.setString(2, cardHolder.getText());
-            pstmt.setInt(3, Integer.parseInt(cardNumber.getText()));
-            pstmt.setString(4, expiryDate.getText());
-            pstmt.setInt(5, Integer.parseInt(securityCode.getText()));
+            pstmt.setString(1, card_name.getText());
+            pstmt.setString(2, card_holder.getText());
+            pstmt.setInt(3, Integer.parseInt(card_number.getText()));
+            pstmt.setString(4, expiry_date.getText());
+            pstmt.setInt(5, Integer.parseInt(security_code.getText()));
             pstmt.setString(6, userID);
 
             pstmt.executeUpdate();
