@@ -223,28 +223,15 @@ public class ProfileView extends JFrame {
                 userID)) {
             // Update BankDetails table
             String updateBankDetailsSql = "UPDATE BankDetails SET " +
-                    "card_company_name" +
-                    " " +
-                    "=" +
-                    " " +
-                    "?," +
-                    " " +
-                    "card_name = ?, card_number = ?, expiry_date = ?, " +
-                    "security_code" +
-                    " " +
-                    "=" +
-                    " " +
-                    "?" +
-                    " " +
-                    "WHERE userID = ?";
+                    "card_company_name = ?, card_name = ?, card_number = ?, " +
+                    "expiry_date = ?, " +
+                    "security_code WHERE userID = ?";
             try (PreparedStatement pstmt = connection.prepareStatement(updateBankDetailsSql)) {
                 pstmt.setString(1, card_company_name.getText());
                 pstmt.setString(2, card_name.getText());
                 pstmt.setLong(3, Long.parseLong(card_number.getText()));
                 pstmt.setString(4, expiry_date.getText());
-                pstmt.setInt(5, Integer.parseInt(
-                        security_code.getText()));
-                pstmt.setString(6, userID);
+                pstmt.setString(5, userID);
 
                 pstmt.executeUpdate();
             }
