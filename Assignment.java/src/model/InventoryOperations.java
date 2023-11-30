@@ -21,7 +21,7 @@ public class InventoryOperations {
     public Product getGenProductByID(Connection connection, String ID) throws Error {
         try {
             // Query the database to fetch product information
-            String sql = "SELECT brand_name, product_name, product_price, " +
+            String sql = "SELECT brand_name, product_name, price, " +
                         "gauge_type, quantity FROM Products WHERE product_code = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, ID);
@@ -31,7 +31,7 @@ public class InventoryOperations {
                 // Instantiating a Product object
                 String brandName = resultSet.getString("brand_name");
                 String productName = resultSet.getString("product_name");
-                Double productPrice = resultSet.getDouble("productPrice");
+                Double productPrice = resultSet.getDouble("price");
                 String gaugeType = resultSet.getString("gauge_type");
                 Integer quantity = resultSet.getInt("quantity");
                 return new Product(ID, brandName, productName, productPrice,
@@ -55,7 +55,7 @@ public class InventoryOperations {
     public Locomotive getLocomotiveByID(Connection connection, String ID) throws Error {
         try {
             // Query the database to fetch product information
-            String sql = "SELECT dcc_code FROM Product WHERE product_code = ?";
+            String sql = "SELECT dcc_code FROM Products WHERE product_code = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, ID);
             ResultSet resultSet = statement.executeQuery();
@@ -84,7 +84,7 @@ public class InventoryOperations {
     public Controller getControllerByID(Connection connection, String ID) {
         try {
             // Query the database to fetch product information
-            String sql = "SELECT is_digital FROM Product " +
+            String sql = "SELECT is_digital FROM Products " +
                     "WHERE product_code = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, ID);
@@ -158,6 +158,16 @@ public class InventoryOperations {
             e.printStackTrace();
         }
         throw new Error("Product not found");
+    }
+
+    public TrainSet getTrainSetByID(Connection connection, String ID) {
+        return new TrainSet(getGenProductByID(connection, ID),
+                getPackByID(connection, ID));
+    }
+
+    public TrackPack getTrackPackByID(Connection connection, String ID) {
+        return new TrackPack(getGenProductByID(connection, ID),
+                getPackByID(connection, ID));
     }
 
     /**
