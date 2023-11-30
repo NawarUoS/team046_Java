@@ -32,7 +32,20 @@ public class AddProductView extends JFrame {
     private JTextField isDigitalField;
     private JTextField erasListField;
     private JTextField componentsListField;
+    Boolean flag;
 
+    public void clearTextPanels(){
+        productIDField.setText("");
+        brandNameField.setText("");
+        productNameField.setText("");
+        priceField.setText("");
+        gaugeTypeField.setText("");
+        quantityField.setText("");
+        dccField.setText("");
+        isDigitalField.setText("");
+        erasListField.setText("");
+        componentsListField.setText("");
+    }
 
     public AddProductView (Connection connection) throws SQLException {
         // Create the JFrame in the constructor
@@ -101,6 +114,7 @@ public class AddProductView extends JFrame {
 
         // Create an ActionListener for the register button
         addProductButton.addActionListener(e -> {
+            flag = true;
             String productID = productIDField.getText();
             String brandName = brandNameField.getText();
             String productName = productNameField.getText();
@@ -114,6 +128,20 @@ public class AddProductView extends JFrame {
             Boolean isDigital = Boolean.parseBoolean(sIsDigital);
             String erasComp = erasListField.getText();
             String componentComp = componentsListField.getText();
+
+            ArrayList<String> productCodes = new ArrayList<>(4);
+            productCodes.add("R");
+            productCodes.add("C");
+            productCodes.add("L");
+            productCodes.add("S");
+            productCodes.add("M");
+            productCodes.add("P");
+            Boolean check = productCodes.contains(productID.substring(0,1));
+            if (productID.length() > 6 || !check) {
+                JOptionPane.showMessageDialog(panel,"ProductID is not valid");
+                clearTextPanels();
+                flag = false;
+            }
 
             // Converting erasComp into a list<Integer>
             List<Integer> erasList = new ArrayList<Integer>();
@@ -134,31 +162,33 @@ public class AddProductView extends JFrame {
                 }
                 componentList.add(componentQuantity);
             }
-            InventoryOperations inventoryOperations = new InventoryOperations();
+            if (flag) {
+                InventoryOperations inventoryOperations = new InventoryOperations();
 
-            switch(productID.substring(0, 1)) {
-                case "L":
-                    inventoryOperations.addLocomotive(connection, productID, brandName,
-                            productName, price, gauge, quantity, dccCode, erasList);
-                    break;
-                case "S":
-                    inventoryOperations.addRollingStock(connection, productID,
-                            brandName, productName, price, gauge, quantity, erasList);
-                    break;
-                case "C":
-                    inventoryOperations.addController(connection, productID, brandName,
-                            productName, price, gauge, quantity, isDigital);
-                    break;
-                case "P":
-                case "M":
-                    inventoryOperations.addPacks(connection, productID, brandName,
-                            productName, price, gauge, quantity, componentList);
-                    break;
-                case "R":
-                    inventoryOperations.addProduct(connection, productID,
-                            brandName, productName, price, gauge, quantity);
-                default:
-                    System.out.println("Invalid productID");
+                switch (productID.substring(0, 1)) {
+                    case "L":
+                        inventoryOperations.addLocomotive(connection, productID, brandName,
+                                productName, price, gauge, quantity, dccCode, erasList);
+                        break;
+                    case "S":
+                        inventoryOperations.addRollingStock(connection, productID,
+                                brandName, productName, price, gauge, quantity, erasList);
+                        break;
+                    case "C":
+                        inventoryOperations.addController(connection, productID, brandName,
+                                productName, price, gauge, quantity, isDigital);
+                        break;
+                    case "P":
+                    case "M":
+                        inventoryOperations.addPacks(connection, productID, brandName,
+                                productName, price, gauge, quantity, componentList);
+                        break;
+                    case "R":
+                        inventoryOperations.addProduct(connection, productID,
+                                brandName, productName, price, gauge, quantity);
+                    default:
+                        System.out.println("Invalid productID");
+                }
             }
 
         });
