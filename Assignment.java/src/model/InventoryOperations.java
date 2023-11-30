@@ -225,8 +225,8 @@ public class InventoryOperations {
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new Error ("Invalid product details");
         }
-        throw new Error ("Invalid product details");
     }
 
     /**
@@ -257,8 +257,8 @@ public class InventoryOperations {
             addEras(connection, productID, eras);
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new Error ("Invalid product details");
         }
-        throw new Error ("Invalid product details");
     }
 
     /**
@@ -304,8 +304,8 @@ public class InventoryOperations {
             statement.setString(2, productID);
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new Error ("Invalid product details");
         }
-        throw new Error ("Invalid product details");
     }
 
     /**
@@ -371,8 +371,8 @@ public class InventoryOperations {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new Error("Invalid product details");
         }
-        throw new Error("Invalid product details");
     }
 
     /**
@@ -391,15 +391,18 @@ public class InventoryOperations {
         Integer currQuantity = getStock(connection, productID);
         Integer newQuantity = currQuantity + quantity;
         try {
+            System.out.print("here!" + currQuantity);
+            System.out.print("Now!" + newQuantity);
             // Update Products table
             String sql2 = "UPDATE Products SET quantity = ? WHERE product_code = ?";
             PreparedStatement setStatement = connection.prepareStatement(sql2);
-
+            System.out.print("Everything above works");
             setStatement.setInt(1, newQuantity);
             setStatement.setString(2, productID);
-
+            System.out.print("Up here!");
             setStatement.executeUpdate();
             setStatement.close();
+            System.out.print("this all works");
 
             if (productID.substring(0,1) == "P" || productID.substring(0,1) == "M") {
                 for (int i = 0; i < quantity; i++) {
@@ -410,10 +413,11 @@ public class InventoryOperations {
                     }
                 }
             }
+            System.out.print("maybe");
         } catch (SQLException i) {
             i.printStackTrace();
+            throw new Error("Invalid Stock change");
         }
-        throw new Error("Invalid stock change");
     }
 
     /**
