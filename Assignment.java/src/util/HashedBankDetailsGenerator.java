@@ -1,5 +1,7 @@
 package src.util;
 
+import src.account.BankDetails;
+
 import javax.swing.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -7,25 +9,26 @@ import java.security.NoSuchAlgorithmException;
 public class HashedBankDetailsGenerator {
     private static String salt;
 
-    public static String hashBankDetails(char[] password, String userID) {
+    public static String hashBankDetail(String bankDetail, String userID) {
         try {
             // Create a MessageDigest instance for SHA-256
             MessageDigest md = MessageDigest.getInstance("SHA-256");
 
             // Concatenate the salt and password bytes
             salt = userID;
-            byte[] saltedPasswordBytes = concatenateBytes(salt.getBytes(),
-                    new String(password).getBytes());
+
+            byte[] saltedBankDetailBytes = concatenateBytes(salt.getBytes(),
+                    String.valueOf(bankDetail).getBytes());
 
             // Update the digest with the salted password bytes
-            md.update(saltedPasswordBytes);
+            md.update(saltedBankDetailBytes);
 
             // Get the hashed password bytes
-            byte[] hashedPasswordBytes = md.digest();
+            byte[] hashedBankDetailBytes = md.digest();
 
             // Convert the hashed password bytes to a hexadecimal string
             StringBuilder hexStringBuilder = new StringBuilder();
-            for (byte b : hashedPasswordBytes) {
+            for (byte b : hashedBankDetailBytes) {
                 hexStringBuilder.append(String.format("%02x", b));
             }
             return hexStringBuilder.toString();
@@ -44,11 +47,12 @@ public class HashedBankDetailsGenerator {
     }
 
     public static void main(String[] args) {
-        char[] password = "asd@456".toCharArray();
+        long bankDetail = 123123123123213L;
         String salt = "MyStaticSalt";
-        //String hashedPassword = hashPassword(password, salt);
+        String hashedCardNumber = hashBankDetail(String.valueOf(bankDetail),
+                salt);
 
-        System.out.println("Original Password: " + String.valueOf(password));
-        //System.out.println("Hashed Password: " + hashedPassword);
+        System.out.println("Original Card Number: " + bankDetail);
+        System.out.println("Hashed Card Number: " + hashedCardNumber);
     }
 }
