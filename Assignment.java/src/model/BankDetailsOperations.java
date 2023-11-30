@@ -22,7 +22,7 @@ public class BankDetailsOperations {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                int card_number = resultSet.getInt("card_number");
+                long card_number = resultSet.getLong("card_number");
                 String card_name =
                         resultSet.getString("card_name");
                 String card_company_name = resultSet.getString(
