@@ -162,65 +162,64 @@ public class QueueView extends JPanel {
         }
     }
 
-    private void fulfillOrder(JTable table) {
-        int[] selectedRows = table.getSelectedRows();
-    
-        if (selectedRows.length > 0) { // Check if at least one row is selected
-            Map<String, Integer> productQuantities = new HashMap<>();
-    
-            // Confirm order fulfillment
-            int confirmResult = JOptionPane.showConfirmDialog(this,
-                    "Are you sure you want to fulfill the selected order(s)?", 
-                    "Fulfill Order Confirmation", JOptionPane.YES_NO_OPTION);
-    
-            if (confirmResult == JOptionPane.YES_OPTION) {
-                // Implement the logic to change the status of the selected orders to "f" (fulfilled)
-                try {
-                    // Example SQL query to update the order status for multiple orders
-                    String updateQuery = 
-                        "UPDATE Orders SET order_status = 'f' WHERE order_number IN (" +
-                        String.join(",", Arrays.stream(selectedRows).mapToObj(
-                            String::valueOf).toArray(String[]::new)) + ")";
-                    try (PreparedStatement preparedStatement = 
-                                    connection.prepareStatement(updateQuery)) {
+private void fulfillOrder(JTable table) {
+    int[] selectedRows = table.getSelectedRows();
+
+    if (selectedRows.length > 0) { // Check if at least one row is selected
+        Map<String, Integer> productQuantities = new HashMap<>();
+
+        // Confirm order fulfillment
+        int confirmResult = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to fulfill the selected order(s)?", 
+                "Fulfill Order Confirmation", JOptionPane.YES_NO_OPTION);
+
+        if (confirmResult == JOptionPane.YES_OPTION) {
+            // Implement the logic to change the status of the selected orders to "f" (fulfilled)
+            try {
+                // Collect product codes and quantities for selected rows
+                for (int selectedRow : selectedRows) {
+                    String productCode = 
+                    // "Product Code" is the sixth column
+                        (String) table.getValueAt(selectedRow, 5); 
+                        int orderNumber = (int) table.getValueAt(selectedRow, 0);
+                        int quantity = 1; 
+
+                    // If the product code already exists in the map, update the quantity
+                    if (productQuantities.containsKey(productCode)) {
+                        quantity += productQuantities.get(productCode);
+                    }
+
+                    productQuantities.put(productCode, quantity);
+                    
+                    // Example SQL query to update the order status for the selected order
+                    String updateQuery = "UPDATE Orders SET order_status = 'f' WHERE order_number = ?";
+                    try (PreparedStatement preparedStatement 
+                        = connection.prepareStatement(updateQuery)) {
+                        preparedStatement.setInt(1, orderNumber);
                         preparedStatement.executeUpdate();
                     }
-    
-                    // Collect product codes and quantities for selected rows
-                    for (int selectedRow : selectedRows) {
-                        String productCode = 
-                            (String) table.getValueAt(selectedRow, 5); // Assuming "Product Code" is the first column
-                        int quantity = 1; // Assuming the quantity to be subtracted is 1, modify as needed
-    
-                        // If the product code already exists in the map, update the quantity
-                        if (productQuantities.containsKey(productCode)) {
-                            quantity += productQuantities.get(productCode);
-                        }
-    
-                        productQuantities.put(productCode, quantity);
-                    }
-    
-                    // Update stock using the updateStock method
-                    updateStock(productQuantities);
-    
-                    // Display a success message
-                    JOptionPane.showMessageDialog(this, 
-                        "Order(s) fulfilled successfully!", 
-                        "Fulfill Order", JOptionPane.INFORMATION_MESSAGE);
-    
-                    // Refresh the table after status change
-                    refreshTable(table);
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, 
-                "Please select at least one row to fulfill the order.",
-                "Fulfill Order", JOptionPane.WARNING_MESSAGE);
-        }
-    }
 
+                // Update stock using the updateStock method
+                updateStock(productQuantities);
+
+                // Display a success message
+                JOptionPane.showMessageDialog(this, 
+                    "Order(s) fulfilled successfully!", 
+                    "Fulfill Order", JOptionPane.INFORMATION_MESSAGE);
+
+                // Refresh the table after status change
+                refreshTable(table);
+            } catch (SQLException | NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, 
+            "Please select at least one row to fulfill the order.",
+            "Fulfill Order", JOptionPane.WARNING_MESSAGE);
+    }
+}
     private void updateStock(Map<String, Integer> productQuantities) {
         // Assuming you have access to an instance of the InventoryOperations class
         InventoryOperations inventoryOperations = new InventoryOperations();
@@ -229,8 +228,7 @@ public class QueueView extends JPanel {
             String productCode = entry.getKey();
             int quantity = entry.getValue();
 
-            // Assuming the quantity to be subtracted is specified in the map, modify as
-            // needed
+            // negative quantity decreases stock levels
             inventoryOperations.addStock(connection, productCode, -quantity);
         }
     }
@@ -239,22 +237,8 @@ public class QueueView extends JPanel {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0); // Clear existing rows
 
-        // SQL query to retrieve confirmed orders with relevant information
 
         table.setModel(createTableFromSQL().getModel()); // Populate the table with updated data
     }
 
 }
-
-/*         from refreshTable
- *         String sqlQuery = "SELECT o.order_number, o.order_date, a.forename, a.surname, a.email_address, ad.house_number, ad.street_name, ad.city_name, ad.postcode, "
-                + "GROUP_CONCAT(ol.product_code SEPARATOR ', ') AS order_contents, SUM(ol.order_line_cost) AS order_cost, o.order_status, a.userID, b.card_number "
-                + "FROM Orders o "
-                + "JOIN Accounts a ON o.userID = a.userID "
-                + "JOIN Addresses ad ON a.userID = ad.userID "
-                + "JOIN OrderLines ol ON o.order_number = ol.order_number "
-                + "LEFT JOIN BankDetails b ON a.userID = b.userID "
-                + "WHERE o.order_status = 'confirmed' "
-                + "GROUP BY o.order_number, o.order_date, a.forename, a.surname, a.email_address, ad.house_number, ad.street_name, ad.city_name, ad.postcode, o.order_status, a.userID, b.card_number";
-
- */
