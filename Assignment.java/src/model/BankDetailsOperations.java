@@ -1,7 +1,11 @@
 package src.model;
 
 import src.account.*;
+import src.util.CurrentUserCache;
+import src.util.HashedBankDetailsGenerator;
+import src.util.HashedPasswordGenerator;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -135,9 +139,16 @@ public class BankDetailsOperations {
         return false;
     }
 
-
-    // Save hashed(?) bank details into database
-    public void saveBankDetails() {
-
+    private static boolean verifyBankDetail(String bankDetail,
+                                          String storedBankDetailHash) {
+        try {
+            String hashBankDetail =
+                    HashedBankDetailsGenerator.hashBankDetail(bankDetail,
+                            CurrentUserCache.getLoggedInUser().getUserID());
+            return hashBankDetail.equals(storedBankDetailHash);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
