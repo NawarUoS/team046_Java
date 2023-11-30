@@ -66,9 +66,9 @@ public class ManagerView extends JFrame {
         };
 
         staffTable = new JTable(tableModel);
-        tableModel.addColumn("Email");
         tableModel.addColumn("Forename");
         tableModel.addColumn("Surname");
+        tableModel.addColumn("Email");
 
 
         // Populate the JTable with query results
