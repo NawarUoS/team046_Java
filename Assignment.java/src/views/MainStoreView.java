@@ -25,6 +25,7 @@ public class MainStoreView extends JFrame {
     private final int HEIGHT = 500;
 
     public MainStoreView(Connection connection) throws SQLException {
+
         this.setTitle("Store");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(WIDTH, HEIGHT);
@@ -130,7 +131,12 @@ public class MainStoreView extends JFrame {
         middlePanel.add(packsPanel);
 
         // Add components to bottom panel
-        bottomPanel.add(discreteStaffButton);
+        if (CurrentUserCache.getLoggedInUser().getUserRoles().contains(
+                UserRole.STAFF)) {
+            bottomPanel.add(discreteStaffButton);
+        } else {
+            bottomPanel.add(new JLabel());
+        }
         bottomPanel.add(new JLabel());
         bottomPanel.add(new JLabel());
         bottomPanel.add(new JLabel());
