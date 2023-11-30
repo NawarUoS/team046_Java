@@ -45,7 +45,7 @@ public class ProfileView extends JFrame {
         JPanel panel = new JPanel();
         this.add(panel);
 
-        panel.setLayout(new GridLayout(13, 2, 10, 10));
+        panel.setLayout(new GridLayout(8, 2, 10, 10));
 
         Account currentUser = CurrentUserCache.getLoggedInUser();
 
@@ -95,29 +95,30 @@ public class ProfileView extends JFrame {
         postcode = new JTextField(20);
         postcode.setText(address.getPostCode());
 
-        JLabel cardNameLabel = new JLabel("Card Name: ");
-        card_company_name = new JTextField(20);
-        card_company_name.setText(hasBankDetails ? bankDetails.getCardName()
-                : "");
-
-        JLabel cardNumberLabel = new JLabel("Card Number:");
-        card_number = new JTextField(20);
-        card_number.setText(hasBankDetails ?
-                String.valueOf(bankDetails.getCardNumber()) :
-                "");
-
-        JLabel cardHolderLabel = new JLabel("Cardholder Name:");
-        card_name = new JTextField(20);
-        card_name.setText(hasBankDetails ? bankDetails.getCardHolder() :
-                "");
-
-        JLabel cardExpiryLabel = new JLabel("Card Expiry (mm/yy):");
-        expiry_date = new JTextField(20);
-        expiry_date.setText(hasBankDetails ? bankDetails.getExpiryDate() :
-                "00/00");
-
-        JLabel securityCodeLabel = new JLabel("Security Code:");
-        security_code = new JTextField(20);
+        // TODO BANK DETAILS HAVE THEIR OWN PAGE NOW //
+//        JLabel cardNameLabel = new JLabel("Card Name: ");
+//        card_company_name = new JTextField(20);
+//        card_company_name.setText(hasBankDetails ? bankDetails.getCardName()
+//                : "");
+//
+//        JLabel cardNumberLabel = new JLabel("Card Number:");
+//        card_number = new JTextField(20);
+//        card_number.setText(hasBankDetails ?
+//                String.valueOf(bankDetails.getCardNumber()) :
+//                "");
+//
+//        JLabel cardHolderLabel = new JLabel("Cardholder Name:");
+//        card_name = new JTextField(20);
+//        card_name.setText(hasBankDetails ? bankDetails.getCardHolder() :
+//                "");
+//
+//        JLabel cardExpiryLabel = new JLabel("Card Expiry (mm/yy):");
+//        expiry_date = new JTextField(20);
+//        expiry_date.setText(hasBankDetails ? bankDetails.getExpiryDate() :
+//                "00/00");
+//
+//        JLabel securityCodeLabel = new JLabel("Security Code:");
+//        security_code = new JTextField(20);
 
         // Button to Save Changes
         JButton saveButton = new JButton("Save");
@@ -160,16 +161,16 @@ public class ProfileView extends JFrame {
         panel.add(city_name);
         panel.add(postcodeLabel);
         panel.add(postcode);
-        panel.add(cardNameLabel);
-        panel.add(card_company_name);
-        panel.add(cardNumberLabel);
-        panel.add(card_number);
-        panel.add(cardHolderLabel);
-        panel.add(card_name);
-        panel.add(cardExpiryLabel);
-        panel.add(expiry_date);
-        panel.add(securityCodeLabel);
-        panel.add(security_code);
+//        panel.add(cardNameLabel);
+//        panel.add(card_company_name);
+//        panel.add(cardNumberLabel);
+//        panel.add(card_number);
+//        panel.add(cardHolderLabel);
+//        panel.add(card_name);
+//        panel.add(cardExpiryLabel);
+//        panel.add(expiry_date);
+//        panel.add(securityCodeLabel);
+//        panel.add(security_code);
         panel.add(mainStoreButton);
         panel.add(saveButton);
 

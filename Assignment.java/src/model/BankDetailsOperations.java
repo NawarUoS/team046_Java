@@ -15,27 +15,29 @@ public class BankDetailsOperations {
     // add class attributes so can access them globally
 
     // Get order details by order_number
-    public BankDetails getBankDetailsByUserID(Connection connection, String userID) throws Error {
+    public BankDetails getBankDetailsByUserID(Connection connection,
+                                                String userID) throws Error {
         try {
             // Query the database to fetch user information
-            String sql = "SELECT card_number, card_company_name, expiry_date," +
-                    " card_name FROM BankDetails WHERE userID = ?";
+            String sql = "SELECT card_number_hash, card_company_name, " +
+                    "expiry_date_hash, card_name FROM BankDetails WHERE " +
+                    "userID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, userID);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                long card_number = resultSet.getLong("card_number");
+                String card_number_hash =
+                        resultSet.getString("card_number_hash");
                 String card_name =
                         resultSet.getString("card_name");
                 String card_company_name = resultSet.getString(
                         "card_company_name");
-                String expiry_date =
-                        resultSet.getString("expiry_date");
+                String expiry_date_hash =
+                        resultSet.getString("expiry_date_hash");
 
                 return new BankDetails(card_company_name, card_name,
-                        card_number,
-                        expiry_date, userID);
+                        card_number_hash, expiry_date_hash, userID);
             }
 
         } catch (SQLException e) {
@@ -51,7 +53,7 @@ public class BankDetailsOperations {
         String userID = bankDetails.getUserID();
         String cardName = bankDetails.getCardName();
         String cardHolder = bankDetails.getCardHolder();
-        long cardNumber = bankDetails.getCardNumber();
+        String cardNumberHash = bankDetails.getCardNumberHash();
         String expiryDate = bankDetails.getExpiryDate();
 
         try {
@@ -59,7 +61,7 @@ public class BankDetailsOperations {
             // Query the database to insert user information
             String sql = "INSERT INTO BankDetails (userID, card_company_name," +
                     " " +
-                    "card_name, card_number, expiry_date) " +
+                    "card_name, card_number_hash, expiry_date) " +
                     "VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -67,7 +69,7 @@ public class BankDetailsOperations {
             statement.setString(1, userID);
             statement.setString(2, cardName);
             statement.setString(3, cardHolder);
-            statement.setLong(4, cardNumber);
+            statement.setString(4, cardNumberHash);
             statement.setString(5, expiryDate);
 
 
@@ -118,7 +120,8 @@ public class BankDetailsOperations {
     // Refrences card_number to update 
     public boolean checkBankDetailsInDatabase(Connection connection, String userID) {
         try {
-            String sql = "SELECT card_number FROM BankDetails WHERE userID = ?";
+            String sql = "SELECT card_number_hash FROM BankDetails WHERE " +
+                    "userID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, userID);
             ResultSet resultSet = statement.executeQuery();

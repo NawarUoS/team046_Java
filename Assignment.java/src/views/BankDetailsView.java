@@ -1,2 +1,5 @@
-package src.views;public class BankDetailsView {
+package src.views;
+
+public class BankDetailsView {
+
 }
