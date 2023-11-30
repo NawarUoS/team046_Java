@@ -1,31 +1,30 @@
 package src.views;
 
 import src.account.*;
-import src.inventory.Inventory;
-import src.model.*;
 import src.model.*;
 import src.util.*;
 
 import javax.swing.*;
 import javax.swing.table.*;
-import javax.xml.crypto.Data;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Random;
+
 
 public class MainStoreView extends JFrame {
+    private Connection connection;
+
     private JTable productsTable;
     private JTable packsTable;
     private final int WIDTH = 800;
     private final int HEIGHT = 500;
 
     public MainStoreView(Connection connection) throws SQLException {
-
+        this.connection = connection;
         this.setTitle("Store");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(WIDTH, HEIGHT);
@@ -197,5 +196,126 @@ public class MainStoreView extends JFrame {
                 ex.printStackTrace();
             }
         });
+
+        addToOrderButton.addActionListener(e -> {
+            int selectedRow = productsTable.getSelectedRow();
+
+            if (selectedRow != -1) {
+                String productCode = (String) productsTable.getValueAt(selectedRow, 0);
+                String productName = (String) productsTable.getValueAt(selectedRow, 2);
+
+                String quantityString = JOptionPane.showInputDialog(this, "Enter quantity for " + productName + ":");
+
+                if (quantityString != null && !quantityString.isEmpty()) {
+                    try {
+                        int quantity = Integer.parseInt(quantityString);
+
+                        if (checkInventoryAvailability(productCode, quantity)) {
+                            addToCart(productCode, quantity);
+
+                            JOptionPane.showMessageDialog(this, "Product added to cart successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Insufficient quantity in store inventory.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "Invalid quantity. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a product to add to the cart.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+    }
+
+    private boolean checkInventoryAvailability(String productCode, int requestedQuantity) {
+        // Implement logic to check if the requested quantity is available in the store inventory
+        // Placeholder implementation:
+        InventoryOperations i = new InventoryOperations();
+        int availableQuantity = i.getStock(connection, productCode);
+        return requestedQuantity <= availableQuantity;
+    }
+
+    private void addToCart(String productCode, int quantity) {
+        // Ensure that the product code and quantity are valid
+        if (productCode == null || productCode.isEmpty() || quantity <= 0) {
+            JOptionPane.showMessageDialog(this, "Invalid product code or quantity.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            // Calculate the order line cost
+            double orderLineCost = calculateOrderLineCost(productCode, quantity);
+
+            // Insert the order line into the database
+            String insertQuery = "INSERT INTO OrderLines (order_line_number, items_quantity, order_line_cost, product_code, order_number) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+                int orderLineNumber = generateUniqueOrderLineNumber(); // Implement this method
+                int orderNumber = getPendingOrderNumber();
+
+                insertStatement.setInt(1, orderLineNumber);
+                insertStatement.setInt(2, quantity);
+                insertStatement.setDouble(3, orderLineCost);
+                insertStatement.setString(4, productCode);
+                insertStatement.setInt(5, orderNumber);
+
+                // Execute the INSERT statement
+                insertStatement.executeUpdate();
+
+                // Display a success message
+                JOptionPane.showMessageDialog(this, "Product added to cart successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle or log the exception appropriately
+            JOptionPane.showMessageDialog(this, "Error adding product to cart.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }    
+    private int getPendingOrderNumber() throws SQLException {
+        // Example SQL query to retrieve the order number of the user's pending order
+        String query = "SELECT order_number FROM Orders WHERE userID = ? AND order_status = 'p' LIMIT 1";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, CurrentUserCache.getLoggedInUser().getUserID());
+    
+            ResultSet resultSet = preparedStatement.executeQuery();
+    
+            if (resultSet.next()) {
+                return resultSet.getInt("order_number");
+            } else {
+                // No pending order found for the user
+                return -1;
+            }
+        }
+    }   
+    
+    private double calculateOrderLineCost(String productCode, int quantity) throws SQLException {
+        // Ensure that quantity is positive
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be a positive integer.");
+        }
+    
+        // Example SQL query to retrieve the price from OrderLines for the given product code
+        String query = "SELECT price FROM Products WHERE product_code = ? LIMIT 1";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, productCode);
+    
+            ResultSet resultSet = preparedStatement.executeQuery();
+    
+            if (resultSet.next()) {
+                // Retrieve the price from the OrderLines table
+                double price = resultSet.getDouble("price");
+    
+                // Calculate the order line cost by multiplying price and quantity
+                return price * quantity;
+            } else {
+                throw new SQLException("Price not found for the product code: " + productCode);
+            }
+        }
+    }
+
+    private int generateUniqueOrderLineNumber() {
+    // Generate a unique order line number using timestamp and random number
+    long timestamp = System.currentTimeMillis();
+    int randomSuffix = new Random().nextInt(1000); // Adjust the range as needed
+
+    return (int) (timestamp + randomSuffix);
     }
 }
