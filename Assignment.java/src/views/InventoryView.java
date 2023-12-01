@@ -22,6 +22,7 @@ public class InventoryView extends JFrame {
         this.setTitle("Inventory View");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(500, 250);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         setLayout(new BorderLayout());
 
@@ -102,7 +103,12 @@ public class InventoryView extends JFrame {
 
         // Refresh button for table updates
         JButton refreshButton = new JButton("Refresh");
-        refreshButton.addActionListener(e -> refreshTable(table));
+        refreshButton.addActionListener(e -> {
+            dispose();
+            InventoryView inventoryView =
+                    new InventoryView(connection);
+            inventoryView.setVisible(true);
+        });
 
         // Button panel created and added to
         JPanel buttonPanel = new JPanel();
@@ -274,64 +280,56 @@ public class InventoryView extends JFrame {
     }
 
     private void deleteProducts(JTable table) {
-        int[] selectedRows = table.getSelectedRows();
-
-        if (selectedRows.length > 0) { // Check if at least one row is selected
-            List<Integer> productIDs = new ArrayList<>();
+        int selectedRow = table.getSelectedRow();
 
             // Confirm the deletion with a dialog box
-            int option = JOptionPane.showConfirmDialog(this,
-                    "Are you sure you want to delete the selected products?",
-                    "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+        int option = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete the selected product?",
+                "Confirm Deletion", JOptionPane.YES_NO_OPTION);
 
-            if (option == JOptionPane.YES_OPTION) {
-                // User confirmed deletion
-                // Collect order numbers for selected rows
-                for (int selectedRow : selectedRows) {
-                    int productID = (int) table.getValueAt(selectedRow, 0);
-                    productIDs.add(productID);
-                }
+        if (option == JOptionPane.YES_OPTION) {
+            // User confirmed deletion
+            // Translate to productID
+            String productID = (String) table.getValueAt(selectedRow, 0);
 
-                // Implement the logic to delete the selected products
-                try {
-                    // Delete associated all entries of pack
-                    String deletePackQuery = "DELETE FROM Packs WHERE product_code IN (" +
-                            String.join(",", productIDs.stream().map(String::valueOf).toArray(String[]::new)) + ")";
-                    try (PreparedStatement preparedStatement = connection.prepareStatement(deletePackQuery)) {
-                        preparedStatement.executeUpdate();
-                    }
+            // Implement the logic to delete the selected products
+            try {
+                String deletePackQuery = "DELETE FROM Packs WHERE product_code = ?";
+                PreparedStatement packstatement = connection.prepareStatement(deletePackQuery);
+                packstatement.setString(1, productID);
+                packstatement.executeUpdate();
 
-                    // Delete all associated entries in packs for component code
-                    String deleteComponentQuery = "DELETE FROM Packs WHERE component_code IN (" +
-                            String.join(",", productIDs.stream().map(String::valueOf).toArray(String[]::new)) + ")";
-                    try (PreparedStatement preparedStatement = connection.prepareStatement(deleteComponentQuery)) {
-                        preparedStatement.executeUpdate();
-                    }
+                String deleteComponentQuery = "DELETE FROM Packs WHERE component_code = ?";
+                PreparedStatement compstatement = connection.prepareStatement(deleteComponentQuery);
+                compstatement.setString(1, productID);
+                compstatement.executeUpdate();
 
-                    // Delete all associated entries in eras
-                    String deleteErasQuery = "DELETE FROM Eras WHERE product_code IN (" +
-                            String.join(",", productIDs.stream().map(String::valueOf).toArray(String[]::new)) + ")";
-                    try (PreparedStatement preparedStatement = connection.prepareStatement(deleteErasQuery)) {
-                        preparedStatement.executeUpdate();
-                    }
 
-                    // Delete the product in Products
-                    String deleteProductQuery = "DELETE FROM Products WHERE product_code IN (" +
-                            String.join(",", productIDs.stream().map(String::valueOf).toArray(String[]::new)) + ")";
-                    try (PreparedStatement preparedStatement = connection.prepareStatement(deleteProductQuery)) {
-                        preparedStatement.executeUpdate();
-                    }
+                String deleteErasQuery = "DELETE FROM Eras WHERE product_code = ?";
+                PreparedStatement erastatement = connection.prepareStatement(deleteErasQuery);
+                erastatement.setString(1, productID);
+                erastatement.executeUpdate();
 
-                    // Refresh the table after deletion
-                    refreshTable(table);
+                String deleteOrders = "DELETE FROM OrderLines WHERE product_code = ?";
+                PreparedStatement orderstatement = connection.prepareStatement(deleteOrders);
+                orderstatement.setString(1, productID);
+                orderstatement.executeUpdate();
 
-                    // Display a confirmation message
-                    JOptionPane.showMessageDialog(this,
-                            "Selected Products and associated packs and eras deleted successfully.",
-                            "Deletion Successful", JOptionPane.INFORMATION_MESSAGE);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                // Delete the product in Products
+                String deleteProductQuery = "DELETE FROM Products WHERE product_code = ?";
+                PreparedStatement statement = connection.prepareStatement(deleteProductQuery);
+                statement.setString(1, productID);
+                statement.executeUpdate();
+
+                // Refresh the table after deletion
+                refreshTable(table);
+
+                // Display a confirmation message
+                JOptionPane.showMessageDialog(this,
+                        "Selected Products and associated packs and eras deleted successfully.",
+                        "Deletion Successful", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         } else {
             JOptionPane.showMessageDialog(this,

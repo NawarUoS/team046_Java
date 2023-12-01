@@ -22,6 +22,7 @@ public class PackContentView extends JFrame {
         this.setTitle("Pack Content View");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(500, 250);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         setLayout(new BorderLayout());
 
