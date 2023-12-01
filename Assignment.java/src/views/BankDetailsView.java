@@ -98,7 +98,7 @@ public class BankDetailsView extends JFrame {
             }
         });
 
-        JButton mainStoreButton = new JButton("Main Store Page");
+        JButton mainStoreButton = new JButton("Return to Profile");
 
         // Add components to the frame
         panel.add(cardNameLabel);
@@ -119,9 +119,9 @@ public class BankDetailsView extends JFrame {
             dispose();
             // Create and show the new RegistrationView JFrame
             try {
-                MainStoreView mainStoreView =
-                        new MainStoreView(connection);
-                mainStoreView.setVisible(true);
+                ProfileView profileView =
+                        new ProfileView(connection);
+                profileView.setVisible(true);
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
