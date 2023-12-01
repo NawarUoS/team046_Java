@@ -45,8 +45,10 @@ public class InventoryView extends JFrame {
             }
         });
 
+        // Button takes you to packContentView, passes in content list of that pack
         JButton packViewButton = new JButton("View Pack");
         packViewButton.addActionListener(e -> {
+            dispose();
             try {
                 Integer selectedRow = table.getSelectedRow();
                 String selectedID = (String) table.getValueAt(selectedRow, 0);
@@ -64,7 +66,6 @@ public class InventoryView extends JFrame {
                     JOptionPane.showMessageDialog(scrollPane,
                             "Please select one pack");
                 }
-                dispose();
             } catch (NullPointerException error) {
                 JOptionPane.showMessageDialog(scrollPane, "Please select one pack");
             }
@@ -102,6 +103,7 @@ public class InventoryView extends JFrame {
         // Button panel created and added to
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(backButton);
+        buttonPanel.add(packViewButton);
         buttonPanel.add(addButton);
         buttonPanel.add(alterStockButton);
         buttonPanel.add(refreshButton);

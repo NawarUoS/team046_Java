@@ -1,8 +1,6 @@
 package src.model;
 
-import src.views.LoginView;
-import src.views.ManagerView;
-import src.views.RegistrationView;
+import src.views.*;
 
 import javax.swing.*;
 
@@ -22,6 +20,9 @@ public class ConnectionMainE {
                 databaseConnectionHandler.openConnection();
 
                 // test view
+                InventoryView inventoryView =
+                        new InventoryView(databaseConnectionHandler.getConnection());
+                inventoryView.setVisible(true);
 
 
             } catch (Throwable t) {

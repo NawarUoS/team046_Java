@@ -34,7 +34,7 @@ public class StaffView extends JFrame {
         this.add(cardPanel);
 
         // Create screens (JPanel instances)
-        JPanel inventoryScreen = new AlterStockView(connection);
+        JFrame inventoryScreen = new InventoryView(connection);
         JPanel queueScreen = new QueueView(
                                         connection, cardLayout, cardPanel);
         JPanel historyScreen = new HistoryView(
