@@ -87,37 +87,43 @@ public class PackContentView extends JFrame {
                 case "L":
                     locosList.add(inventoryOperations.getLocomotiveByID(
                             connection, contents.get(i)[0]));
-                    locosList.get(locLen).setStockLevel(Integer.parseInt(contents.get(i)[1]));
+                    locosList.get(locLen).setStockLevel(Integer.parseInt
+                                                        (contents.get(i)[1]));
                     locLen++;
                     break;
                 case "S":
                     rollingList.add(inventoryOperations.getRollingStockByID(
                             connection, contents.get(i)[0]));
-                    rollingList.get(rolLen).setStockLevel(Integer.parseInt(contents.get(i)[1]));
+                    rollingList.get(rolLen).setStockLevel(Integer.parseInt
+                                                        (contents.get(i)[1]));
                     rolLen++;
                     break;
                 case "C":
                     contList.add(inventoryOperations.getControllerByID(
                             connection, contents.get(i)[0]));
-                    contList.get(conLen).setStockLevel(Integer.parseInt(contents.get(i)[1]));
+                    contList.get(conLen).setStockLevel(Integer.parseInt
+                                                        (contents.get(i)[1]));
                     conLen++;
                     break;
                 case "P":
                     trPackList.add(inventoryOperations.getTrackPackByID(
                             connection, contents.get(i)[0]));
-                    trPackList.get(trpLen).setStockLevel(Integer.parseInt(contents.get(i)[1]));
+                    trPackList.get(trpLen).setStockLevel(Integer.parseInt
+                                                        (contents.get(i)[1]));
                     trpLen++;
                     break;
                 case "M":
                     trSetList.add(inventoryOperations.getTrainSetByID(
                             connection, contents.get(i)[0]));
-                    trSetList.get(trsLen).setStockLevel(Integer.parseInt(contents.get(i)[1]));
+                    trSetList.get(trsLen).setStockLevel(Integer.parseInt
+                                                        (contents.get(i)[1]));
                     trsLen++;
                     break;
                 case "R":
                     trList.add(inventoryOperations.getTrackbyID(
                             connection, contents.get(i)[0]));
-                    trList.get(traLen).setStockLevel(Integer.parseInt(contents.get(i)[1]));
+                    trList.get(traLen).setStockLevel(Integer.parseInt
+                                                        (contents.get(i)[1]));
                     traLen++;
                     break;
                 default:

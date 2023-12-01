@@ -292,32 +292,38 @@ public class InventoryView extends JFrame {
             // Translate to productID
             String productID = (String) table.getValueAt(selectedRow, 0);
 
-            // Implement the logic to delete the selected products
+            // Implement the logic to delete the selected products from all tables
+            // where that product may occur
             try {
                 String deletePackQuery = "DELETE FROM Packs WHERE product_code = ?";
-                PreparedStatement packstatement = connection.prepareStatement(deletePackQuery);
+                PreparedStatement packstatement =
+                        connection.prepareStatement(deletePackQuery);
                 packstatement.setString(1, productID);
                 packstatement.executeUpdate();
 
                 String deleteComponentQuery = "DELETE FROM Packs WHERE component_code = ?";
-                PreparedStatement compstatement = connection.prepareStatement(deleteComponentQuery);
+                PreparedStatement compstatement =
+                        connection.prepareStatement(deleteComponentQuery);
                 compstatement.setString(1, productID);
                 compstatement.executeUpdate();
 
 
                 String deleteErasQuery = "DELETE FROM Eras WHERE product_code = ?";
-                PreparedStatement erastatement = connection.prepareStatement(deleteErasQuery);
+                PreparedStatement erastatement =
+                        connection.prepareStatement(deleteErasQuery);
                 erastatement.setString(1, productID);
                 erastatement.executeUpdate();
 
                 String deleteOrders = "DELETE FROM OrderLines WHERE product_code = ?";
-                PreparedStatement orderstatement = connection.prepareStatement(deleteOrders);
+                PreparedStatement orderstatement =
+                        connection.prepareStatement(deleteOrders);
                 orderstatement.setString(1, productID);
                 orderstatement.executeUpdate();
 
                 // Delete the product in Products
                 String deleteProductQuery = "DELETE FROM Products WHERE product_code = ?";
-                PreparedStatement statement = connection.prepareStatement(deleteProductQuery);
+                PreparedStatement statement =
+                        connection.prepareStatement(deleteProductQuery);
                 statement.setString(1, productID);
                 statement.executeUpdate();
 
@@ -326,14 +332,16 @@ public class InventoryView extends JFrame {
 
                 // Display a confirmation message
                 JOptionPane.showMessageDialog(this,
-                        "Selected Products and associated packs and eras deleted successfully.",
+                        "Selected Products and associated packs " +
+                                "and eras deleted successfully.",
                         "Deletion Successful", JOptionPane.INFORMATION_MESSAGE);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Please select at least one product to delete.", "Delete Order",
+                    "Please select at least one product to delete.",
+                    "Delete Product",
                     JOptionPane.WARNING_MESSAGE);
         }
     }

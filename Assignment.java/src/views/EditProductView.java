@@ -183,11 +183,14 @@ public class EditProductView extends JFrame {
             if (flag) {
                 InventoryOperations inventoryOperations = new InventoryOperations();
 
+                // Goes through and checks if fields have valid data in, if they
+                // do, then calls method to update database.
                 if (brandName.length() >= 2) {
                     try {
                         String brandSQL = "UPDATE Products SET brand_name = ? " +
                                 "WHERE product_code = ?";
-                        PreparedStatement brandStatement = connection.prepareStatement(brandSQL);
+                        PreparedStatement brandStatement =
+                                connection.prepareStatement(brandSQL);
                         brandStatement.setString(1, brandName);
                         brandStatement.setString(2, productID);
                         brandStatement.executeUpdate();
@@ -201,7 +204,8 @@ public class EditProductView extends JFrame {
                     try {
                         String productSQL = "UPDATE Products SET product_name = ? " +
                                 "WHERE product_code = ?";
-                        PreparedStatement productStatement = connection.prepareStatement(productSQL);
+                        PreparedStatement productStatement =
+                                connection.prepareStatement(productSQL);
                         productStatement.setString(1, productName);
                         productStatement.setString(2, productID);
                         productStatement.executeUpdate();
@@ -278,7 +282,8 @@ public class EditProductView extends JFrame {
                         sIsDigital.equalsIgnoreCase("false")) {
                     Boolean isDigital = Boolean.parseBoolean(sIsDigital);
                     try {
-                        String digiSQL = "UPDATE Products SET is_digital = ? WHERE products_code = ?";
+                        String digiSQL = "UPDATE Products SET is_digital = ? " +
+                                "WHERE products_code = ?";
                         PreparedStatement digiStatement =
                                 connection.prepareStatement(digiSQL);
                         digiStatement.setBoolean(1, isDigital);

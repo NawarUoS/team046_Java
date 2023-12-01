@@ -178,26 +178,32 @@ public class AddProductView extends JFrame {
                 }
                 componentList.add(componentQuantity);
             }
+            // Decides which type of product being added and adds that
+            // type of product
             if (flag) {
                 InventoryOperations inventoryOperations = new InventoryOperations();
 
                 switch (productID.substring(0, 1)) {
                     case "L":
-                        inventoryOperations.addLocomotive(connection, productID, brandName,
-                                productName, price, gauge, quantity, isPack, dccCode, erasList);
+                        inventoryOperations.addLocomotive(connection, productID,
+                                brandName, productName, price, gauge, quantity,
+                                isPack, dccCode, erasList);
                         break;
                     case "S":
                         inventoryOperations.addRollingStock(connection, productID,
-                                brandName, productName, price, gauge, quantity, isPack, erasList);
+                                brandName, productName, price, gauge, quantity,
+                                isPack, erasList);
                         break;
                     case "C":
-                        inventoryOperations.addController(connection, productID, brandName,
-                                productName, price, gauge, quantity, isPack, isDigital);
+                        inventoryOperations.addController(connection, productID,
+                                brandName, productName, price, gauge, quantity,
+                                isPack, isDigital);
                         break;
                     case "P":
                     case "M":
-                        inventoryOperations.addPacks(connection, productID, brandName,
-                                productName, price, gauge, quantity, isPack, componentList);
+                        inventoryOperations.addPacks(connection, productID,
+                                brandName, productName, price, gauge, quantity,
+                                isPack, componentList);
                         break;
                     case "R":
                         inventoryOperations.addProduct(connection, productID,
