@@ -24,6 +24,7 @@ public class LoginView extends JFrame {
         this.setTitle("Login");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(300, 150);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         this.connection = connection;
 

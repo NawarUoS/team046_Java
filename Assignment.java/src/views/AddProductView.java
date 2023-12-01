@@ -52,6 +52,7 @@ public class AddProductView extends JFrame {
         this.setTitle("Add Products");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(500, 250);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Create a JPanel to hold the components
         JPanel panel = new JPanel();

@@ -28,6 +28,7 @@ public class ManagerView extends JFrame {
         this.setTitle("Manager Dashboard");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800, 500);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Create a JPanel to hold the components
         JPanel panel = new JPanel();
