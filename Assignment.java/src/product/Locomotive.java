@@ -32,7 +32,7 @@ public class Locomotive extends Product {
         return eraCode;
     }
 
-    public String getDdcCode() {
+    public String getDccCode() {
         return dccCode;
     }
 }

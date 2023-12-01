@@ -45,6 +45,30 @@ public class InventoryView extends JFrame {
             }
         });
 
+        JButton packViewButton = new JButton("View Pack");
+        packViewButton.addActionListener(e -> {
+            try {
+                Integer selectedRow = table.getSelectedRow();
+                String selectedID = (String) table.getValueAt(selectedRow, 0);
+                try {
+                    if (selectedID.substring(0,1) == "M" ||
+                            selectedID.substring(0,1) == "P" ) {
+                        InventoryOperations inventoryOperations = new InventoryOperations();
+                        List<String[]> contents = inventoryOperations.
+                                getPackByID(connection, selectedID);
+                        PackContentView packContentView =
+                                new PackContentView(connection, contents);
+                        packContentView.setVisible(true);
+                    }
+                } catch (StringIndexOutOfBoundsException ignore) {
+                    JOptionPane.showMessageDialog(scrollPane,
+                            "Please select one pack");
+                }
+                dispose();
+            } catch (NullPointerException error) {
+                JOptionPane.showMessageDialog(scrollPane, "Please select one pack");
+            }
+        });
         // Button linking to Add Product page
         JButton addButton = new JButton("Add Product");
         addButton.addActionListener(e -> {
@@ -157,7 +181,8 @@ public class InventoryView extends JFrame {
                         tempLoco.getProductPrice(),
                         tempLoco.getGaugeType(),
                         tempLoco.getStockLevel(),
-                        tempLoco.getDdcCode(), "", "",
+                        tempLoco.getDccCode(), "",
+                        false,
                         tempLoco.getEraCode(),
                 };
                 model.addRow(lrow);
@@ -171,7 +196,8 @@ public class InventoryView extends JFrame {
                         tempRoller.getProductName(),
                         tempRoller.getProductPrice(),
                         tempRoller.getGaugeType(),
-                        tempRoller.getStockLevel(), "", "", "",
+                        tempRoller.getStockLevel(), "", "",
+                        false,
                         tempRoller.getEraCode(),
                 };
                 model.addRow(rrow);
@@ -186,7 +212,8 @@ public class InventoryView extends JFrame {
                         tempCons.getProductPrice(),
                         tempCons.getGaugeType(),
                         tempCons.getStockLevel(),
-                        tempCons.getDigital()
+                        tempCons.getDigital(), "",
+                        false
                 };
                 model.addRow(crow);
             }
@@ -199,7 +226,8 @@ public class InventoryView extends JFrame {
                         tempTrack.getProductName(),
                         tempTrack.getProductPrice(),
                         tempTrack.getGaugeType(),
-                        tempTrack.getStockLevel(),
+                        tempTrack.getStockLevel(), "", "",
+                        false
                 };
                 model.addRow(trow);
             }
