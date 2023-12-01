@@ -13,7 +13,7 @@ import java.awt.*;
 import java.sql.Connection;
 
 public class MainViewController {
-    public static void main(String[] args) {
+    public static void run() {
         DatabaseConnectionHandler databaseConnectionHandler =
                 new DatabaseConnectionHandler();
 

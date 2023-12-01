@@ -31,7 +31,7 @@ public class CartView extends JFrame {
      */
     public CartView(Connection connection) throws SQLException {
         // Create the JFrame in the constructor
-        this.setTitle("Cart");
+        this.setTitle("Carti");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800, 500);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
