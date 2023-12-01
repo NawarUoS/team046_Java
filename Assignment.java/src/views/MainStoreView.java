@@ -146,7 +146,9 @@ public class MainStoreView extends JFrame {
         bottomPanel.add(addToOrderButton);
 
         logoutButton.addActionListener(e -> {
+            // Closes current view
             dispose();
+            // Create and show the new JFrame
             try {
                 CurrentUserCache.clearCache();
                 LoginView loginView = new LoginView(connection);
