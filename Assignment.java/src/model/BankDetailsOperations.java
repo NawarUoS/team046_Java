@@ -60,8 +60,7 @@ public class BankDetailsOperations {
             // TODO fix sql statement when table is updated
             // Query the database to insert user information
             String sql = "INSERT INTO BankDetails (userID, card_company_name," +
-                    " " +
-                    "card_name, card_number_hash, expiry_date) " +
+                    " card_name, card_number_hash, expiry_date) " +
                     "VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
