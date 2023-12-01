@@ -34,7 +34,7 @@ public class StaffView extends JFrame {
         this.add(cardPanel);
 
         // Create screens (JPanel instances)
-        JPanel inventoryScreen = new InventoryScreen();
+        JPanel inventoryScreen = new AlterStockView(connection);
         JPanel queueScreen = new QueueView(
                                         connection, cardLayout, cardPanel);
         JPanel historyScreen = new HistoryView(
@@ -44,6 +44,17 @@ public class StaffView extends JFrame {
         cardPanel.add(inventoryScreen, "Inventory");
         cardPanel.add(queueScreen, "Queue");
         cardPanel.add(historyScreen, "History");
+
+        JButton backButton = new JButton("Back to Store");
+        backButton.addActionListener(e -> {
+            dispose();
+            try {
+                MainStoreView mainStoreView = new MainStoreView(connection);
+                mainStoreView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
 
         // Create buttons
         JPanel initialScreen = getInitialScreen(connection);
@@ -110,23 +121,23 @@ public class StaffView extends JFrame {
         return initialScreen;
     }
 
-    private class InventoryScreen extends JPanel {
-        public InventoryScreen() {
-            setLayout(new BorderLayout());
+    // private class InventoryScreen extends JPanel {
+    //     public InventoryScreen() {
+    //         setLayout(new BorderLayout());
 
-            // Content for Inventory Screen
-            add(new JLabel(
-                "Inventory Screen Content", SwingConstants.CENTER));
+    //         // Content for Inventory Screen
+    //         add(new JLabel(
+    //             "Inventory Screen Content", SwingConstants.CENTER));
 
-            // Back button to the initial screen
-            JButton backButton = new JButton("Back to Main Screen");
-            backButton.addActionListener(
-                e -> cardLayout.show(cardPanel, "Initial"));
+    //         // Back button to the initial screen
+    //         JButton backButton = new JButton("Back to Main Screen");
+    //         backButton.addActionListener(
+    //             e -> cardLayout.show(cardPanel, "Initial"));
 
-            JPanel buttonPanel = new JPanel();
-            buttonPanel.add(backButton);
-            add(buttonPanel, BorderLayout.SOUTH);
-        }
-    }
+    //         JPanel buttonPanel = new JPanel();
+    //         buttonPanel.add(backButton);
+    //         add(buttonPanel, BorderLayout.SOUTH);
+    //     }
+    // }
 
 }

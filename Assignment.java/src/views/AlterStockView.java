@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class AlterStockView extends JFrame {
+public class AlterStockView extends JPanel {
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private JTable historyTable;
@@ -28,10 +28,10 @@ public class AlterStockView extends JFrame {
 
     public AlterStockView (Connection connection) throws SQLException {
         // Create the JFrame in the constructor
-        this.setTitle("Alter Stock");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(500, 250);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // this.setTitle("Alter Stock");
+        // this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // this.setSize(500, 250);
+        // this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Create a JPanel to hold the components
         JPanel panel = new JPanel();
@@ -52,7 +52,7 @@ public class AlterStockView extends JFrame {
         JButton changeStockButton = new JButton("Change Stock");
         JButton backButton = new JButton("Stock View");
         backButton.addActionListener(e -> {
-            dispose();
+            //dispose();
             InventoryView inventoryView =
                     new InventoryView(connection);
             inventoryView.setVisible(true);
