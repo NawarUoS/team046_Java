@@ -52,6 +52,7 @@ public class InventoryView extends JFrame {
         // Button takes you to packContentView, passes in content list of that pack
         JButton packViewButton = new JButton("View Pack");
         packViewButton.addActionListener(e -> {
+            dispose();
             try {
                 Integer selectedRow = table.getSelectedRow();
                 String selectedID = (String) table.getValueAt(selectedRow, 0);
@@ -61,7 +62,6 @@ public class InventoryView extends JFrame {
                         InventoryOperations inventoryOperations = new InventoryOperations();
                         List<String[]> contents = inventoryOperations.
                                 getPackByID(connection, selectedID);
-                        dispose();
                         PackContentView packContentView =
                                 new PackContentView(connection, contents);
                         packContentView.setVisible(true);
@@ -70,7 +70,7 @@ public class InventoryView extends JFrame {
                     JOptionPane.showMessageDialog(scrollPane,
                             "Please select one pack");
                 }
-            } catch (ArrayIndexOutOfBoundsException error) {
+            } catch (NullPointerException error) {
                 JOptionPane.showMessageDialog(scrollPane, "Please select one pack");
             }
         });
