@@ -171,6 +171,18 @@ public class ProfileView extends JFrame {
                 "street_name = ?, city_name = ?, postcode = ? WHERE userID" +
                 " = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateAddressSql)) {
+            try {
+                int houseNumberInt =
+                        Integer.parseInt(house_number.getText());
+                // The input is a valid integer, you can use it
+                // Now you can use the 'houseNumber' variable
+            } catch (NumberFormatException nfe) {
+                // The input is not a valid integer
+                // Handle the case where the input is not a valid integer
+                // For example, show an error message to the user
+                house_number.setText("Invalid house number");
+                return;
+            }
             pstmt.setInt(1, Integer.parseInt(house_number.getText()));
             pstmt.setString(2, street_name.getText());
             pstmt.setString(3, city_name.getText());
