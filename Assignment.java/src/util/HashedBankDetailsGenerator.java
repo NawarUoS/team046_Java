@@ -48,7 +48,7 @@ public class HashedBankDetailsGenerator {
 
     public static void main(String[] args) {
         long bankDetail = 123123123123213L;
-        String salt = "MyStaticSalt";
+        String salt = "GetsUserID";
         String hashedCardNumber = hashBankDetail(String.valueOf(bankDetail),
                 salt);
 
