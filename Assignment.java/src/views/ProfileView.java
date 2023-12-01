@@ -7,6 +7,7 @@ import src.model.AccountOperations;
 import src.model.AddressOperations;
 import src.model.BankDetailsOperations;
 import src.util.CurrentUserCache;
+import src.util.HashedPasswordGenerator;
 import src.util.UniqueUserIDGenerator;
 
 import javax.swing.*;
@@ -24,6 +25,7 @@ public class ProfileView extends JFrame {
     private JTextField forename;
     private JTextField surname;
     private JTextField email_address;
+    private JTextField password;
     private JTextField house_number;
     private JTextField street_name;
     private JTextField city_name;
@@ -41,7 +43,7 @@ public class ProfileView extends JFrame {
         JPanel panel = new JPanel();
         this.add(panel);
 
-        panel.setLayout(new GridLayout(9, 2, 10, 10));
+        panel.setLayout(new GridLayout(10, 2, 10, 10));
 
         Account currentUser = CurrentUserCache.getLoggedInUser();
 
@@ -62,6 +64,9 @@ public class ProfileView extends JFrame {
         JLabel emailLabel = new JLabel("Email:");
         email_address = new JTextField(20);
         email_address.setText(currentUser.getEmailAddress());
+
+        JLabel passwordLabel = new JLabel("New Password:");
+        password = new JTextField(20);
 
         JLabel houseNumberLabel = new JLabel("House Number:");
         house_number = new JTextField(20);
@@ -124,6 +129,8 @@ public class ProfileView extends JFrame {
         panel.add(surname);
         panel.add(emailLabel);
         panel.add(email_address);
+        panel.add(passwordLabel);
+        panel.add(password);
         panel.add(houseNumberLabel);
         panel.add(house_number);
         panel.add(roadNameLabel);
@@ -149,7 +156,8 @@ public class ProfileView extends JFrame {
 
         // Update Account table
         String updateAccountSql = "UPDATE Accounts SET forename = ?, surname " +
-                "= ?, email_address = ? WHERE userID = ?";
+                "= ?, email_address = ?, unique_password_hash = ? WHERE " +
+                "userID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateAccountSql)) {
             pstmt.setString(1, forename.getText());
             pstmt.setString(2, surname.getText());
@@ -161,7 +169,10 @@ public class ProfileView extends JFrame {
                 return;
             }
             pstmt.setString(3, email_address.getText());
-            pstmt.setString(4, userID);
+            pstmt.setString(4,
+                    HashedPasswordGenerator.hashPassword(
+                            password.getText().toCharArray(), userID));
+            pstmt.setString(5, userID);
 
             pstmt.executeUpdate();
         }
