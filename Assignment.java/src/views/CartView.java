@@ -3,6 +3,7 @@ package src.views;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import src.model.BankDetailsOperations;
 import src.model.OrderLineOperations;
 import src.model.OrderOperations;
 import src.util.CurrentUserCache;
@@ -186,7 +187,8 @@ public class CartView extends JFrame {
         int selectedRow = currentOrdersTable.getSelectedRow();
         if (selectedRow != -1) {
             // Assuming orderNumber is the first column in the table
-            int orderNumber = (int) currentOrdersTable.getValueAt(selectedRow, 4);
+            int orderNumber =
+                    (int) currentOrdersTable.getValueAt(selectedRow, 4);
 
             // Display a confirmation dialog
             int confirmResult = JOptionPane.showConfirmDialog(
@@ -197,15 +199,32 @@ public class CartView extends JFrame {
 
             if (confirmResult == JOptionPane.YES_OPTION) {
                 // Perform database update (modify as needed)
-                OrderOperations o = new OrderOperations();
-                o.updateOrderStatus(connection, orderNumber, "c");
+                OrderOperations orderOperations = new OrderOperations();
+                orderOperations.updateOrderStatus(connection,
+                                                    orderNumber, "c");
 
                 // Notify the user that the order was confirmed
                 JOptionPane.showMessageDialog(
                         this,
-                        "Order #" + orderNumber + " has been confirmed successfully!",
+                        "Order #" + orderNumber +
+                                " has been confirmed successfully!",
                         "Order Confirmed",
                         JOptionPane.INFORMATION_MESSAGE);
+
+                BankDetailsOperations bankDetailsOperations =
+                        new BankDetailsOperations();
+
+                if (!bankDetailsOperations.checkBankDetailsInDatabase(
+                        connection,
+                        CurrentUserCache.getLoggedInUser().getUserID())) {
+                    try {
+                        BankDetailsView bankDetailsView =
+                                new BankDetailsView(connection);
+                        bankDetailsView.setVisible(true);
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
             }
         } else {
             JOptionPane.showMessageDialog(
