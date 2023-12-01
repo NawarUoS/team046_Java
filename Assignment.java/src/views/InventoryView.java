@@ -52,13 +52,13 @@ public class InventoryView extends JFrame {
         // Button takes you to packContentView, passes in content list of that pack
         JButton packViewButton = new JButton("View Pack");
         packViewButton.addActionListener(e -> {
-            dispose();
             try {
                 Integer selectedRow = table.getSelectedRow();
                 String selectedID = (String) table.getValueAt(selectedRow, 0);
                 try {
                     if (selectedID.substring(0,1) == "M" ||
                             selectedID.substring(0,1) == "P" ) {
+                        dispose();
                         InventoryOperations inventoryOperations = new InventoryOperations();
                         List<String[]> contents = inventoryOperations.
                                 getPackByID(connection, selectedID);
