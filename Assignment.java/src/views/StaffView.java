@@ -89,13 +89,9 @@ public class StaffView extends JFrame {
             // Closes current login view
             dispose();
             // Create and show the new RegistrationView JFrame
-            try {
-                AlterStockView alterStockView =
-                        new AlterStockView(connection);
-                alterStockView.setVisible(true);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+            InventoryView inventoryView =
+                    new InventoryView(connection);
+            inventoryView.setVisible(true);
         });        
         queueButton.addActionListener(
                     e -> cardLayout.show(cardPanel, "Queue"));
