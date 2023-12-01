@@ -11,6 +11,7 @@ import src.util.HashedBankDetailsGenerator;
 import src.util.UniqueUserIDGenerator;
 
 import javax.swing.*;
+import javax.tools.Tool;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,7 +33,9 @@ public class BankDetailsView extends JFrame {
         this.setTitle("Bank Details");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(new Dimension(400, 400));
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setLocation(
+            (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() /4,
+            (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() /4);
 
 
         JPanel panel = new JPanel();
@@ -46,7 +49,8 @@ public class BankDetailsView extends JFrame {
                 new BankDetailsOperations();
 
         // Create Labels and Text Fields
-        JLabel cardNameLabel = new JLabel("Card Name: ");
+        JLabel cardNameLabel =
+                new JLabel("Card Name (e.g VISA, MasterCard): ");
         card_company_name = new JTextField(20);
 
         JLabel cardNumberLabel = new JLabel("Card Number:");
@@ -55,7 +59,7 @@ public class BankDetailsView extends JFrame {
         JLabel cardHolderLabel = new JLabel("Cardholder Name:");
         card_name = new JTextField(20);
 
-        JLabel cardExpiryLabel = new JLabel("Card Expiry (mm/yy):");
+        JLabel cardExpiryLabel = new JLabel("Expiry Date (mm/yy):");
         expiry_date = new JTextField(20);
 
         JLabel securityCodeLabel = new JLabel("Security Code:");
@@ -98,7 +102,7 @@ public class BankDetailsView extends JFrame {
             }
         });
 
-        JButton mainStoreButton = new JButton("Main Store Page");
+        JButton returnButton = new JButton("Return");
 
         // Add components to the frame
         panel.add(cardNameLabel);
@@ -111,20 +115,12 @@ public class BankDetailsView extends JFrame {
         panel.add(expiry_date);
         panel.add(securityCodeLabel);
         panel.add(security_code);
-        panel.add(mainStoreButton);
+        panel.add(returnButton);
         panel.add(saveButton);
 
-        mainStoreButton.addActionListener(e -> {
+        returnButton.addActionListener(e -> {
             // Closes current login view
             dispose();
-            // Create and show the new RegistrationView JFrame
-            try {
-                MainStoreView mainStoreView =
-                        new MainStoreView(connection);
-                mainStoreView.setVisible(true);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
         });
 
     }

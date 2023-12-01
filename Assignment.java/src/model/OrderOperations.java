@@ -12,7 +12,19 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class OrderOperations {
-    // add class attributes so can access them globally
+    // from cart view 
+    public void updateOrderStatus(Connection connection, int orderNumber, String newStatus) {
+        // Placeholder method for updating order status in the database (modify as needed)
+        String sqlQuery = "UPDATE Orders SET order_status = ? WHERE order_number = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            preparedStatement.setString(1, newStatus);
+            preparedStatement.setInt(2, orderNumber);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // Get order details by order_number
     public Order getOrderByOrderNumber(Connection connection, int order_number) {

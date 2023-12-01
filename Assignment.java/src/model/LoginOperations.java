@@ -13,7 +13,8 @@ public class LoginOperations {
 
     private static String userID;
 
-    public boolean verifyLogin(Connection connection, String emailAddress,
+    public static boolean verifyLogin(Connection connection,
+                                      String emailAddress,
                               char[] enteredPassword) {
         try {
             // Query the database to fetch user information

@@ -106,8 +106,6 @@ public class ProfileView extends JFrame {
 
         JButton bankDetailsButton = new JButton("View Bank Details");
         bankDetailsButton.addActionListener(e -> {
-            // Closes current login view
-            dispose();
             // Create and show the new RegistrationView JFrame
             try {
                 BankDetailsView bankDetailsView =

@@ -54,13 +54,13 @@ public class BankDetailsOperations {
         String cardName = bankDetails.getCardName();
         String cardHolder = bankDetails.getCardHolder();
         String cardNumberHash = bankDetails.getCardNumberHash();
-        String expiryDate = bankDetails.getExpiryDate();
+        String expiryDateHash = bankDetails.getExpiryDateHash();
 
         try {
             // TODO fix sql statement when table is updated
             // Query the database to insert user information
             String sql = "INSERT INTO BankDetails (userID, card_company_name," +
-                    " card_name, card_number_hash, expiry_date) " +
+                    " card_name, card_number_hash, expiry_date_hash) " +
                     "VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -69,7 +69,7 @@ public class BankDetailsOperations {
             statement.setString(2, cardName);
             statement.setString(3, cardHolder);
             statement.setString(4, cardNumberHash);
-            statement.setString(5, expiryDate);
+            statement.setString(5, expiryDateHash);
 
 
             // Execute the insert statement
