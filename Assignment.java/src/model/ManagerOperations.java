@@ -30,11 +30,15 @@ public class ManagerOperations {
 
     public String promoteUsersToStaff(Connection connection,
                                                      List<String> emails) {
+        int numberOfPromotedPoos = 0;
+
+        AccountOperations accountOperations = new AccountOperations();
         for (String email : emails) {
-            if (!checkAccountInDatabase(connection, email))
-                return "Account does not exist. Couldn't promote user to " +
-                        "staff.";
             try {
+                if (!accountOperations.checkAccountInDatabase(connection,
+                        email)) {
+                    break;
+                }
                 // Query the database to update user information
                 String sql = "UPDATE Accounts SET user_staff = ? " +
                         "WHERE email_address = ?";
@@ -50,18 +54,23 @@ public class ManagerOperations {
                 // Close the statement to release resources
                 statement.close();
 
+                numberOfPromotedPoos++;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return "Successfully promoted user to staff.";
+        if (numberOfPromotedPoos == 0)
+            return "User(s) do not exist.";
+        else
+            return "Successfully promoted " + numberOfPromotedPoos + " user(s)";
     }
 
     public String dismissUserFromStaff(Connection connection, String email) {
-        if (!checkAccountInDatabase(connection, email))
+        AccountOperations accountOperations = new AccountOperations();
+        if (!accountOperations.checkAccountInDatabase(connection, email)) {
             return "Account does not exist. Couldn't dismiss user from " +
                     "staff.";
-        AccountOperations accountOperations = new AccountOperations();
+        }
         if (accountOperations.getAccountByEmail(connection,
                 email).getUserRoles().contains(UserRole.MANAGER)) {
             return "User is Manager, cannot dismiss manager.";
@@ -86,24 +95,6 @@ public class ManagerOperations {
             e.printStackTrace();
         }
         return "Successfully dismissed user from staff.";
-    }
-
-    public boolean checkAccountInDatabase(Connection connection,
-                                          String emailAddress) {
-        try {
-            String sql = "SELECT userID FROM Accounts WHERE email_address = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, emailAddress);
-            ResultSet resultSet = statement.executeQuery();
-
-            // Account exists if result set is not empty
-            if (resultSet.next()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     public static void main(String[] args) {

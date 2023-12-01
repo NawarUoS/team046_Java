@@ -68,7 +68,7 @@ public class QueueView extends JPanel {
                 + "a.surname, a.email_address, ad.house_number, ad.street_name, " 
                 + "ad.city_name, ad.postcode, GROUP_CONCAT(ol.product_code SEPARATOR ', ') " 
                 + "AS order_contents, SUM(ol.order_line_cost) AS order_cost, " 
-                + "o.order_status, a.userID, b.card_number FROM Orders o "
+                + "o.order_status, a.userID, b.card_number_hash FROM Orders o "
                 + "JOIN Accounts a ON o.userID = a.userID "
                 + "JOIN Addresses ad ON a.userID = ad.userID "
                 + "JOIN OrderLines ol ON o.order_number = ol.order_number "
@@ -76,7 +76,7 @@ public class QueueView extends JPanel {
                 + "WHERE o.order_status = 'c' "
                 + "GROUP BY o.order_number, o.order_date, a.forename, a.surname, " 
                 + "a.email_address, ad.house_number, ad.street_name, ad.city_name, " 
-                + "ad.postcode, o.order_status, a.userID, b.card_number";
+                + "ad.postcode, o.order_status, a.userID, b.card_number_hash";
 
         try (PreparedStatement preparedStatement 
                                     = connection.prepareStatement(sqlQuery)) {
@@ -93,7 +93,7 @@ public class QueueView extends JPanel {
                         resultSet.getString("order_contents"),
                         resultSet.getDouble("order_cost"),
                         resultSet.getString("order_status"),
-                        resultSet.getString("card_number") 
+                        resultSet.getString("card_number_hash")
                             != null ? "Yes" : "No"
                 };
                 model.addRow(row);
