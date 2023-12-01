@@ -100,6 +100,18 @@ public class RegistrationView extends JFrame {
             }
             char[] passwordChars = passwordField.getPassword();
             String houseNumber = houseNumberField.getText();
+            try {
+                int houseNumberInt =
+                        Integer.parseInt(houseNumberField.getText());
+                // The input is a valid integer, you can use it
+                // Now you can use the 'houseNumber' variable
+            } catch (NumberFormatException nfe) {
+                // The input is not a valid integer
+                // Handle the case where the input is not a valid integer
+                // For example, show an error message to the user
+                houseNumberField.setText("Invalid house number");
+                return;
+            }
             String streetName = streetNameField.getText();
             String cityName = cityNameField.getText();
             String postCode = postCodeField.getText();
