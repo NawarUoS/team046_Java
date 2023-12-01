@@ -41,7 +41,7 @@ public class StaffView extends JFrame {
                                         connection, cardLayout, cardPanel);
 
         // Add screens to the cardPanel with associated names
-        cardPanel.add(inventoryScreen, "Inventory");
+        //cardPanel.add(inventoryScreen, "Inventory");
         cardPanel.add(queueScreen, "Queue");
         cardPanel.add(historyScreen, "History");
 
@@ -85,8 +85,18 @@ public class StaffView extends JFrame {
                 ex.printStackTrace();
             }
         });
-        inventoryButton.addActionListener(
-                    e -> cardLayout.show(cardPanel, "Inventory"));
+        inventoryButton.addActionListener(e -> {
+            // Closes current login view
+            dispose();
+            // Create and show the new RegistrationView JFrame
+            try {
+                AlterStockView alterStockView =
+                        new AlterStockView(connection);
+                alterStockView.setVisible(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });        
         queueButton.addActionListener(
                     e -> cardLayout.show(cardPanel, "Queue"));
         historyButton.addActionListener(
