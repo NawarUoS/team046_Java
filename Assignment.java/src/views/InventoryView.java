@@ -16,18 +16,23 @@ public class InventoryView extends JFrame {
     private CardLayout cardLayout;
     private JPanel cardPanel;
 
-    public InventoryView(
-            Connection connection) {
+    public InventoryView(Connection connection) {
         this.connection = connection;
-        this.cardLayout = cardLayout;
-        this.cardPanel = cardPanel;
+
+        this.setTitle("Inventory View");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(500, 250);
 
         setLayout(new BorderLayout());
 
         // Content for Queue Screen
-        add(new JLabel("Edit Product Screen Content", SwingConstants.CENTER));
+        add(new JLabel("Inventory Screen Content", SwingConstants.CENTER));
 
-        // Back button to the initial screen
+        // Table with data from the SQL table
+        JTable table = createTableFromSQL();
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        // Back button to the inventory screen
         JButton backButton = new JButton("Back to Staff Dashboard");
         backButton.addActionListener(e -> {
             dispose();
@@ -40,11 +45,7 @@ public class InventoryView extends JFrame {
             }
         });
 
-        // Table with data from the SQL table
-        JTable table = createTableFromSQL();
-        JScrollPane scrollPane = new JScrollPane(table);
-
-        // Buttons to delete an order and change the status of an order
+        // Button linking to Add Product page
         JButton addButton = new JButton("Add Product");
         addButton.addActionListener(e -> {
             dispose();
@@ -57,6 +58,7 @@ public class InventoryView extends JFrame {
             }
         });
 
+        // Button linking to Alter Stock page
         JButton alterStockButton = new JButton("Alter Stock");
         alterStockButton.addActionListener(e -> {
             dispose();
@@ -69,33 +71,37 @@ public class InventoryView extends JFrame {
             }
         });
 
-        // Refresh button
+        // Refresh button for table updates
         JButton refreshButton = new JButton("Refresh");
         refreshButton.addActionListener(e -> refreshTable(table));
 
+        // Button panel created and added to
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(backButton);
         buttonPanel.add(addButton);
         buttonPanel.add(alterStockButton);
         buttonPanel.add(refreshButton);
 
+        // Positioning the button and scrollpanel
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
     private JTable createTableFromSQL() {
+        // Creating the columns for the table, not all fields will have something in
         String[] columnNames = { "Product ID", "Brand Name", "Product Name",
                 "Price", "Gauge Type", "Quantity", "Dcc Code", "Is Digital?",
                  "Is Pack?", "Eras" };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
-        // SQL query to retrieve confirmed orders with relevant information
+        // SQL query to retrieve all product_code in Products table
         String sqlQuery = "SELECT product_code FROM Products";
 
         try (PreparedStatement preparedStatement
                      = connection.prepareStatement(sqlQuery)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
+            // Adds all retrieved product_codes to a list of Strings
             List<String> productList = new ArrayList<>();
             while (resultSet.next()) {
                 productList.add(resultSet.getString("product_code"));
@@ -107,6 +113,8 @@ public class InventoryView extends JFrame {
             List<TrackPack> trPackList = new ArrayList<>();
             List<TrainSet> trSetList = new ArrayList<>();
             List<Track> trList = new ArrayList<>();
+            // For each item in productList, retrieves the full object from the
+            // database and appends to a list of that item
             for (int i = 0; i < productList.size(); i++){
                 switch (productList.get(i).substring(0,1)){
                     case "L":
@@ -137,6 +145,8 @@ public class InventoryView extends JFrame {
                         System.out.println("Invalid code found");
                 }
             }
+            //Long code but logic is the same for all of them, instantiate a
+            // temporary object then use getter methods to append attributes to the table
             Locomotive tempLoco;
             for (int l = 0; l < locosList.size(); l++){
                 tempLoco = locosList.get(l);
@@ -228,6 +238,7 @@ public class InventoryView extends JFrame {
         return new JTable(model);
     }
 
+    // Refresh table for any changes that have been made
     private void refreshTable(JTable table) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0); // Clear existing rows
