@@ -57,22 +57,31 @@ public class LoginView extends JFrame {
 
         // Create an ActionListener for the login button
         loginButton.addActionListener(e -> {
+            AccountOperations accountOperations = new AccountOperations();
+
             email = emailField.getText();
+            if (!accountOperations.checkAccountInDatabase(connection, email)) {
+                emailField.setText("User does not exist.");
+                return;
+            }
+
             char[] passwordChars = passwordField.getPassword();
+            if (!LoginOperations.verifyLogin(connection, email,
+                                                            passwordChars)) {
+                emailField.setText("Incorrect password.");
+                return;
+            }
             System.out.println(email);
             System.out.println(new String(passwordChars));
-            LoginOperations loginOperations =
-                    new LoginOperations();
-            System.out.println(loginOperations.verifyLogin(
+            System.out.println(LoginOperations.verifyLogin(
                     connection, email, passwordChars));
-            AccountOperations accountOperations = new AccountOperations();
             CurrentUserCache.storeUserInformation(
                     accountOperations.getAccountByEmail(connection, email));
             // Continue only if login is successful
             DatabaseConnectionHandler databaseConnectionHandler =
                     new DatabaseConnectionHandler();
             MainStoreView mainStoreView = null;
-            if (loginOperations.verifyLogin(connection, email, passwordChars))
+            if (LoginOperations.verifyLogin(connection, email, passwordChars))
                 loginSuccess = true;
             if (getLoginSuccess()) {
                 dispose();
