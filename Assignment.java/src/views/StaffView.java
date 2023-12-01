@@ -99,6 +99,7 @@ public class StaffView extends JFrame {
 
         // Add buttons to the initial screen
         JPanel initialScreen = new JPanel();
+        initialScreen.add(mainStoreButton);
         initialScreen.add(inventoryButton);
         initialScreen.add(queueButton);
         initialScreen.add(historyButton);
