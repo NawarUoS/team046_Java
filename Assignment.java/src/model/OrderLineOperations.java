@@ -8,6 +8,30 @@ import java.sql.SQLException;
 import src.order.OrderLine;
 
 public class OrderLineOperations {
+    // from cart 
+    public void updateOrderLineQuantity(Connection connection, int orderLineNumber, int newQuantity) {
+        try {
+            // SQL query to update the quantity in the OrderLines table
+            String updateQuery = "UPDATE OrderLines SET items_quantity = ? WHERE order_line_number = ?";
+    
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+                preparedStatement.setInt(1, newQuantity);
+                preparedStatement.setInt(2, orderLineNumber);
+    
+                // Execute the update statement
+                int rowsAffected = preparedStatement.executeUpdate();
+    
+                if (rowsAffected > 0) {
+                    System.out.println("Order line quantity updated successfully.");
+                } else {
+                    System.out.println("Failed to update order line quantity.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public OrderLine getOrderLineByOrderLineNumber(Connection connection, int order_line_number) throws Error {
         try {
